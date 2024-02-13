@@ -22,8 +22,10 @@ internal class EnemyAI_KillEnemy_Postfix
 
         if(!EnemiesValueManager.EnemiesData.ContainsKey(__instance.enemyType.enemyName))
         {
-            EnemiesValueManager.RegisterEnemy();
+            EnemiesValueManager.RegisterEnemy(__instance.enemyType.enemyName, new());
         }
+
+        var enemyData = EnemiesValueManager.EnemiesData[__instance.enemyType.enemyName];
 
         var grabbableGO = __instance.gameObject.AddComponent<GrabbableObject>();
         grabbableGO.grabbable = true;
@@ -34,7 +36,15 @@ internal class EnemyAI_KillEnemy_Postfix
         grabbableGO.itemProperties = new()
         {
             allowDroppingAheadOfPlayer = true,
-            creditsWorth = 100,
+            creditsWorth = 0,
+            isScrap = true,
+            itemSpawnsOnGround = false,
+            twoHanded = true,
+            toolTips = ["A mob.", "It can be sold"],
+            spawnPrefab = __instance.enemyType.enemyPrefab,
+            minValue = enemyData.MinValue,
+            maxValue = enemyData.MaxValue,
+            weight = enemyData.Mass,
         };
     }
 }

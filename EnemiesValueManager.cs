@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ES3Types;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -28,8 +29,16 @@ public static class EnemiesValueManager
         EnemiesData = parsed;
     }
 
-    public static void RegisterEnemy()
+    public static void RegisterEnemy(string enemyName, EnemyValue enemyData)
     {
-
+        if(EnemiesData.TryAdd(enemyName, enemyData))
+        {
+            Plugin.logger.LogDebug("EnemyData '{0}' already exists!", enemyName);
+        }
+        if (!File.Exists(EnemiesDataFile))
+        {
+            var output = JsonConvert.SerializeObject(EnemiesData, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText(output, EnemiesDataFile);
+        }
     }
 }

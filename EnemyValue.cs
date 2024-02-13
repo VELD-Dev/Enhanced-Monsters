@@ -6,8 +6,10 @@ namespace LootableMonsters;
 
 [JsonObject(Description = "The value of a moby once killed, if it can be killed.")]
 [method: JsonConstructor]
-public struct EnemyValue(bool canBePicked = true, int value = 100)
+public struct EnemyValue(bool canBePicked = true, int minval = 80, int maxval = 250, int mass = 50)
 {
     public bool Pickupable = canBePicked;
-    public int CreditsValue = value;
+    public int MinValue = minval;
+    public int MaxValue = maxval;
+    public int Mass = mass;
 }
