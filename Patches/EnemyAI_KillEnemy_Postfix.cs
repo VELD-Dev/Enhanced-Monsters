@@ -11,9 +11,12 @@ internal class EnemyAI_KillEnemy_Postfix
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.KillEnemy))]
     private static void KillEnemy(EnemyAI __instance, bool destroy)
     {
-        if (__instance == null) return;
+        Plugin.logger.LogInfo($"Mob {__instance.enemyType.enemyName} died. Trying to make it grabbable.");
+        if (__instance == null) return;  // Should never happen
 
         if (destroy) return;
+
+        Plugin.logger.LogInfo("Mob was not destroyed. Now making it grabbable.");
 
         if (!__instance.isEnemyDead)
         {
@@ -23,11 +26,13 @@ internal class EnemyAI_KillEnemy_Postfix
         if(!EnemiesValueManager.EnemiesData.ContainsKey(__instance.enemyType.enemyName))
         {
             EnemiesValueManager.RegisterEnemy(__instance.enemyType.enemyName, new());
+            Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{__instance.enemyType.enemyName}'");
         }
 
         var enemyData = EnemiesValueManager.EnemiesData[__instance.enemyType.enemyName];
 
         var grabbableGO = __instance.gameObject.AddComponent<GrabbableObject>();
+        Plugin.logger.LogInfo("Added GrabbableObject component to mob. Now setting it up.");
         grabbableGO.grabbable = true;
         grabbableGO.customGrabTooltip = __instance.enemyType.enemyName;
         grabbableGO.parentObject = grabbableGO.gameObject.transform;
@@ -46,5 +51,6 @@ internal class EnemyAI_KillEnemy_Postfix
             maxValue = enemyData.MaxValue,
             weight = enemyData.Mass,
         };
+        Plugin.logger.LogInfo("Mob should now be grabbable.");
     }
 }

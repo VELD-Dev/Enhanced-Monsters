@@ -33,7 +33,7 @@ public static class EnemiesValueManager
     {
         if(EnemiesData.TryAdd(enemyName, enemyData))
         {
-            Plugin.logger.LogDebug("EnemyData '{0}' already exists!", enemyName);
+            Plugin.logger.LogDebug($"EnemyData '{enemyName}' already exists!");
         }
         if (!File.Exists(EnemiesDataFile))
         {
