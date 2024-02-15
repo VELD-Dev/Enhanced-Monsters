@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LootableMonsters.Utils;
+namespace EnhancedMonsters.Utils;
 
 public static class TypesExtensions
 {

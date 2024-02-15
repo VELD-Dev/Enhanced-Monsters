@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LootableMonsters.Patches;
+namespace EnhancedMonsters.Patches;
 
 [HarmonyPatch(typeof(EnemyAI))]
 internal class EnemyAI_Patches

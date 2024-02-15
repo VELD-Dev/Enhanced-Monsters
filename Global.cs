@@ -26,9 +26,9 @@ global using BepInEx.Harmony;
 global using HarmonyLib;
 global using HarmonyLib.Tools;
 
-global using LootableMonsters;
-global using LootableMonsters.Patches;
-global using LootableMonsters.Utils.Utils;
+global using EnhancedMonsters;
+global using EnhancedMonsters.Patches;
+global using EnhancedMonsters.Utils.Utils;
 
 global using Unity;
 global using Unity.Networking;

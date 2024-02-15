@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LootableMonsters.Utils.Utils;
+namespace EnhancedMonsters.Utils.Utils;
 
 public static class EnemiesDataManager
 {
-    public static Dictionary<string, EnemyValue> EnemiesData = [];
+    public static Dictionary<string, EnemyData> EnemiesData = [];
     public static string EnemiesDataFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EnemiesData.json");
     public static readonly Dictionary<string, string> CreaturesRank = new()
     {
@@ -39,7 +39,7 @@ public static class EnemiesDataManager
         }
 
         var filetext = File.ReadAllText(EnemiesDataFile);
-        var parsed = JsonConvert.DeserializeObject<Dictionary<string, EnemyValue>>(filetext);
+        var parsed = JsonConvert.DeserializeObject<Dictionary<string, EnemyData>>(filetext);
         if (parsed is null)
         {
             EnemiesData = [];
@@ -48,7 +48,7 @@ public static class EnemiesDataManager
         EnemiesData = parsed;
     }
 
-    public static void RegisterEnemy(string enemyName, EnemyValue enemyData)
+    public static void RegisterEnemy(string enemyName, EnemyData enemyData)
     {
         if (!EnemiesData.TryAdd(enemyName, enemyData))
         {

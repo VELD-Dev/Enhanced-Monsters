@@ -1,4 +1,4 @@
-﻿namespace LootableMonsters;
+﻿namespace EnhancedMonsters;
 
 [BepInPlugin(PluginInfo.GUID, PluginInfo.DisplayName, PluginInfo.Version)]
 public class Plugin : BaseUnityPlugin   
