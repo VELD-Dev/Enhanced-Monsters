@@ -6,6 +6,6 @@ Lethal Company mod allowing to pick enemies as loots, and some enemies to loot s
 - Allows you to sell dead mobs.
 - Configurable mobs minimum and maximum value.
 - Masked mimics drop their mask when they die.
-- Mobs now all display their rank (dangerousness) when you scan them.
+- All "dangerous" mobs display their rank (dangerousness) when you scan them.
 
 I must still think about more features in fact.
