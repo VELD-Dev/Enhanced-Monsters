@@ -27,6 +27,9 @@ global using HarmonyLib;
 global using HarmonyLib.Tools;
 
 global using LootableMonsters;
+global using LootableMonsters.Patches;
+global using LootableMonsters.Utils.Utils;
+
 global using Unity;
 global using Unity.Networking;
 global using Unity.Networking.Transport;

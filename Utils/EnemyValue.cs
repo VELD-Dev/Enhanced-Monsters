@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LootableMonsters;
+namespace LootableMonsters.Utils.Utils;
 
 [JsonObject(Description = "The value of a moby once killed, if it can be killed.")]
 [method: JsonConstructor]

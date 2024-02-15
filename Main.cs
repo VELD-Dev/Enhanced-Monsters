@@ -16,6 +16,8 @@ public class Plugin : BaseUnityPlugin
         logger ??= Logger;  // This should never happen.
 
         logger.LogInfo("This is NOT an RPG mod. And hi btw.");
+        EnemiesDataManager.LoadEnemiesData();
+        logger.LogInfo("Enemies data loaded.");
         ApplyAllPatches();
         logger.LogDebug("All harmony patches have been applied (energistics).");
     }
@@ -27,7 +29,7 @@ public class Plugin : BaseUnityPlugin
             throw new NullReferenceException($"{nameof(logger)} is null. Cannot process further because it means that the mod was not initialized yet.");
         }
         logger.LogDebug("Applying patches...");
-        harmony.PatchAll(typeof(EnemyAI));
+        harmony.PatchAll(typeof(EnemyAI_Patches));
         logger.LogDebug("Enemy patches applied.");
     }
 }
