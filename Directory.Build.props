@@ -1,0 +1,9 @@
+<Project>
+  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <PropertyGroup>
+    
+    <!-- LC BepInEx plugin folder here -->
+    <LCPluginFolder>B:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\</LCPluginFolder>
+    
+  </PropertyGroup>
+</Project>

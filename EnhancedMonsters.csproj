@@ -139,4 +139,34 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="LICENSE">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://github.com/VELD-Dev/schemastore/master/src/schemas/json/ThunderstoreManifestSchema.json" /></VisualStudio></ProjectExtensions>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <MakeDir Directories="bin/$(Configuration)/$(AssemblyName)/" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(ProjectDir)/README.md" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(ProjectDir)/manifest.json" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(ProjectDir)/LICENSE" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <ZipDirectory SourceDirectory="bin/$(Configuration)/$(AssemblyName)/" DestinationFile="$(LCPluginFolder)/$(AssemblyName).zip" Overwrite="true" />
+
+    <MakeDir Directories="$(LCPluginFolder)/$(AssemblyName)/" ContinueOnError="false" />
+    <Copy SourceFiles="bin/$(Configuration)/$(AssemblyName)/$(AssemblyName).dll" DestinationFolder="$(LCPluginFolder)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="bin/$(Configuration)/$(AssemblyName)/README.md" DestinationFolder="$(LCPluginFolder)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="bin/$(Configuration)/$(AssemblyName)/manifest.json" DestinationFolder="$(LCPluginFolder)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="bin/$(Configuration)/$(AssemblyName)/LICENSE" DestinationFolder="$(LCPluginFolder)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Exec Command="echo Successfully copied all this shit to the right folder" />
+  </Target>
+
 </Project>

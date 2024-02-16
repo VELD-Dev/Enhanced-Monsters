@@ -31,5 +31,7 @@ public class Plugin : BaseUnityPlugin
         logger.LogDebug("Applying patches...");
         harmony.PatchAll(typeof(EnemyAI_Patches));
         logger.LogDebug("Enemy patches applied.");
+        harmony.PatchAll(typeof(MaskedPlayerEnemy_Patches));
+        logger.LogDebug("MaskedEnemy patches applied.");
     }
 }

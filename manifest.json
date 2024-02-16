@@ -1,0 +1,7 @@
+{
+  "name": "EnhancedMonsters",
+  "description": "A mod aiming to overhaul overall monsters in many ways.",
+  "version_number": "0.1.0",
+  "website_url": "https://github.com/VELD-Dev/Enhanced-Monsters/",
+  "dependencies": [ "BepInEx-BepInExPack-5.4.2100" ]
+}

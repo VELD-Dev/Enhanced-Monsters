@@ -8,32 +8,35 @@ namespace EnhancedMonsters.Utils.Utils;
 public static class EnemiesDataManager
 {
     public static Dictionary<string, EnemyData> EnemiesData = [];
-    public static string EnemiesDataFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EnemiesData.json");
-    public static readonly Dictionary<string, string> CreaturesRank = new()
+    public static Dictionary<string, EnemyData> DefaultEnemiesData = new()
     {
-        ["Hoarding bug"]    = "E",
-        ["Spore Lizard"]    = "E",
-        ["Baboon hawk"]     = "E",
-        ["Hydrogere"]       = "D",
-        ["Centipede"]       = "D",
-        ["MouthDog"]        = "C",
-        ["Bunker Spider"]   = "C",
-        ["Crawler"]         = "B",
-        ["Flowerman"]       = "B",
-        ["SandWorm"]        = "B",
-        ["CoilHead"]        = "A",
-        ["Masked"]          = "A",
-        ["Nutcracker"]      = "A",
-        ["ForestKeeper"]    = "A",
-        ["RedBees"]         = "A",
-        ["Jester"]          = "S+",
-        ["DressGirl"]       = "?",
+        // Lootable
+        ["Baboon hawk"]     = new EnemyData(true, 50, 80, 61, "E"),
+        ["Hoarding bug"]    = new EnemyData(true, 80, 110, 38, "E"),
+        ["Centipede"]       = new EnemyData(true, 90, 120, 23, "D"),
+        ["Bunker Spider"]   = new EnemyData(true, 140, 180, 75, "C"),
+        ["MouthDog"]        = new EnemyData(true, 170, 210, 88, "C"),
+        ["Crawler"]         = new EnemyData(true, 210, 270, 66, "B"),
+        ["Flowerman"]       = new EnemyData(true, 250, 290, 55, "B"),
+        ["Nutcracker"]      = new EnemyData(true, 300, 340, 44, "A"),
+
+        // Invincible
+        ["Spore Lizard"]    = new EnemyData(false, 0, 0, 0, "E"),
+        ["Hydrogere"]       = new EnemyData(false, 0, 0, 0, "D"),
+        ["RedBees"]         = new EnemyData(false, 0, 0, 0, "C"),
+        ["SandWorm"]        = new EnemyData(false, 0, 0, 0, "B"),
+        ["CoilHead"]        = new EnemyData(false, 0, 0, 0, "A"),
+        ["ForestKeeper"]    = new EnemyData(false, 0, 0, 0, "S"),
+        ["Jester"]          = new EnemyData(false, 0, 0, 0, "S+"),
+        ["DressGirl"]       = new EnemyData(false, 0, 0, 0, "?")
     };
+    public static string EnemiesDataFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EnemiesData.json");
 
     public static void LoadEnemiesData()
     {
         if (!File.Exists(EnemiesDataFile))
         {
+            EnemiesData = DefaultEnemiesData;
             SaveEnemiesData();
             return;
         }
@@ -42,10 +45,13 @@ public static class EnemiesDataManager
         var parsed = JsonConvert.DeserializeObject<Dictionary<string, EnemyData>>(filetext);
         if (parsed is null)
         {
-            EnemiesData = [];
+            EnemiesData = DefaultEnemiesData;
+            SaveEnemiesData();
             return;
         }
         EnemiesData = parsed;
+        EnemiesData.Union(DefaultEnemiesData);
+        SaveEnemiesData();
     }
 
     public static void RegisterEnemy(string enemyName, EnemyData enemyData)
