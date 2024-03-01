@@ -38,6 +38,9 @@
     <Reference Include="BepInEx.Harmony">
       <HintPath>B:\soft\Steam\steamapps\common\Lethal Company\BepInEx\core\BepInEx.Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="LethalLib">
+      <HintPath>..\..\..\..\..\..\..\Mounted\SSD 2\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\LethalLib\LethalLib.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>B:\soft\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>

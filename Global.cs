@@ -26,11 +26,16 @@ global using BepInEx.Harmony;
 global using HarmonyLib;
 global using HarmonyLib.Tools;
 
+global using LethalLib;
+global using LethalLib.Extras;
+global using LethalLib.Modules;
+
 global using EnhancedMonsters;
 global using EnhancedMonsters.Patches;
-global using EnhancedMonsters.Utils.Utils;
+global using EnhancedMonsters.Utils;
 
 global using Unity;
+global using Unity.Netcode;
 global using Unity.Networking;
 global using Unity.Networking.Transport;
 global using Unity.Networking.Transport.Utilities;

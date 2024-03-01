@@ -1,10 +1,4 @@
-﻿using DunGen.Graph;
-using EnhancedMonsters.Utils;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EnhancedMonsters.Patches;
+﻿namespace EnhancedMonsters.Patches;
 
 [HarmonyPatch(typeof(EnemyAI))]
 public class EnemyAI_Patches
@@ -15,7 +9,7 @@ public class EnemyAI_Patches
     {
         Plugin.logger.LogDebug($"Mob {__instance.enemyType.enemyName} spawned, assigning rank.");
         string creatureRank = EnemiesDataManager.EnemiesData[__instance.enemyType.enemyName].Rank ?? "?";
-        var scanData = __instance.gameObject.EnsureComponent<ScanNodeProperties>();
+        var scanData = __instance.gameObject.transform.Find("ScanNode").gameObject.EnsureComponent<ScanNodeProperties>();
         scanData.subText = $"Rank {creatureRank}";
         Plugin.logger.LogDebug($"Mob rank assigned. Rank: {creatureRank}");
     }
@@ -24,10 +18,13 @@ public class EnemyAI_Patches
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.KillEnemy))]
     private static void KillEnemy(EnemyAI __instance, bool destroy)
     {
-        Plugin.logger.LogInfo($"Mob {__instance.enemyType.enemyName} died.");
         if (__instance == null) return;  // Should never happen
 
+        Plugin.logger.LogInfo($"Mob {__instance.enemyType.enemyName} died.");
+
         if (destroy) return;
+
+        if (!__instance.IsHost || !__instance.IsServer) return;
 
         Plugin.logger.LogInfo("Mob was not destroyed. Now making it grabbable.");
 
@@ -43,33 +40,43 @@ public class EnemyAI_Patches
         }
 
         var enemyData = EnemiesDataManager.EnemiesData[__instance.enemyType.enemyName];
-        int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
+        int mobValue = RoundManager.Instance.AnomalyRandom.Next(enemyData.MinValue, enemyData.MaxValue);
 
+        __instance.meshRenderers[0].GetComponent<Collider>().enabled = true;
         var physPropComponent = __instance.gameObject.EnsureComponent<PhysicsProp>();
+        var scanNode = __instance.gameObject.transform.Find("ScanNode").gameObject.EnsureComponent<ScanNodeProperties>();
+
         Plugin.logger.LogInfo("Added GrabbableObject component to mob. Now setting it up.");
         physPropComponent.grabbable = true;
         physPropComponent.customGrabTooltip = __instance.enemyType.enemyName;
-        physPropComponent.parentObject = physPropComponent.gameObject.transform;
-        physPropComponent.mainObjectRenderer = physPropComponent.gameObject.EnsureComponent<MeshRenderer>();
+        physPropComponent.scrapValue = mobValue;
+        physPropComponent.propColliders =
+        [
+            scanNode.gameObject.GetComponent<Collider>(),
+            physPropComponent.gameObject.GetComponentInChildren<MeshRenderer>().gameObject.GetComponent<Collider>()
+        ];
+        physPropComponent.mainObjectRenderer = __instance.meshRenderers[0];
         physPropComponent.enabled = true;
         physPropComponent.itemProperties = ScriptableObject.CreateInstance<Item>();
+        physPropComponent.itemProperties.itemId = 0;
+        physPropComponent.itemProperties.itemName = __instance.enemyType.enemyName;
         physPropComponent.itemProperties.allowDroppingAheadOfPlayer = true;
         physPropComponent.itemProperties.creditsWorth = 0;
+        physPropComponent.itemProperties.grabAnim = "HoldLung";
         physPropComponent.itemProperties.isScrap = true;
         physPropComponent.itemProperties.itemSpawnsOnGround = false;
         physPropComponent.itemProperties.twoHanded = true;
-        physPropComponent.itemProperties.toolTips = ["A mob.", "It can be sold"];
+        physPropComponent.itemProperties.twoHandedAnimation = true;
         physPropComponent.itemProperties.spawnPrefab = __instance.enemyType.enemyPrefab;
         physPropComponent.itemProperties.minValue = enemyData.MinValue;
         physPropComponent.itemProperties.maxValue = enemyData.MaxValue;
-        physPropComponent.itemProperties.weight = enemyData.Mass;
+        physPropComponent.itemProperties.weight = enemyData.Mass / 100f;
 
-        var scanNode = __instance.gameObject.EnsureComponent<ScanNodeProperties>();
-        scanNode.headerText = __instance.enemyType.enemyName;
-        scanNode.subText = $"Rank: {enemyData.Rank}";
-        scanNode.scrapValue = mobValue;
-        scanNode.maxRange = 7;
-        scanNode.minRange = 0;
+        __instance.gameObject.transform.Find("ScanNode").gameObject.GetComponent<Collider>().enabled = true;
+        scanNode.scrapValue = physPropComponent.scrapValue;
+        scanNode.subText = $"Value: ${scanNode.scrapValue}";
+        scanNode.maxRange = 10;
+        scanNode.minRange = 1;
         //scanNode.nodeType = (int)NodeType.Normal;
         scanNode.requiresLineOfSight = true;
         Plugin.logger.LogInfo("Mob should now be grabbable.");

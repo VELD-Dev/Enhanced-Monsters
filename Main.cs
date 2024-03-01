@@ -1,7 +1,8 @@
 ﻿namespace EnhancedMonsters;
 
 [BepInPlugin(PluginInfo.GUID, PluginInfo.DisplayName, PluginInfo.Version)]
-public class Plugin : BaseUnityPlugin   
+[BepInDependency("evaisa.lethallib", BepInDependency.DependencyFlags.HardDependency)]
+public class Plugin : BaseUnityPlugin 
 {
     private static readonly Harmony harmony = new(PluginInfo.GUID);
     public static ManualLogSource? logger;
@@ -31,7 +32,9 @@ public class Plugin : BaseUnityPlugin
         logger.LogDebug("Applying patches...");
         harmony.PatchAll(typeof(EnemyAI_Patches));
         logger.LogDebug("Enemy patches applied.");
-        harmony.PatchAll(typeof(MaskedPlayerEnemy_Patches));
-        logger.LogDebug("MaskedEnemy patches applied.");
+        //harmony.PatchAll(typeof(MaskedPlayerEnemy_Patches));
+        //logger.LogDebug("MaskedEnemy patches applied.");
+        harmony.PatchAll(typeof(MenuManager_Patches));
+        logger.LogDebug("MenuManager patches applied.");
     }
 }
