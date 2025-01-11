@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EnhancedMonsters.Utils;
+﻿namespace EnhancedMonsters.Utils;
 
 public static class TypesExtensions
 {
@@ -35,5 +31,52 @@ public static class TypesExtensions
             component = go.AddComponent<T>();
         }
         return component;
+    }
+
+
+    /// <summary>
+    /// Allows adding a range of values inside a Dictionary. If a value is in conflict, it skips it.
+    /// </summary>
+    /// <typeparam name="K">Key type</typeparam>
+    /// <typeparam name="T">Value type</typeparam>
+    /// <typeparam name="TI">Enumerable</typeparam>
+    /// <param name="target">Where the objects will be merged</param>
+    /// <param name="source">Objects to be merged</param>
+    /// <param name="key">Key accessor</param>
+    /// <param name="selector">Value accessor</param>
+    /// <param name="set">Wether it is a SetRange or an AddRange operation</param>
+    public static void AddRange<K, T, TI>(this IDictionary<K, T> target, IEnumerable<TI> source, Func<TI, K> key, Func<TI, T> selector, bool set = true)
+    {
+        foreach (var item in source)
+        {
+            var dkey = key(item);
+            var dval = selector(item);
+            if(set)
+            {
+                target[dkey] = dval;
+            }
+            else
+            {
+                target.TryAdd(key(item), selector(item));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Instead of returning a new dict resulting of the merge, it directly merges into the existing dictionary.<br/>
+    /// Above this, duplicated keys are ignored. Basically a "BetterUnion" as well
+    /// </summary>
+    /// <typeparam name="K">Key</typeparam>
+    /// <typeparam name="T">Value</typeparam>
+    /// <param name="target">Where the objects will be merged</param>
+    /// <param name="source">Objects to be merged/unioned/concatenated</param>
+    public static void ProperConcat<K, T>(this IDictionary<K, T> target, IDictionary<K, T> source)
+    {
+        foreach(var kvp in source)
+        {
+            if (target.ContainsKey(kvp.Key))
+                continue;
+            target.Add(kvp.Key, kvp.Value);
+        }
     }
 }

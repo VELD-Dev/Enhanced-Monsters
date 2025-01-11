@@ -3,7 +3,7 @@
   <PropertyGroup>
     
     <!-- LC BepInEx plugin folder here -->
-    <LCPluginFolder>B:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\</LCPluginFolder>
+    <LCPluginFolder>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins</LCPluginFolder>
     
   </PropertyGroup>
 </Project>
