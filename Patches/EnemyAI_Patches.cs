@@ -46,7 +46,7 @@ public class EnemyAI_Patches
             InstantiatePhysicPrefabServerRpc(netref, mobValue);
         }
 
-        Plugin.logger.LogInfo("Mob should now be grabbable for all users.");
+        Plugin.logger.LogDebug("Mob should now be grabbable for all users.");
     }
 
     //////////
@@ -62,10 +62,16 @@ public class EnemyAI_Patches
             return;
         }
 
-        var enemyToPropInstance = NetworkManager.Instantiate(Plugin.EnemyToPropPrefab);
-        enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
+        if(!EnemiesDataManager.Enemies2Props.TryGetValue(enemy.enemyType.enemyName, out var enemy2prop))
+        {
+            Plugin.logger.LogWarning($"Mob {enemy.enemyType.enemyName} has no enemy2prop prefab.");
+        }
 
-        SynchronizeMobClientRpc(netref, new NetworkObjectReference(enemyToPropInstance), mobValue);
+        var enemyToPropInstance = NetworkManager.Instantiate(enemy2prop);
+        enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
+        var e2propInstRef = new NetworkObjectReference(enemyToPropInstance);
+
+        SynchronizeMobClientRpc(netref, e2propInstRef, mobValue);
     }
 
     [ClientRpc]
@@ -83,27 +89,9 @@ public class EnemyAI_Patches
             return;
         }
 
-        Plugin.logger.LogDebug("SyncMobBreak1");
-
         var enemy2PropGO = enemy2PropNetObj.gameObject;
-
-        Plugin.logger.LogDebug("SyncMobBreak2");
-        enemy2PropGO.name = enemy.enemyType.enemyName + " propized";
-        Plugin.logger.LogDebug("SyncMobBreak3");
         enemy2PropGO.transform.position = enemy.transform.position;
-        enemy.transform.parent = enemy2PropGO.transform;
-        enemy.transform.localPosition = new UnityEngine.Vector3(0, 0, 0);
-
-        Plugin.logger.LogDebug("SyncMobBreak4");
-        var boxCollider = enemy2PropGO.GetComponent<BoxCollider>();
-        Plugin.logger.LogDebug("SyncMobBreak5");
-        var capsuleCollider = enemy.GetComponentInChildren<Collider>();
-        boxCollider.center = capsuleCollider.bounds.center;
-
-        Plugin.logger.LogDebug("SyncMobBreak6");
         var enemyData = SyncedConfig.Instance.EnemiesData[enemy.enemyType.enemyName];
-
-        Plugin.logger.LogInfo($"Synchronizing mob data between players: {enemy.enemyType.enemyName}, value: {mobValue} scraps");
 
         if (!enemy2PropGO.TryGetComponent(out PhysicsProp physPropComponent))
         {
@@ -111,25 +99,16 @@ public class EnemyAI_Patches
             return;
         }
 
-        Plugin.logger.LogInfo("Enabling GrabbableObject component on the mob.");
         physPropComponent.grabbable = enemyData.Pickupable;
         physPropComponent.scrapValue = mobValue;
-        physPropComponent.itemProperties.isScrap = enemyData.Pickupable;
 
-        Plugin.logger.LogInfo("Updating ScanNode...");
-        var scanNodeGo = enemy.gameObject.transform.Find("ScanNode").gameObject;
-        scanNodeGo.transform.parent = enemy2PropGO.transform;
-        scanNodeGo.GetComponent<Collider>().enabled = true;
-
+        var scanNodeGo = enemy2PropGO.transform.Find("ScanNode").gameObject;
         var scanNode = scanNodeGo.GetComponent<ScanNodeProperties>();
-        Plugin.logger.LogInfo("Setting ScanNode scrap value...");
         scanNode.scrapValue = physPropComponent.scrapValue;
         scanNode.subText = $"Rank:{enemyData.Rank}\nValue: ${scanNode.scrapValue}";
-        scanNode.maxRange = 13;
-        scanNode.minRange = 1;
-        scanNode.nodeType = 2;
-        scanNode.requiresLineOfSight = true;
 
-        Plugin.logger.LogInfo("Mob successfully synchronized among all clients ! It is now grabbable and sellable !");
+        enemy.gameObject.GetComponent<NetworkObject>().Despawn(true);
+
+        Plugin.logger.LogDebug("Mob successfully synchronized among all clients ! It is now grabbable and sellable !");
     }
 }

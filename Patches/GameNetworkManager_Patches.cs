@@ -11,11 +11,6 @@ internal class GameNetworkManager_Patches
     [HarmonyPatch("Start")]
     public static void Start(GameNetworkManager __instance)
     {
-        if (!NetworkManager.Singleton.NetworkConfig.Prefabs.Contains(Plugin.EnemyToPropPrefab))
-        {
-            NetworkManager.Singleton.AddNetworkPrefab(Plugin.EnemyToPropPrefab);
-        }
-
         var enemies = Resources.FindObjectsOfTypeAll<EnemyAI>();
         foreach (var enemy in enemies)
         {
@@ -26,6 +21,8 @@ internal class GameNetworkManager_Patches
             }
         }
         EnemiesDataManager.SaveEnemiesData();
+
+        EnemiesDataManager.EnsureEnemy2PropPrefabs();
     }
 
     [HarmonyPostfix]

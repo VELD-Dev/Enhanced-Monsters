@@ -1,7 +1,12 @@
 {
-  "name": "EnhancedMonsters",
-  "description": "A mod aiming to overhaul overall monsters in many ways.",
-  "version_number": "0.1.0",
+  "name": "Enhanced_Monsters",
+  "description": "This mod adds ranking and allows killable mobs to be sold, even modded ones!\nIncompatible with SellBodiesFixed !",
+  "version_number": "1.0.0",
   "website_url": "https://github.com/VELD-Dev/Enhanced-Monsters/",
-  "dependencies": [ "BepInEx-BepInExPack-5.4.2100" ]
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100",
+    "xilophor-StaticNetcodeLib-1.1.1",
+    "Evaisa-LethalLib-0.16.2",
+    "AinaVT-LethalConfig-1.4.3"
+  ]
 }

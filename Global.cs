@@ -39,6 +39,9 @@ global using EnhancedMonsters.Utils;
 
 global using StaticNetcodeLib;
 
+global using LethalLib;
+global using LethalLib.Modules;
+
 global using Unity;
 global using Unity.Collections;
 global using Unity.Netcode;

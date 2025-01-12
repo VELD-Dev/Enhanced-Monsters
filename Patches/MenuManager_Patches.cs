@@ -33,6 +33,8 @@ public class MenuManager_Patches
         }
         EnemiesDataManager.SaveEnemiesData();
 
+        EnemiesDataManager.EnsureEnemy2PropPrefabs();
+
         Plugin.logger.LogInfo("All enemies have been patched correctly.");
     }
 }
