@@ -23,7 +23,7 @@ public static class EnemiesDataManager
 
         // Invincible
         ["Docile Locust Bees"]  = new EnemyData(false, 0, 0, 0, "F"),
-        ["Red Pill"]            = new EnemyData(false, 0, 0, 0, "F"),
+        ["Red pill"]            = new EnemyData(false, 0, 0, 0, "F"),
         ["Blob"]                = new EnemyData(false, 0, 0, 0, "D"),
         ["Red Locust Bees"]     = new EnemyData(false, 0, 0, 0, "C"),
         ["Butler Bees"]         = new EnemyData(false, 0, 0, 0, "C"),
@@ -37,10 +37,10 @@ public static class EnemiesDataManager
         ["Lasso"]               = new EnemyData(false, 0, 0, 0, "dont exist haha"),
 
         // Unsellable
-        ["ForestGiant"] = new EnemyData(false, 0, 0, 0, "S"), // This one is just too big lmao
+        ["ForestGiant"]         = new EnemyData(false, 0, 0, 0, "S"), // This one is just too big lmao
 
         // MODDED
-        ["PinkGiant"]           = new EnemyData(false, 0, 0, 0, "F"),
+        ["PinkGiant"]           = new EnemyData(false, 0, 0, 0, "F"), // Too big too to be sold
         ["Football"]            = new EnemyData(false, 0, 0, 0, "B"),
         ["Locker"]              = new EnemyData(false, 0, 0, 0, "A"),
         ["Bush Wolf"]           = new EnemyData(true, 250, 320, 72, "A"),
@@ -120,60 +120,5 @@ public static class EnemiesDataManager
         //Plugin.logger.LogDebug(EnemiesDataFile);
         File.WriteAllText(EnemiesDataFile, output);
         Plugin.logger.LogInfo("Saved enemies data.");
-    }
-
-    internal static void FixupEnemyNetworkBehaviours(EnemyAI enemy)
-    {
-        Plugin.logger.LogInfo($"Fixing prefab for mob {enemy.enemyType.enemyName} to be grabbable.");
-
-        if (!SyncedConfig.Instance.EnemiesData.ContainsKey(enemy.enemyType.enemyName))
-        {
-            EnemiesDataManager.RegisterEnemy(enemy.enemyType.enemyName, new());
-            Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{enemy.enemyType.enemyName}'");
-        }
-
-        var enemyData = SyncedConfig.Instance.EnemiesData[enemy.enemyType.enemyName];
-
-        //enemy.meshRenderers[0].GetComponent<Collider>().enabled = true;
-        var physPropComponent = enemy.gameObject.EnsureComponent<PhysicsProp>();
-        var scanNode = enemy.gameObject.transform.Find("ScanNode")?.gameObject.GetComponent<ScanNodeProperties>() ?? null;
-        if (scanNode is null)
-            return;
-
-        Plugin.logger.LogInfo("Added GrabbableObject component to mob. Now setting it up.");
-        physPropComponent.grabbable = false;  // Will be set to true on runtime
-        physPropComponent.customGrabTooltip = enemy.enemyType.enemyName;
-        physPropComponent.scrapValue = 0;
-        physPropComponent.propColliders =
-        [
-            scanNode.gameObject.GetComponent<Collider>(),
-            physPropComponent.gameObject.GetComponent<Collider>()
-        ];
-        //physPropComponent.mainObjectRenderer = enemy.meshRenderers[0];
-        physPropComponent.enabled = false;  // Will be set to true on runtime
-        physPropComponent.itemProperties = ScriptableObject.CreateInstance<Item>();
-        physPropComponent.itemProperties.name = $"{enemy.enemyType.enemyName} Loot";
-        physPropComponent.itemProperties.itemId = 0;
-        physPropComponent.itemProperties.itemName = enemy.enemyType.enemyName;
-        physPropComponent.itemProperties.allowDroppingAheadOfPlayer = true;
-        physPropComponent.itemProperties.creditsWorth = 0;
-        physPropComponent.itemProperties.grabAnim = "HoldLung";
-        physPropComponent.itemProperties.isScrap = false;
-        physPropComponent.itemProperties.itemSpawnsOnGround = false;
-        physPropComponent.itemProperties.twoHanded = true;
-        physPropComponent.itemProperties.twoHandedAnimation = true;
-        physPropComponent.itemProperties.spawnPrefab = enemy.enemyType.enemyPrefab;
-        physPropComponent.itemProperties.minValue = enemyData.MinValue;
-        physPropComponent.itemProperties.maxValue = enemyData.MaxValue;
-        physPropComponent.itemProperties.meshOffset = false;
-        physPropComponent.itemProperties.pocketAnim = "";
-        physPropComponent.itemProperties.throwAnim = "";
-        physPropComponent.itemProperties.useAnim = "";
-        physPropComponent.itemProperties.meshVariants = [];
-        physPropComponent.itemProperties.materialVariants = [];
-        physPropComponent.itemProperties.requiresBattery = false;
-
-        physPropComponent.itemProperties.weight = enemyData.Mass / 100f;
-        Plugin.logger.LogInfo($"Mob {enemy.enemyType.enemyName} have been fixed.");
     }
 }

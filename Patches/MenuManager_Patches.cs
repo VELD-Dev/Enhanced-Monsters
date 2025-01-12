@@ -25,7 +25,11 @@ public class MenuManager_Patches
         Plugin.logger.LogInfo($"{enemies.Length} enemies to patch.");
         foreach(var enemy in enemies)
         {
-            EnemiesDataManager.FixupEnemyNetworkBehaviours(enemy);
+            if (!SyncedConfig.Instance.EnemiesData.ContainsKey(enemy.enemyType.enemyName))
+            {
+                EnemiesDataManager.RegisterEnemy(enemy.enemyType.enemyName, new());
+                Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{enemy.enemyType.enemyName}'");
+            }
         }
         EnemiesDataManager.SaveEnemiesData();
 

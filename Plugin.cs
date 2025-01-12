@@ -1,4 +1,6 @@
-﻿namespace EnhancedMonsters;
+﻿using EnhancedMonsters.Utils;
+
+namespace EnhancedMonsters;
 
 [BepInPlugin(PluginInfo.GUID, PluginInfo.DisplayName, PluginInfo.Version)]
 [BepInDependency("ainavt.lc.lethalconfig", BepInDependency.DependencyFlags.HardDependency)]
@@ -9,6 +11,7 @@ public class Plugin : BaseUnityPlugin
     internal static Plugin Singleton { get; private set; }
     private static readonly Harmony harmony = new(PluginInfo.GUID);
     public static ManualLogSource? logger;
+    public static GameObject EnemyToPropPrefab { get; private set; }
 
     private void Awake()
     {
@@ -27,6 +30,8 @@ public class Plugin : BaseUnityPlugin
         logger.LogInfo("Enemies data loaded and ready to be synchronized.");
         ApplyAllPatches();
         logger.LogDebug("All harmony patches have been applied (energistics).");
+        CreateThePrefab();
+        logger.LogDebug("The Prefab have been created correctly");
     }
 
     private static void ApplyAllPatches()
@@ -46,7 +51,48 @@ public class Plugin : BaseUnityPlugin
         logger.LogDebug("PlayerController patches applied.");
         harmony.PatchAll(typeof(GameNetworkManager_Patches));
         logger.LogDebug("GameNetworkManager patches applied.");
-        harmony.PatchAll(typeof(RoundManager_Patches));
-        logger.LogDebug("RoundManager patches applied.");
+    }
+
+    private static void CreateThePrefab()
+    {
+        var prefab = new GameObject("EnemyAsProp");
+        prefab.hideFlags = HideFlags.HideAndDontSave;
+        prefab.tag = "PhysicsProp";
+        prefab.layer = 6;
+        GameObject.DontDestroyOnLoad(prefab);
+        var networkObject = prefab.AddComponent<NetworkObject>();
+        networkObject.ActiveSceneSynchronization = false;
+        networkObject.AlwaysReplicateAsRoot = false;
+        networkObject.AutoObjectParentSync = false;
+        networkObject.SynchronizeTransform = true;
+        networkObject.SceneMigrationSynchronization = true;
+        networkObject.SpawnWithObservers = true;
+        networkObject.DontDestroyWithOwner = true;
+        var collider = prefab.AddComponent<BoxCollider>();
+        collider.enabled = true;
+        var physProp = prefab.AddComponent<PhysicsProp>();
+        physProp.grabbable = true;
+        physProp.scrapValue = 0;
+        physProp.propColliders = [ collider ];
+        physProp.enabled = true;
+        physProp.customGrabTooltip = "Grab";
+        physProp.itemProperties = ScriptableObject.CreateInstance<Item>();
+        physProp.itemProperties.itemId = 0;
+        physProp.itemProperties.allowDroppingAheadOfPlayer = true;
+        physProp.itemProperties.creditsWorth = 0;
+        physProp.itemProperties.grabAnim = "HoldLung";
+        physProp.itemProperties.isScrap = false;
+        physProp.itemProperties.itemSpawnsOnGround = false;
+        physProp.itemProperties.twoHanded = true;
+        physProp.itemProperties.twoHandedAnimation = true;
+        physProp.itemProperties.meshOffset = false;
+        physProp.itemProperties.pocketAnim = "";
+        physProp.itemProperties.throwAnim = "";
+        physProp.itemProperties.useAnim = "";
+        physProp.itemProperties.meshVariants = [];
+        physProp.itemProperties.materialVariants = [];
+        physProp.itemProperties.requiresBattery = false;
+
+        EnemyToPropPrefab = prefab;
     }
 }
