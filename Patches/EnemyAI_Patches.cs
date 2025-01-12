@@ -40,7 +40,7 @@ public class EnemyAI_Patches
         if (NetworkManager.Singleton.IsHost)
         {
             var enemyData = SyncedConfig.Instance.EnemiesData[__instance.enemyType.enemyName];
-            int mobValue = RoundManager.Instance.AnomalyRandom.Next(enemyData.MinValue, enemyData.MaxValue);
+            int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
             var netref = new NetworkBehaviourReference(__instance);
             Plugin.logger.LogInfo("Synchronizing the mob data and scrap value with clients...");
             InstantiatePhysicPrefabServerRpc(netref, mobValue);

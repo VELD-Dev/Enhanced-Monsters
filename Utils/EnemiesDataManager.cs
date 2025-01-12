@@ -145,7 +145,7 @@ public static class EnemiesDataManager
                 var pp = e2p.GetComponent<PhysicsProp>();
                 pp.itemProperties.minValue = SyncedConfig.Instance.EnemiesData[enemyName].MinValue;
                 pp.itemProperties.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
-                pp.itemProperties.weight = SyncedConfig.Instance.EnemiesData[enemyName].Mass;
+                pp.itemProperties.weight = SyncedConfig.Instance.EnemiesData[enemyName].Mass / 100f;
 
                 continue;
             }
