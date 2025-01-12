@@ -91,12 +91,16 @@ public static class EnemiesDataManager
     /// <param name="maxPrice">Maximum price of the entity</param>
     /// <param name="mass">Mass (in lb) of the entity</param>
     /// <param name="rank">Rank of the entity shown in the holo-display when scanned. Do not line-break, make it as short as possible.</param>
-    public static void RegisterEnemy(string enemyName, bool sellable, int minPrice, int maxPrice, int mass, string rank)
+    public static void RegisterEnemy(string enemyName, bool sellable, int minPrice, int maxPrice, float mass, string rank)
     {
         EnemiesData.Add(enemyName, new(sellable, minPrice, maxPrice, mass, rank));
+
+        if (!SyncedConfig.IsHost && NetworkManager.Singleton.IsListening) return;
+
+        SyncedConfig.BroadcastSync();
     }
 
-    public static void RegisterEnemy(string enemyName, EnemyData enemyData)
+    internal static void RegisterEnemy(string enemyName, EnemyData enemyData)
     {
         if (!SyncedConfig.IsHost && NetworkManager.Singleton.IsListening) return;
 
@@ -145,7 +149,7 @@ public static class EnemiesDataManager
                 var pp = e2p.GetComponent<PhysicsProp>();
                 pp.itemProperties.minValue = SyncedConfig.Instance.EnemiesData[enemyName].MinValue;
                 pp.itemProperties.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
-                pp.itemProperties.weight = SyncedConfig.Instance.EnemiesData[enemyName].Mass / 100f;
+                pp.itemProperties.weight = SyncedConfig.Instance.EnemiesData[enemyName].LCMass;
 
                 continue;
             }
@@ -169,15 +173,6 @@ public static class EnemiesDataManager
 
             var mapDot = copy.transform.Find("MapDot");
             if(mapDot)  GameObject.Destroy(mapDot);
-
-            // might need to set that on 
-            var enemyAnimator = copy.GetComponentInChildren<Animator>();
-            enemyAnimator.SetBool("Stunned", false);
-            enemyAnimator.SetBool("stunned", false);
-            enemyAnimator.SetBool("stun", false);
-            //enemyAnimator.SetTrigger("KillEnemy");
-            enemyAnimator.SetBool("Dead", true);
-
 
             // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
             var scanNode = copy.transform.Find("ScanNode");
@@ -205,7 +200,7 @@ public static class EnemiesDataManager
             enemyItem.twoHanded = true;
             enemyItem.requiresBattery = false;
             enemyItem.twoHandedAnimation = true;
-            enemyItem.weight = SyncedConfig.Instance.EnemiesData[enemyName].Mass / 100f;
+            enemyItem.weight = SyncedConfig.Instance.EnemiesData[enemyName].LCMass;
             enemyItem.spawnPrefab = e2prop;
 
             LethalLib.Modules.Items.RegisterItem(enemyItem);

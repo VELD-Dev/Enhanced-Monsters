@@ -107,7 +107,26 @@ public class EnemyAI_Patches
         scanNode.scrapValue = physPropComponent.scrapValue;
         scanNode.subText = $"Rank:{enemyData.Rank}\nValue: ${scanNode.scrapValue}";
 
+        var enemyAnimator = enemy2PropGO.GetComponentInChildren<Animator>();
+        if (enemyAnimator)
+        {
+            try
+            {
+                enemyAnimator.SetBool("Stunned", false);
+                enemyAnimator.SetBool("stunned", false);
+                enemyAnimator.SetBool("stun", false);
+                enemyAnimator.SetTrigger("KillEnemy");
+                enemyAnimator.SetBool("Dead", true);
+            }
+            catch (Exception e)
+            {
+                Plugin.logger.LogWarning($"Tried to set animation to 'Dead' state on enemy '{enemy.enemyType.enemyName}' but failed. Enemy has no dead state ? Probably a modded enemy. Error: {e}");
+            }
+        }
+
         enemy.gameObject.GetComponent<NetworkObject>().Despawn(true);
+
+
 
         Plugin.logger.LogDebug("Mob successfully synchronized among all clients ! It is now grabbable and sellable !");
     }

@@ -1,4 +1,5 @@
 ﻿using EnhancedMonsters.Utils;
+using System.Runtime.CompilerServices;
 
 namespace EnhancedMonsters;
 

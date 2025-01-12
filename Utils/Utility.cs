@@ -1,7 +1,9 @@
 ﻿namespace EnhancedMonsters.Utils;
 
-public static class TypesExtensions
+public static class Utility
 {
+    public const float KgToLb = 1f/0.45359237f;
+
     public static string ToStringObj(this object obj, string prefix = "")
     {
         var sb = new StringBuilder();

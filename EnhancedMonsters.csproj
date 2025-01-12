@@ -178,6 +178,12 @@
     <Copy SourceFiles="$(ProjectDir)/LICENSE" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
     <ZipDirectory SourceDirectory="bin/$(Configuration)/$(AssemblyName)/" DestinationFile="$(LCPluginFolder)/$(AssemblyName).zip" Overwrite="true" />
 
+    <MakeDir Directories="bin/$(Configuration)/EnhancedMonstersThunderstore/BepInEx/plugins/$(AssemblyName)/" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="bin/$(Configuration)/EnhancedMonstersThunderstore/BepInEx/plugins/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(ProjectDir)/README.md;$(ProjectDir)/manifest.json;$(ProjectDir)/LICENSE;$(ProjectDir)/icon.png" DestinationFolder="bin/$(Configuration)/EnhancedMonstersThunderstore/"/>
+    <Copy Condition="Exists('$(ProjectDir)CHANGELOG.md')" SourceFiles="$(ProjectDir)/CHANGELOG.md" DestinationFolder="bin/$(Configuration)/EnhancedMonstersThunderstore/"/>
+    <ZipDirectory SourceDirectory="bin/$(Configuration)/EnhancedMonstersThunderstore/" DestinationFile="$(ProjectDir)/$(AssemblyName)Thunderstore.zip" Overwrite="true"/>
+
     <MakeDir Directories="$(LCPluginFolder)/$(AssemblyName)/" ContinueOnError="false" />
     <Copy SourceFiles="bin/$(Configuration)/$(AssemblyName)/$(AssemblyName).dll" DestinationFolder="$(LCPluginFolder)/$(AssemblyName)/" SkipUnchangedFiles="true" />
     <Copy SourceFiles="bin/$(Configuration)/$(AssemblyName)/README.md" DestinationFolder="$(LCPluginFolder)/$(AssemblyName)/" SkipUnchangedFiles="true" />
