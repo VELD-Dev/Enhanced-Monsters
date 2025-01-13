@@ -6,23 +6,31 @@ namespace EnhancedMonsters.Utils;
 
 public static class EnemiesDataManager
 {
+    [JsonObject]
+    [method: JsonConstructor]
+    public class EnemyDataFile(int version, Dictionary<string, EnemyData> enemiesData)
+    {
+        public int Version { get; set; } = version;
+        public Dictionary<string, EnemyData> EnemiesData { get; set; } = enemiesData ?? [];
+    }
+
     public static readonly Dictionary<string, EnemyData> EnemiesData = [];
     public static readonly Dictionary<string, EnemyData> DefaultEnemiesData = new()
     {
         // Lootable
         ["Manticoil"]           = new EnemyData(true, 100, 160, 10, "F"),
-        ["Tulip Snake"]         = new EnemyData(true, 10, 70, 24, "F"),
-        ["Baboon hawk"]         = new EnemyData(true, 40, 70, 61, "E"),
-        ["Hoarding bug"]        = new EnemyData(true, 30, 60, 38, "E"),
-        ["Puffer"]              = new EnemyData(true, 50, 95, 78, "D"),
+        ["Tulip Snake"]         = new EnemyData(true, 10, 70, 11, "F"),
+        ["Baboon hawk"]         = new EnemyData(true, 40, 70, 31, "E"),
+        ["Hoarding bug"]        = new EnemyData(true, 30, 60, 24, "E"),
+        ["Puffer"]              = new EnemyData(true, 50, 95, 69, "D"),
         ["Centipede"]           = new EnemyData(true, 55, 95, 23, "D"),
-        ["Bunker Spider"]       = new EnemyData(true, 140, 180, 75, "C"),
+        ["Bunker Spider"]       = new EnemyData(true, 140, 180, 57, "C"),
         ["MouthDog"]            = new EnemyData(true, 170, 210, 88, "C"),
         ["Crawler"]             = new EnemyData(true, 210, 270, 66, "B"),
-        ["Flowerman"]           = new EnemyData(true, 225, 299, 45, "B"),
-        ["Butler"]              = new EnemyData(true, 250, 305, 99, "B"),
-        ["Nutcracker"]          = new EnemyData(true, 300, 340, 44, "A"),
-        ["Maneater"]            = new EnemyData(true, 310, 340, 80, "A"),
+        ["Flowerman"]           = new EnemyData(true, 225, 299, 40, "B"),
+        ["Butler"]              = new EnemyData(true, 250, 305, 77, "B"),
+        ["Nutcracker"]          = new EnemyData(true, 300, 340, 43, "A"),
+        ["Maneater"]            = new EnemyData(true, 310, 340, 42, "A"),
 
 
         // Invincible
@@ -47,8 +55,8 @@ public static class EnemiesDataManager
         ["PinkGiant"]           = new EnemyData(false, 0, 0, 0, "F"), // Too big too to be sold
         ["Football"]            = new EnemyData(false, 0, 0, 0, "B"),
         ["Locker"]              = new EnemyData(false, 0, 0, 0, "A"),
-        ["Bush Wolf"]           = new EnemyData(true, 250, 320, 72, "A"),
-        ["PjonkGoose"]          = new EnemyData(true, 279, 340, 60, "A"),
+        ["Bush Wolf"]           = new EnemyData(true, 250, 320, 51, "A"),
+        ["PjonkGoose"]          = new EnemyData(true, 279, 340, 64, "A"),
 
     };
     public static string EnemiesDataFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EnemiesData.json");
@@ -66,7 +74,7 @@ public static class EnemiesDataManager
 
         var filetext = File.ReadAllText(EnemiesDataFile);
         Plugin.logger.LogDebug(filetext);
-        var parsed = JsonConvert.DeserializeObject<Dictionary<string, EnemyData>>(filetext);
+        var parsed = JsonConvert.DeserializeObject<EnemyDataFile>(filetext);
         if (parsed is null)
         {
             Plugin.logger.LogWarning("Enemy Data File seems to be empty or invalid.");
@@ -74,7 +82,16 @@ public static class EnemiesDataManager
             SaveEnemiesData();
             return;
         }
-        EnemiesData.ProperConcat(parsed);
+
+        if(parsed.Version < PluginInfo.ConfigVersion)
+        {
+            Plugin.logger.LogWarning("Enemy Data File seems to be outdated. A new config file will be created.");
+            EnemiesData.ProperConcat(DefaultEnemiesData);
+            SaveEnemiesData();
+            return;
+        }
+
+        EnemiesData.ProperConcat(parsed.EnemiesData);
         Plugin.logger.LogDebug($"{parsed} => {EnemiesData.Count}");
         EnemiesData.ProperConcat(DefaultEnemiesData);
         Plugin.logger.LogDebug($"{DefaultEnemiesData.Count} => {EnemiesData.Count}");
@@ -124,7 +141,9 @@ public static class EnemiesDataManager
     {
         if (!SyncedConfig.IsHost && (NetworkManager.Singleton?.IsListening ?? false)) return;
 
-        var output = JsonConvert.SerializeObject(EnemiesData, Newtonsoft.Json.Formatting.Indented);
+        var newFile = new EnemyDataFile(PluginInfo.ConfigVersion, EnemiesData);
+
+        var output = JsonConvert.SerializeObject(newFile, Newtonsoft.Json.Formatting.Indented);
         //Plugin.logger.LogDebug(output);
         //Plugin.logger.LogDebug(EnemiesDataFile);
         File.WriteAllText(EnemiesDataFile, output);
@@ -159,10 +178,28 @@ public static class EnemiesDataManager
             var copy = new GameObject(enemy.name + " neutralized");
             foreach(Transform c in enemy.transform)
             {
+                if (c.name.StartsWith("MapDot")) continue;
+                if (c.name.StartsWith("Collider")) continue;
+                if (c.name.StartsWith("VoiceSFX")) continue;
+                if (c.name.StartsWith("CreatureSFX")) continue;
+                if (c.name.StartsWith("SeepingSFX")) continue;
+                if (c.name.StartsWith("CreatureVoice")) continue;
+                if (c.name.StartsWith("Ambience")) continue;
+
                 var goCopy = GameObject.Instantiate(c);
                 goCopy.name = c.name;
                 goCopy.transform.parent = copy.transform;
             }
+            // Clearing components that should not be
+            copy.RemoveComponentsInChildren<Collider>();
+            copy.RemoveComponentsInChildren<OccludeAudio>();
+            copy.RemoveComponentsInChildren<EnemyAICollisionDetect>();
+            copy.RemoveComponentsInChildren<AudioSource>();
+            copy.RemoveComponentsInChildren<AudioLowPassFilter>();
+            copy.RemoveComponentsInChildren<AudioReverbFilter>();
+            copy.RemoveComponentsInChildren<ParticleSystem>();
+            copy.RemoveComponentsInChildren<ParticleSystemRenderer>();
+
             copy.transform.localScale = enemy.transform.localScale;
             var e2prop = LethalLib.Modules.NetworkPrefabs.CloneNetworkPrefab(Plugin.EnemyToPropPrefab, enemy.name + " propized");
             copy.transform.parent = e2prop.transform;
@@ -171,16 +208,15 @@ public static class EnemiesDataManager
             physProp.grabbable = true;
             physProp.grabbableToEnemies = false;
 
-            var mapDot = copy.transform.Find("MapDot");
-            if(mapDot)  GameObject.Destroy(mapDot);
-
             // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
             var scanNode = copy.transform.Find("ScanNode");
             if (!scanNode)
                 continue;
 
             scanNode.transform.parent = e2prop.transform;
-            var scanComp = scanNode.GetComponent<ScanNodeProperties>();
+            scanNode.gameObject.AddComponent<BoxCollider>();
+            scanNode.localPosition = new(0, 0, 0);
+            var scanComp = scanNode.gameObject.EnsureComponent<ScanNodeProperties>();
             scanComp.maxRange = 13;
             scanComp.minRange = 1;
             scanComp.nodeType = 2;

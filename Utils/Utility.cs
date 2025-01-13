@@ -81,4 +81,19 @@ public static class Utility
             target.Add(kvp.Key, kvp.Value);
         }
     }
+
+    /// <summary>
+    /// Removes and destroy all the components in the children of the gameobject.
+    /// </summary>
+    /// <typeparam name="T">Type of the components to remove</typeparam>
+    /// <param name="go">GameObject whose children to remove the components from</param>
+    public static void RemoveComponentsInChildren<T>(this GameObject go) where T : Component
+    {
+        var components = go.GetComponentsInChildren<T>();
+        foreach(T comp in components)
+        {
+            Plugin.logger.LogDebug($"Destroying component {comp.GetType().Name} on {comp.name} (child of {go.name})");
+            Component.Destroy(comp);
+        }
+    }
 }

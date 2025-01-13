@@ -2,6 +2,18 @@
 
 All notable changes will be documented in the changelog.  
   
+## [1.0.5](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.0.5) - 2025-01-13  
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.0.4..1.0.5)
+- Added a config versionning. Your current enemies data current configs will all be reset to the *new* default values.
+- Removed mobs collisions when they're dead
+- Removed mobs sounds when they die
+- Fixed ScanNode not showing on some dead monsters.  
+
+Known issues:
+- The butler keeps moving after its death... wtf?
+- The Forest Giant does not have any scan node for some reason, so I'll fix it next hotfix
+
 ## [1.0.4](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.0.4) - 2025-01-12
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.0.3..1.0.4)
