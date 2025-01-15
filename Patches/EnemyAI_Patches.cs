@@ -3,7 +3,6 @@
 
 namespace EnhancedMonsters.Patches;
 
-[StaticNetcode]
 [HarmonyPatch(typeof(EnemyAI))]
 public class EnemyAI_Patches
 {
@@ -11,7 +10,12 @@ public class EnemyAI_Patches
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.Start))]
     private static void Start(EnemyAI __instance)
     {
-        string creatureRank = SyncedConfig.Instance.EnemiesData[__instance.enemyType.enemyName].Rank ?? "?";
+        string creatureRank;
+        if(LocalConfig.Singleton.synchronizeRanks.Value)
+            creatureRank = SyncedConfig.Instance.EnemiesData[__instance.enemyType.enemyName].Rank ?? "?";
+        else
+            creatureRank = SyncedConfig.Default.EnemiesData[__instance.enemyType.enemyName].Rank ?? "?";
+
         var scanData = __instance.gameObject.transform.Find("ScanNode").gameObject.EnsureComponent<ScanNodeProperties>();
         scanData.subText = $"Rank {creatureRank}";
     }
@@ -37,97 +41,20 @@ public class EnemyAI_Patches
             Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{__instance.enemyType.enemyName}'");
         }
 
-        if (NetworkManager.Singleton.IsHost)
+        if (NetworkManager.Singleton.IsServer)
         {
-            var enemyData = SyncedConfig.Instance.EnemiesData[__instance.enemyType.enemyName];
-            int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
-            var netref = new NetworkBehaviourReference(__instance);
-            Plugin.logger.LogInfo("Synchronizing the mob data and scrap value with clients...");
-            InstantiatePhysicPrefabServerRpc(netref, mobValue);
+            Plugin.logger.LogDebug($"Spawning EnemyScrap for enemy {__instance.enemyType.enemyName}.");
+            if (!EnemiesDataManager.Enemies2Props.TryGetValue(__instance.enemyType.enemyName, out var enemy2prop))
+            {
+                Plugin.logger.LogWarning($"Mob {__instance.enemyType.enemyName} has no enemy2prop prefab.");
+            }
+
+            var enemyToPropInstance = NetworkManager.Instantiate(enemy2prop);
+            enemyToPropInstance.transform.position = __instance.transform.position;
+            enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
+            __instance.GetComponent<NetworkObject>().Despawn(true);
         }
 
         Plugin.logger.LogDebug("Mob should now be grabbable for all users.");
-    }
-
-    //////////
-    // RPCs //
-    //////////
-
-    [ServerRpc]
-    public static void InstantiatePhysicPrefabServerRpc(NetworkBehaviourReference netref, int mobValue)
-    {
-        if(!netref.TryGet<EnemyAI>(out var enemy))
-        {
-            Plugin.logger.LogError("Coudln't instantiate physic prop prefab: Invalid EnemyAI net behaviour reference");
-            return;
-        }
-
-        if(!EnemiesDataManager.Enemies2Props.TryGetValue(enemy.enemyType.enemyName, out var enemy2prop))
-        {
-            Plugin.logger.LogWarning($"Mob {enemy.enemyType.enemyName} has no enemy2prop prefab.");
-        }
-
-        var enemyToPropInstance = NetworkManager.Instantiate(enemy2prop);
-        enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
-        var e2propInstRef = new NetworkObjectReference(enemyToPropInstance);
-
-        SynchronizeMobClientRpc(netref, e2propInstRef, mobValue);
-    }
-
-    [ClientRpc]
-    public static void SynchronizeMobClientRpc(NetworkBehaviourReference enemyNetRef, NetworkObjectReference enemy2PropNetRef, int mobValue)
-    {
-        if(!enemyNetRef.TryGet(out EnemyAI enemy, NetworkManager.Singleton))
-        {
-            Plugin.logger.LogError("Couldn't synchronize the enemy among network: The network reference was invalid. Critical synchronization error. Can you even see that dead enemy ?");
-            return;
-        }
-        
-        if(!enemy2PropNetRef.TryGet(out NetworkObject enemy2PropNetObj))
-        {
-            Plugin.logger.LogError("Couldn't synchronize the enemy among network: The network object reference for Physic Props was invalid. Maybe it wasn't spawned correctly at first.");
-            return;
-        }
-
-        var enemy2PropGO = enemy2PropNetObj.gameObject;
-        enemy2PropGO.transform.position = enemy.transform.position;
-        var enemyData = SyncedConfig.Instance.EnemiesData[enemy.enemyType.enemyName];
-
-        if (!enemy2PropGO.TryGetComponent(out PhysicsProp physPropComponent))
-        {
-            Plugin.logger.LogError("Physic Prop Object did not have the PhysicsProp component. Make sure the component was correctly initialized before the game start.");
-            return;
-        }
-
-        physPropComponent.grabbable = enemyData.Pickupable;
-        physPropComponent.scrapValue = mobValue;
-
-        var scanNodeGo = enemy2PropGO.transform.Find("ScanNode").gameObject;
-        var scanNode = scanNodeGo.GetComponent<ScanNodeProperties>();
-        scanNode.scrapValue = physPropComponent.scrapValue;
-        scanNode.subText = $"Rank:{enemyData.Rank}\nValue: ${scanNode.scrapValue}";
-
-        var enemyAnimator = enemy2PropGO.GetComponentInChildren<Animator>();
-        if (enemyAnimator)
-        {
-            try
-            {
-                enemyAnimator.SetBool("Stunned", false);
-                enemyAnimator.SetBool("stunned", false);
-                enemyAnimator.SetBool("stun", false);
-                enemyAnimator.SetTrigger("KillEnemy");
-                enemyAnimator.SetBool("Dead", true);
-            }
-            catch (Exception e)
-            {
-                Plugin.logger.LogWarning($"Tried to set animation to 'Dead' state on enemy '{enemy.enemyType.enemyName}' but failed. Enemy has no dead state ? Probably a modded enemy. Error: {e}");
-            }
-        }
-
-        enemy.gameObject.GetComponent<NetworkObject>().Despawn(true);
-
-
-
-        Plugin.logger.LogDebug("Mob successfully synchronized among all clients ! It is now grabbable and sellable !");
     }
 }

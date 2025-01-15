@@ -18,19 +18,19 @@ public static class EnemiesDataManager
     public static readonly Dictionary<string, EnemyData> DefaultEnemiesData = new()
     {
         // Lootable
-        ["Manticoil"]           = new EnemyData(true, 100, 160, 10, "F"),
-        ["Tulip Snake"]         = new EnemyData(true, 10, 70, 11, "F"),
-        ["Baboon hawk"]         = new EnemyData(true, 40, 70, 31, "E"),
+        ["Manticoil"]           = new EnemyData(true, 20, 30, 10, "F"),
+        ["Tulip Snake"]         = new EnemyData(true, 10, 20, 11, "F"),
         ["Hoarding bug"]        = new EnemyData(true, 30, 60, 24, "E"),
-        ["Puffer"]              = new EnemyData(true, 50, 95, 69, "D"),
-        ["Centipede"]           = new EnemyData(true, 55, 95, 23, "D"),
-        ["Bunker Spider"]       = new EnemyData(true, 140, 180, 57, "C"),
-        ["MouthDog"]            = new EnemyData(true, 170, 210, 88, "C"),
-        ["Crawler"]             = new EnemyData(true, 210, 270, 66, "B"),
-        ["Flowerman"]           = new EnemyData(true, 225, 299, 40, "B"),
-        ["Butler"]              = new EnemyData(true, 250, 305, 77, "B"),
-        ["Nutcracker"]          = new EnemyData(true, 300, 340, 43, "A"),
-        ["Maneater"]            = new EnemyData(true, 310, 340, 42, "A"),
+        ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E"),
+        ["Centipede"]           = new EnemyData(true, 25, 40, 23, "D"),
+        ["Baboon hawk"]         = new EnemyData(true, 40, 70, 31, "D"),
+        ["Bunker Spider"]       = new EnemyData(true, 90, 120, 57, "C"),
+        ["MouthDog"]            = new EnemyData(true, 110, 140, 88, "C"),
+        ["Crawler"]             = new EnemyData(true, 150, 180, 66, "B"),
+        ["Flowerman"]           = new EnemyData(true, 162, 190, 40, "B"),
+        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B"),
+        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A"),
+        ["Maneater"]            = new EnemyData(true, 250, 290, 42, "S"),
 
 
         // Invincible
@@ -83,7 +83,7 @@ public static class EnemiesDataManager
             return;
         }
 
-        if(parsed.Version < PluginInfo.ConfigVersion)
+        if((PluginInfo.ConfigVersion - parsed.Version) > 1)
         {
             Plugin.logger.LogWarning("Enemy Data File seems to be outdated. A new config file will be created.");
             EnemiesData.ProperConcat(DefaultEnemiesData);
@@ -165,7 +165,8 @@ public static class EnemiesDataManager
                     continue;
                 }
 
-                var pp = e2p.GetComponent<PhysicsProp>();
+                var pp = e2p.GetComponent<EnemyScrap>();
+                pp.enemyType = enemy.enemyType;
                 pp.itemProperties.minValue = SyncedConfig.Instance.EnemiesData[enemyName].MinValue;
                 pp.itemProperties.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
                 pp.itemProperties.weight = SyncedConfig.Instance.EnemiesData[enemyName].LCMass;
@@ -204,9 +205,10 @@ public static class EnemiesDataManager
             var e2prop = LethalLib.Modules.NetworkPrefabs.CloneNetworkPrefab(Plugin.EnemyToPropPrefab, enemy.name + " propized");
             copy.transform.parent = e2prop.transform;
             Plugin.logger.LogInfo($"Attached {copy.name} to {copy.transform.parent.name}");
-            var physProp = e2prop.GetComponent<PhysicsProp>();
-            physProp.grabbable = true;
-            physProp.grabbableToEnemies = false;
+            var enemyScrap = e2prop.GetComponent<EnemyScrap>();
+            enemyScrap.grabbable = true;
+            enemyScrap.grabbableToEnemies = false;
+            enemyScrap.enemyType = enemy.enemyType;
 
             // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
             var scanNode = copy.transform.Find("ScanNode");
@@ -224,8 +226,9 @@ public static class EnemiesDataManager
             scanComp.headerText = "Dead " + scanComp.headerText;
 
             var enemyItem = ScriptableObject.CreateInstance<Item>();
-            physProp.itemProperties = enemyItem;
+            enemyScrap.itemProperties = enemyItem;
 
+            enemyItem.name = enemyName + " scrap";
             enemyItem.itemName = scanComp.headerText;
             enemyItem.minValue = SyncedConfig.Instance.EnemiesData[enemyName].MinValue;
             enemyItem.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
@@ -240,6 +243,7 @@ public static class EnemiesDataManager
             enemyItem.spawnPrefab = e2prop;
 
             LethalLib.Modules.Items.RegisterItem(enemyItem);
+            Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
             Enemies2Props.Add(enemyName, e2prop);
             Plugin.logger.LogInfo($"Registered NetworkPrefab '{e2prop.name}'/'{copy.name}' ({enemyItem.itemName})");
         }

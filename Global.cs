@@ -27,17 +27,11 @@ global using BepInEx.Logging;
 global using HarmonyLib;
 global using HarmonyLib.Tools;
 
-global using LethalConfig;
-global using LethalConfig.ConfigItems;
-global using LethalConfig.ConfigItems.Options;
-
 global using EnhancedMonsters;
 global using EnhancedMonsters.Config;
 global using EnhancedMonsters.Monobehaviours;
 global using EnhancedMonsters.Patches;
 global using EnhancedMonsters.Utils;
-
-global using StaticNetcodeLib;
 
 global using LethalLib;
 global using LethalLib.Modules;

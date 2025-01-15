@@ -52,6 +52,9 @@
     <Reference Include="LethalLib">
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\LethalLib\LethalLib.dll</HintPath>
     </Reference>
+    <Reference Include="LethalSettings">
+      <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\LethalSettings\LethalSettings.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -156,9 +159,6 @@
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="Xilophor.StaticNetcodeLib">
-      <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\StaticNetcodeLib\Xilophor.StaticNetcodeLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 

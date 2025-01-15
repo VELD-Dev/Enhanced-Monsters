@@ -4,9 +4,9 @@ using System.Runtime.CompilerServices;
 namespace EnhancedMonsters;
 
 [BepInPlugin(PluginInfo.GUID, PluginInfo.DisplayName, PluginInfo.Version)]
-[BepInDependency("ainavt.lc.lethalconfig", BepInDependency.DependencyFlags.HardDependency)]
+[BepInDependency("ainavt.lc.lethalconfig", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency("com.willis.lc.lethalsettings", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("evaisa.lethallib", BepInDependency.DependencyFlags.HardDependency)]
-[BepInDependency(StaticNetcodeLib.MyPluginInfo.PLUGIN_GUID, BepInDependency.DependencyFlags.HardDependency)]
 [BepInIncompatibility("Entity378.sellbodies")]
 public class Plugin : BaseUnityPlugin 
 {
@@ -64,7 +64,7 @@ public class Plugin : BaseUnityPlugin
         collider.enabled = true;
         collider.isTrigger = true;
         collider.size = new(1.5f, 1.5f, 1.5f);
-        prefab.AddComponent<PhysicsProp>();
+        prefab.AddComponent<EnemyScrap>();
 
         EnemyToPropPrefab = prefab;
     }
