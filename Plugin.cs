@@ -20,12 +20,12 @@ public class Plugin : BaseUnityPlugin
         Singleton = this;
         logger = Logger;
         new LocalConfig(Config);
+        Plugin.logger.LogInfo("Local config initialized.");
+        NetcodePatcher();
     }
 
     private void Start()
     {
-        logger ??= Logger;  // This should never happen.
-
         logger.LogInfo("This is (maybe) NOT an RPG mod. And hi btw.");
         EnemiesDataManager.LoadEnemiesData();
         new SyncedConfig(Config);
@@ -60,6 +60,8 @@ public class Plugin : BaseUnityPlugin
         var prefab = LethalLib.Modules.NetworkPrefabs.CreateNetworkPrefab("EnemyAsProp");
         prefab.tag = "PhysicsProp";
         prefab.layer = 6;
+        var ngo = prefab.GetComponent<NetworkObject>();
+        ngo.AutoObjectParentSync = false;
         var collider = prefab.AddComponent<BoxCollider>();
         collider.enabled = true;
         collider.isTrigger = true;
@@ -67,5 +69,22 @@ public class Plugin : BaseUnityPlugin
         prefab.AddComponent<EnemyScrap>();
 
         EnemyToPropPrefab = prefab;
+    }
+
+    private static void NetcodePatcher()
+    {
+        var types = Assembly.GetExecutingAssembly().GetTypes();
+        foreach (var type in types)
+        {
+            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            foreach (var method in methods)
+            {
+                var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
+                if (attributes.Length > 0)
+                {
+                    method.Invoke(null, null);
+                }
+            }
+        }
     }
 }

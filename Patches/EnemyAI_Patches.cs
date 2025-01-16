@@ -16,8 +16,12 @@ public class EnemyAI_Patches
         else
             creatureRank = SyncedConfig.Default.EnemiesData[__instance.enemyType.enemyName].Rank ?? "?";
 
-        var scanData = __instance.gameObject.transform.Find("ScanNode").gameObject.EnsureComponent<ScanNodeProperties>();
-        scanData.subText = $"Rank {creatureRank}";
+        var scanNode = __instance.gameObject.transform.Find("ScanNode");
+        if(scanNode)
+        {
+            var scanData = scanNode.gameObject.EnsureComponent<ScanNodeProperties>();
+            scanData.subText = $"Rank {creatureRank}";
+        }
     }
 
     [HarmonyPostfix]

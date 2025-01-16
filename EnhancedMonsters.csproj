@@ -118,6 +118,9 @@
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.InputModule">
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.InputModule.dll</HintPath>
     </Reference>
@@ -177,6 +180,7 @@
   <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://github.com/VELD-Dev/schemastore/master/src/schemas/json/ThunderstoreManifestSchema.json" /></VisualStudio></ProjectExtensions>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
     <MakeDir Directories="bin/$(Configuration)/$(AssemblyName)/" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
     <Copy SourceFiles="$(ProjectDir)/README.md" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />

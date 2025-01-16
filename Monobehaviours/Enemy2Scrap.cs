@@ -6,7 +6,7 @@ namespace EnhancedMonsters.Monobehaviours;
 public class EnemyScrap : GrabbableObject
 {
     public Animator EnemyAnimator { get; private set; }
-    public GameObject ScanNode { get; private set; }
+    public ScanNodeProperties ScanNode { get; private set; }
     public EnemyType enemyType;
 
     private readonly NetworkVariable<int> _syncedScrapValue = new();
@@ -22,7 +22,7 @@ public class EnemyScrap : GrabbableObject
             Plugin.logger.LogWarning($"So somehow, the monster {gameObject.name} does not have any Animator. Will work anyway but might have its animations glitched");
         }
 
-        ScanNode = gameObject.transform.Find("ScanNode").gameObject;
+        ScanNode = gameObject.GetComponentInChildren<ScanNodeProperties>();
         if (ScanNode == null)
         {
             Plugin.logger.LogWarning($"No ScanNode found in {gameObject.name}. That's a weird enemy...");
@@ -32,6 +32,15 @@ public class EnemyScrap : GrabbableObject
     public override void Start()
     {
         base.Start();
+
+        if (IsServer)
+        {
+            Plugin.logger.LogInfo("Synchronizing the mob data and scrap values and positions with clients...");
+            var enemyData = SyncedConfig.Instance.EnemiesData[enemyType.enemyName];
+            int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
+
+            SyncedScrapValue = mobValue;
+        }
 
         Plugin.logger.LogInfo($"Mob scrap {enemyType.enemyName} has spawned !");
         if(EnemyAnimator != null)
@@ -58,9 +67,17 @@ public class EnemyScrap : GrabbableObject
         {
             var enemyData = LocalConfig.Singleton.synchronizeRanks.Value ? SyncedConfig.Instance.EnemiesData[enemyType.enemyName] : SyncedConfig.Default.EnemiesData[enemyType.enemyName];
             var scanNode = ScanNode.GetComponent<ScanNodeProperties>();
-            scanNode.scrapValue = scrapValue;
-            scanNode.subText = $"Rank:{enemyData.Rank}\nValue: ${scanNode.scrapValue}";
+            scanNode.scrapValue = SyncedScrapValue;
+            scanNode.subText = $"Rank:{enemyData.Rank}\nValue: ${SyncedScrapValue}";
         }
+    }
+
+    public void UpdateScrapValue(int value)
+    {
+        scrapValue = value;
+        ScanNode.scrapValue = value;
+        var enemyData = LocalConfig.Singleton.synchronizeRanks.Value ? SyncedConfig.Instance.EnemiesData[enemyType.enemyName] : SyncedConfig.Default.EnemiesData[enemyType.enemyName];
+        ScanNode.subText = $"Rank: {enemyData.Rank}\nValue: {value}";
     }
 
     public IEnumerator DisableAnimatorOnAnimationEnd()
@@ -81,16 +98,9 @@ public class EnemyScrap : GrabbableObject
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        _syncedScrapValue.OnValueChanged += (oldVal, newVal) => scrapValue = newVal;
+        _syncedScrapValue.Initialize(this);
+        _syncedPosition.Initialize(this);
+        _syncedScrapValue.OnValueChanged += (oldVal, newVal) => UpdateScrapValue(newVal);
         _syncedPosition.OnValueChanged += (oldVal, newVal) => transform.position = newVal;
-
-        if(IsServer)
-        {
-            Plugin.logger.LogInfo("Synchronizing the mob data and scrap values and positions with clients...");
-            var enemyData = SyncedConfig.Instance.EnemiesData[enemyType.enemyName];
-            int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
-
-            SyncedScrapValue = mobValue;
-        }
     }
 }
