@@ -105,3 +105,13 @@ public static class EnhancedMonstersCompatibilityLayer
     }
 }
 ```
+
+---
+
+### Attributions
+- **IAmBatby** (LethalExpansion, LethalToolbox) for helping me with the networking and with my prefab generation system (for the mobs scraps)
+- **Xilophor** (LethalNetworkAPI, StaticNetcode) for helping me with the networking
+- **Zagster** (OpenBodyCams) for helping me with the networking and various hints
+- **FROG** for helping me with the networking
+- **Xu Xiaolan** (Giant Species) for various help
+- **Moroxide** (Lethal Resonance collaborator) for helping me beta testing the mod
