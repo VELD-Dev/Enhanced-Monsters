@@ -5,7 +5,7 @@ All notable changes will be documented in the changelog.
 ## [1.1.1](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.1) - 2025-01-17
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.0..1.1.1)
-- Fixed that some mobs wouldn't register because I was not searching for ScanNode correctly inside of them, leading into some mobs could be killed but no body was spawning
+- Fixed that some mobs wouldn't register their scrap self because I was not searching for ScanNode correctly inside of them, leading into some mobs could be killed but no corpse scrap was spawning
 - Fixed external mod `EnemyDataRegister` function: It should now be callable from `BaseUnityPlugin.Awake()` and `.Start()`.
 
 ## [1.1.0](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.0) - 2025-01-16
