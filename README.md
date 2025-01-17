@@ -53,7 +53,7 @@ No matter which way you do it, **do never modify the `Version` field, it is made
 #### Q: Is this mod compatible with **TakeThatMaskOff** ?
 > A: *For now, it is, but when the feature will be added, it won't.*
 ---
-#### Q: If I have a mod allowing to kill all enemies, will all of them being sellable
+#### Q: If I have a mod allowing to kill all enemies, will all of them be sellable
 > A: *Yes but there are prerequisites for this. You need to go into the `EnemiesData.json` settings file and set every mob's `Pickupable` boolean value to `true`. Don't forget to add them values.*
 ---
 #### Q: Why do some of the modded monsters of my modpack aren't grabbable after killing them ?
