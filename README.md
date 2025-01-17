@@ -56,6 +56,9 @@ No matter which way you do it, **do never modify the `Version` field, it is made
 #### Q: If I have a mod allowing to kill all enemies, will all of them being sellable
 > A: *Yes but there are prerequisites for this. You need to go into the `EnemiesData.json` settings file and set every mob's `Pickupable` boolean value to `true`. Don't forget to add them values.*
 ---
+#### Q: Why do some of the modded monsters of my modpack aren't grabbable after killing them ?
+> A: *By default, any mob that doesn't have default data is not "pickupable". You need to access the EnemyData config file and set the modded mob's values and wether it's pickupable or not. After that you need to restart the game. Note that some mods do register default data for their mobs so it is not required with every modded mob.*
+---
 #### Q: I have encountered a bug, how do I report it ?
 > A: *You can report it in the [**GitHub issues**](https://github.com/VELD-Dev/Enhanced-Monsters/issues) page, or join the [**Lethal Company Modding**](https://discord.gg/4AuKMbYVys) Discord Server and go to the [**Enhanced Monsters Topic**](https://discord.com/channels/1168655651455639582/1212448321017483275) inside the **`#mod-releases`** forum*
 
