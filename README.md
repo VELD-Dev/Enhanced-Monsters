@@ -48,7 +48,7 @@ No matter which way you do it, **do never modify the `Version` field, it is made
 > A: *I will probably do it, but it's far from being a priority.*
 ---
 #### Q: Is this mod compatible with **SellBodies** or **SellBodiesFixed** ?
-> A: *No. That said, in the current state of development, if you're not looking for modded monsters to be sellable, I'd recommend to keep SellBodies.*
+> A: *No.*
 ---
 #### Q: Is this mod compatible with **TakeThatMaskOff** ?
 > A: *For now, it is, but when the feature will be added, it won't.*

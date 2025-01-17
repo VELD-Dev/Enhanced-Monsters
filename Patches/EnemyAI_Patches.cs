@@ -51,6 +51,7 @@ public class EnemyAI_Patches
             if (!EnemiesDataManager.Enemies2Props.TryGetValue(__instance.enemyType.enemyName, out var enemy2prop))
             {
                 Plugin.logger.LogWarning($"Mob {__instance.enemyType.enemyName} has no enemy2prop prefab.");
+                return;
             }
 
             var enemyToPropInstance = NetworkManager.Instantiate(enemy2prop);

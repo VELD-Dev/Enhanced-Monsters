@@ -108,11 +108,29 @@ public static class EnemiesDataManager
     /// <param name="maxPrice">Maximum price of the entity</param>
     /// <param name="mass">Mass (in lb) of the entity</param>
     /// <param name="rank">Rank of the entity shown in the holo-display when scanned. Do not line-break, make it as short as possible.</param>
-    public static void RegisterEnemy(string enemyName, bool sellable, int minPrice, int maxPrice, float mass, string rank)
+    public static void RegisterEnemy(string enemyName, bool sellable, int minPrice, int maxPrice, float mass, string rank, bool overrideRegister = false)
     {
-        EnemiesData.Add(enemyName, new(sellable, minPrice, maxPrice, mass, rank));
+        if (!EnemiesData.ContainsKey(enemyName))
+        {
+            EnemiesData.Add(enemyName, new(sellable, minPrice, maxPrice, mass, rank));
+        }
+        else
+        {
+            if(overrideRegister)
+            {
+                EnemiesData[enemyName] = new(sellable, minPrice, maxPrice, mass, rank);
+            }
+            else
+            {
+                var modName = Assembly.GetCallingAssembly().GetName().Name;
+                Plugin.logger.LogWarning($"Cannot register modded from mod {modName} enemy {enemyName}: It is already registered (either from file or from .");
+                return;
+            }
+        }
 
-        if (!SyncedConfig.IsHost && NetworkManager.Singleton.IsListening) return;
+        if (SyncedConfig.Instance != null)
+            if (!SyncedConfig.IsHost && NetworkManager.Singleton.IsListening)
+                return;
 
         SyncedConfig.BroadcastSync();
     }
@@ -211,25 +229,25 @@ public static class EnemiesDataManager
             enemyScrap.enemyType = enemy.enemyType;
 
             // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
-            var scanNode = copy.transform.Find("ScanNode");
-            if (!scanNode)
+            var scanNodeProperties = copy.GetComponentInChildren<ScanNodeProperties>();
+            if (!scanNodeProperties)
                 continue;
 
+            var scanNode = scanNodeProperties.gameObject.transform;
             scanNode.transform.parent = e2prop.transform;
             scanNode.gameObject.AddComponent<BoxCollider>();
             scanNode.localPosition = new(0, 0, 0);
-            var scanComp = scanNode.gameObject.EnsureComponent<ScanNodeProperties>();
-            scanComp.maxRange = 13;
-            scanComp.minRange = 1;
-            scanComp.nodeType = 2;
-            scanComp.requiresLineOfSight = true;
-            scanComp.headerText = "Dead " + scanComp.headerText;
+            scanNodeProperties.maxRange = 13;
+            scanNodeProperties.minRange = 1;
+            scanNodeProperties.nodeType = 2;
+            scanNodeProperties.requiresLineOfSight = true;
+            scanNodeProperties.headerText = "Dead " + scanNodeProperties.headerText;
 
             var enemyItem = ScriptableObject.CreateInstance<Item>();
             enemyScrap.itemProperties = enemyItem;
 
             enemyItem.name = enemyName + " scrap";
-            enemyItem.itemName = scanComp.headerText;
+            enemyItem.itemName = scanNodeProperties.headerText;
             enemyItem.minValue = SyncedConfig.Instance.EnemiesData[enemyName].MinValue;
             enemyItem.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
             enemyItem.allowDroppingAheadOfPlayer = true;
