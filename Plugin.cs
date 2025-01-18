@@ -76,6 +76,8 @@ public class Plugin : BaseUnityPlugin
         var types = Assembly.GetExecutingAssembly().GetTypes();
         foreach (var type in types)
         {
+            if (type == typeof(LethalConfigSupport) || type == typeof(LethalSettingsSupport))
+                continue;
             var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
             foreach (var method in methods)
             {

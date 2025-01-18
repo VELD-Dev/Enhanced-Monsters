@@ -2,6 +2,12 @@
 
 All notable changes will be documented in the changelog.  
   
+## [1.1.2](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.2) - 2025-01-18
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.1..1.1.2)
+- Fixed the mod not loading correctly when Lethal Config and Lethal Settings weren't installed.
+- Fixed error appearing when entering main menu. It will not change anything though, previously it was just there doing nothing.
+
 ## [1.1.1](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.1) - 2025-01-17
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.0..1.1.1)

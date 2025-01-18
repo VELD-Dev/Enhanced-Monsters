@@ -47,6 +47,15 @@ public class EnemyScrap : GrabbableObject
         {
             try
             {
+                EnemyAnimator.SetLayerWeight(2, 0f);
+            }
+            catch(Exception e)
+            {
+                Plugin.logger.LogWarning($"Failed to set layer 2's weight to 0 (bracken fix?). Error: {e}");
+                EnemyAnimator.enabled = false;
+            }
+            try
+            {
                 EnemyAnimator.SetBool("Stunned", false);
                 EnemyAnimator.SetBool("stunned", false);
                 EnemyAnimator.SetBool("stun", false);
@@ -57,6 +66,14 @@ public class EnemyScrap : GrabbableObject
             catch (Exception e)
             {
                 Plugin.logger.LogError($"Failed to set the enemy {gameObject.name} mob mesh animator to dead state. Maybe the animator doesn't have a dead state ? Error: {e}");
+                EnemyAnimator.enabled = false;
+            }
+
+            // I hate doing that but I have no choice here
+            if(enemyType.enemyName == "Flowerman")
+            {
+                EnemyAnimator.gameObject.SetActive(false);
+                EnemyAnimator.gameObject.SetActive(true);
                 EnemyAnimator.enabled = false;
             }
         }
