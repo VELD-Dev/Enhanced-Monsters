@@ -1,7 +1,7 @@
 {
   "name": "Enhanced_Monsters",
   "description": "This mod adds ranking and allows killable mobs to be sold, even modded ones!\nIncompatible with SellBodiesFixed !",
-  "version_number": "1.1.2",
+  "version_number": "1.1.3",
   "website_url": "https://github.com/VELD-Dev/Enhanced-Monsters/",
   "dependencies": [
     "BepInEx-BepInExPack-5.4.2100",

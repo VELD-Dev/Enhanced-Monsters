@@ -1,7 +1,18 @@
 # Changelog
 
 All notable changes will be documented in the changelog.  
-  
+ 
+## [1.1.3](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.3) - 2025-01-19
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.2..1.1.3)
+- Fixed mod not loading correctly when Lethal Config and/or LethalSettings were installed, but for real now, hopefully
+- Added a parameter on wether to play or not some mobs death animation. Turning this setting off on some monsters might fix some mobs to be invisible after their death animation.
+- Added new metadata to the enemies config, including rotation when dead (leave it to zero for enemies with death anim, define it when disabling their death anim.)
+- Added foundation of the next major update "Enemies Loots", will be implemented once the enemies scrap data is fully stable or at least in a satisfying state.
+
+Known issues:
+- Sometimes, dead bodies appear next to the ship after landing on a new moon, I don't know why it happens.
+
 ## [1.1.2](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.2) - 2025-01-18
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.1..1.1.2)

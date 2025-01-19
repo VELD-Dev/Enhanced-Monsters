@@ -7,7 +7,9 @@ public class EnemyScrap : GrabbableObject
 {
     public Animator EnemyAnimator { get; private set; }
     public ScanNodeProperties ScanNode { get; private set; }
+    public GameObject EnemyGameObject { get; set; }
     public EnemyType enemyType;
+    public EnemyData EnemyData { get => LocalConfig.Singleton.synchronizeRanks.Value ? SyncedConfig.Instance.EnemiesData[enemyType.enemyName] : SyncedConfig.Default.EnemiesData[enemyType.enemyName]; }
 
     private readonly NetworkVariable<int> _syncedScrapValue = new();
     private readonly NetworkVariable<Vector3> _syncedPosition = new();
@@ -38,6 +40,8 @@ public class EnemyScrap : GrabbableObject
             Plugin.logger.LogInfo("Synchronizing the mob data and scrap values and positions with clients...");
             var enemyData = SyncedConfig.Instance.EnemiesData[enemyType.enemyName];
             int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
+            EnemyGameObject.transform.localEulerAngles = enemyData.Metadata.MeshRotation.ToUnityVec() * ((float)Math.PI/180f);
+            EnemyGameObject.transform.localPosition = enemyData.Metadata.MeshOffset.ToUnityVec();
 
             SyncedScrapValue = mobValue;
         }
@@ -45,6 +49,10 @@ public class EnemyScrap : GrabbableObject
         Plugin.logger.LogInfo($"Mob scrap {enemyType.enemyName} has spawned !");
         if(EnemyAnimator != null)
         {
+            if(!EnemyData.Metadata.AnimateOnDeath)
+            {
+                EnemyAnimator.enabled = false;
+            }
             try
             {
                 EnemyAnimator.SetLayerWeight(2, 0f);

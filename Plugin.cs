@@ -73,11 +73,9 @@ public class Plugin : BaseUnityPlugin
 
     private static void NetcodePatcher()
     {
-        var types = Assembly.GetExecutingAssembly().GetTypes();
+        var types = Assembly.GetExecutingAssembly().GetLoadableTypes();
         foreach (var type in types)
         {
-            if (type == typeof(LethalConfigSupport) || type == typeof(LethalSettingsSupport))
-                continue;
             var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
             foreach (var method in methods)
             {

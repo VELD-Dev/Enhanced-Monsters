@@ -15,51 +15,55 @@ public static class EnemiesDataManager
     }
 
     public static readonly Dictionary<string, EnemyData> EnemiesData = [];
+
+#pragma warning disable IDE0055  // This was really annoying
     public static readonly Dictionary<string, EnemyData> DefaultEnemiesData = new()
     {
         // Lootable
-        ["Manticoil"]           = new EnemyData(true, 20, 30, 10, "F"),
-        ["Tulip Snake"]         = new EnemyData(true, 10, 20, 11, "F"),
-        ["Hoarding bug"]        = new EnemyData(true, 30, 60, 24, "E"),
-        ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E"),
-        ["Centipede"]           = new EnemyData(true, 25, 40, 23, "D"),
-        ["Baboon hawk"]         = new EnemyData(true, 40, 70, 31, "D"),
-        ["Bunker Spider"]       = new EnemyData(true, 90, 120, 57, "C"),
-        ["MouthDog"]            = new EnemyData(true, 110, 140, 88, "C"),
-        ["Crawler"]             = new EnemyData(true, 150, 180, 66, "B"),
-        ["Flowerman"]           = new EnemyData(true, 162, 190, 40, "B"),
-        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B"),
-        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A"),
-        ["Maneater"]            = new EnemyData(true, 250, 290, 42, "S"),
+        ["Manticoil"]           = new EnemyData(true, 20, 30, 10, "F", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["Tulip Snake"]         = new EnemyData(true, 10, 20, 11, "F", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["Hoarding bug"]        = new EnemyData(true, 30, 60, 24, "E", new(new(0, 1, 0), new(0, 0, 0), true)),
+        ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["Centipede"]           = new EnemyData(true, 25, 40, 23, "D", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["Baboon hawk"]         = new EnemyData(true, 40, 70, 31, "D", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["Bunker Spider"]       = new EnemyData(true, 90, 120, 57, "C", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["MouthDog"]            = new EnemyData(true, 110, 140, 88, "C", new(new(0, 0, 0), new(0, 0, 0),  true)),
+        ["Crawler"]             = new EnemyData(true, 150, 180, 66, "B", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["Flowerman"]           = new EnemyData(true, 162, 190, 40, "B", new(new(0, 0, 0), new(0, 90, 0), false)),
+        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B", new(new(0, 0, 0), new(0, 90, 0), false)),
+        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A", new(new(0, 0, 0), new(0, 90, 0), false)),
+        ["Maneater"]            = new EnemyData(true, 250, 290, 42, "S", new(new(0, 0, 0), new(0, 0, 0), true)),
 
 
         // Invincible
-        ["Docile Locust Bees"]  = new EnemyData(false, 0, 0, 0, "F"),
-        ["Red pill"]            = new EnemyData(false, 0, 0, 0, "F"),
-        ["Blob"]                = new EnemyData(false, 0, 0, 0, "D"),
-        ["Red Locust Bees"]     = new EnemyData(false, 0, 0, 0, "C"),
-        ["Butler Bees"]         = new EnemyData(false, 0, 0, 0, "C"),
-        ["Earth Leviathan"]     = new EnemyData(false, 0, 0, 0, "B"),
-        ["Masked"]              = new EnemyData(false, 0, 0, 0, "B"),
-        ["Clay Surgeon"]        = new EnemyData(false, 0, 0, 0, "B"),
-        ["Spring"]              = new EnemyData(false, 0, 0, 0, "A"), // Coilhead
-        ["Jester"]              = new EnemyData(false, 0, 0, 0, "S+"),
-        ["RadMech"]             = new EnemyData(false, 0, 0, 0, "S+"),
-        ["Girl"]                = new EnemyData(false, 0, 0, 0, "?"),
-        ["Lasso"]               = new EnemyData(false, 0, 0, 0, "dont exist haha"),
+        ["Docile Locust Bees"]  = new EnemyData(false, 0, 0, 0, "F", new()),
+        ["Red pill"]            = new EnemyData(false, 0, 0, 0, "F", new()),
+        ["Blob"]                = new EnemyData(false, 0, 0, 0, "D", new()),
+        ["Red Locust Bees"]     = new EnemyData(false, 0, 0, 0, "C", new()),
+        ["Butler Bees"]         = new EnemyData(false, 0, 0, 0, "C", new()),
+        ["Earth Leviathan"]     = new EnemyData(false, 0, 0, 0, "B", new()),
+        ["Masked"]              = new EnemyData(false, 0, 0, 0, "B", new()),
+        ["Clay Surgeon"]        = new EnemyData(false, 0, 0, 0, "B", new()),
+        ["Spring"]              = new EnemyData(false, 0, 0, 0, "A", new()), // Coilhead
+        ["Jester"]              = new EnemyData(false, 0, 0, 0, "S+", new()),
+        ["RadMech"]             = new EnemyData(false, 0, 0, 0, "S+", new()),
+        ["Girl"]                = new EnemyData(false, 0, 0, 0, "?", new()),
+        ["Lasso"]               = new EnemyData(false, 0, 0, 0, "dont exist haha", new()),
 
         // Unsellable
-        ["ForestGiant"]         = new EnemyData(false, 0, 0, 0, "S"), // This one is just too big lmao
+        ["ForestGiant"]         = new EnemyData(false, 0, 0, 0, "S", new(new(0, 0, 0), new(0, 90, 0), false)), // This one is just too big lmao
 
         // MODDED
-        ["PinkGiant"]           = new EnemyData(false, 0, 0, 0, "F"), // Too big too to be sold
-        ["Football"]            = new EnemyData(false, 0, 0, 0, "B"),
-        ["Locker"]              = new EnemyData(false, 0, 0, 0, "A"),
-        ["Bush Wolf"]           = new EnemyData(true, 250, 320, 51, "A"),
-        ["PjonkGoose"]          = new EnemyData(true, 279, 340, 64, "A"),
+        ["PinkGiant"]           = new EnemyData(false, 0, 0, 0, "F", new(new(0, 0, 0), new(0, 90, 0), false)), // Too big too to be sold
+        ["Football"]            = new EnemyData(false, 0, 0, 0, "B", new()),
+        ["Locker"]              = new EnemyData(false, 0, 0, 0, "A", new()),
+        ["Bush Wolf"]           = new EnemyData(true, 250, 320, 51, "A", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["PjonkGoose"]          = new EnemyData(true, 279, 340, 64, "A", new(new(0, 0, 0), new(0, 0, 0), true)),
 
     };
-    public static string EnemiesDataFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EnemiesData.json");
+#pragma warning restore IDE0055
+
+    public static string EnemiesDataFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..", "..", "config", "EnhancedMonsters", "EnemiesData.json");
     public static readonly Dictionary<string, GameObject> Enemies2Props = [];
 
     public static void LoadEnemiesData()
@@ -108,17 +112,19 @@ public static class EnemiesDataManager
     /// <param name="maxPrice">Maximum price of the entity</param>
     /// <param name="mass">Mass (in lb) of the entity</param>
     /// <param name="rank">Rank of the entity shown in the holo-display when scanned. Do not line-break, make it as short as possible.</param>
-    public static void RegisterEnemy(string enemyName, bool sellable, int minPrice, int maxPrice, float mass, string rank, bool overrideRegister = false)
+    /// <param name="metadata">Advanced metadata of the entity.</param>
+    /// <param name="overrideRegister">Wether to override any existing entry or only register it if wasn't already. You better not override unless you're testing your mod.</param>
+    public static void RegisterEnemy(string enemyName, bool sellable, int minPrice, int maxPrice, float mass, string rank, EnemyData.EnemyMetadata metadata, bool overrideRegister = false)
     {
         if (!EnemiesData.ContainsKey(enemyName))
         {
-            EnemiesData.Add(enemyName, new(sellable, minPrice, maxPrice, mass, rank));
+            EnemiesData.Add(enemyName, new(sellable, minPrice, maxPrice, mass, rank, metadata));
         }
         else
         {
             if(overrideRegister)
             {
-                EnemiesData[enemyName] = new(sellable, minPrice, maxPrice, mass, rank);
+                EnemiesData[enemyName] = new(sellable, minPrice, maxPrice, mass, rank, metadata);
             }
             else
             {
@@ -164,6 +170,8 @@ public static class EnemiesDataManager
         var output = JsonConvert.SerializeObject(newFile, Newtonsoft.Json.Formatting.Indented);
         //Plugin.logger.LogDebug(output);
         //Plugin.logger.LogDebug(EnemiesDataFile);
+        if (!Directory.Exists(Path.GetDirectoryName(EnemiesDataFile)))
+            Directory.CreateDirectory(Path.GetDirectoryName(EnemiesDataFile));
         File.WriteAllText(EnemiesDataFile, output);
         Plugin.logger.LogInfo("Saved enemies data.");
     }
@@ -227,6 +235,7 @@ public static class EnemiesDataManager
             enemyScrap.grabbable = true;
             enemyScrap.grabbableToEnemies = false;
             enemyScrap.enemyType = enemy.enemyType;
+            enemyScrap.EnemyGameObject = copy;
 
             // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
             var scanNodeProperties = copy.GetComponentInChildren<ScanNodeProperties>();
@@ -259,6 +268,8 @@ public static class EnemiesDataManager
             enemyItem.twoHandedAnimation = true;
             enemyItem.weight = SyncedConfig.Instance.EnemiesData[enemyName].LCMass;
             enemyItem.spawnPrefab = e2prop;
+            enemyItem.restingRotation = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshRotation.ToUnityVec() * ((float)Math.PI / 180f);
+            enemyItem.positionOffset = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshOffset.ToUnityVec();
 
             LethalLib.Modules.Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);

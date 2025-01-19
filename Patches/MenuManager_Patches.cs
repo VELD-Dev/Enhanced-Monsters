@@ -32,7 +32,7 @@ public class MenuManager_Patches
         {
             if (!SyncedConfig.Instance.EnemiesData.ContainsKey(enemy.enemyType.enemyName))
             {
-                EnemiesDataManager.RegisterEnemy(enemy.enemyType.enemyName, new());
+                EnemiesDataManager.RegisterEnemy(enemy.enemyType.enemyName, new(true, Metadata: new(new(0,0,0), new(0,0,0), true)));
                 Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{enemy.enemyType.enemyName}'");
             }
         }

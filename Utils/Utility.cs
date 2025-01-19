@@ -96,4 +96,24 @@ public static class Utility
             Component.Destroy(comp);
         }
     }
+
+    internal static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
+    {
+        if (assembly == null)
+        {
+            throw new ArgumentNullException(nameof(assembly));
+        }
+
+        try
+        {
+            return assembly.GetTypes();
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            return ex.Types.Where(t => t != null);
+        }
+    }
+
+    public static UnityEngine.Vector3 ToUnityVec(this System.Numerics.Vector3 v) => new(v.X, v.Y, v.Z);
+    public static System.Numerics.Vector3 ToSystemVec(this UnityEngine.Vector3 v) => new(v.x, v.y, v.z);
 }
