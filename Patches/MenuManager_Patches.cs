@@ -9,7 +9,7 @@ public class MenuManager_Patches
     [HarmonyPatch(typeof(MenuManager), "Start")]  // Putted string directly cuz method is private and too lazy to publicize it lmao
     private static void Start(MenuManager __instance)
     {
-        if(__instance is null)
+        if(!__instance)
         {
             Plugin.logger.LogError("MenuManager instance is null. Something might have booted too early.");
             return;
@@ -30,11 +30,11 @@ public class MenuManager_Patches
         Plugin.logger.LogInfo($"{enemies.Length} enemies to patch.");
         foreach(var enemy in enemies)
         {
-            if (!SyncedConfig.Instance.EnemiesData.ContainsKey(enemy.enemyType.enemyName))
-            {
-                EnemiesDataManager.RegisterEnemy(enemy.enemyType.enemyName, new(true, Metadata: new(new(0,0,0), new(0,0,0), true)));
-                Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{enemy.enemyType.enemyName}'");
-            }
+            if (SyncedConfig.Instance.EnemiesData.ContainsKey(enemy.enemyType.enemyName))
+                continue;
+
+            EnemiesDataManager.RegisterEnemy(enemy.enemyType.enemyName, new(true, Metadata: new(new(0,0,0), new(0,0,0), true)));
+            Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{enemy.enemyType.enemyName}'");
         }
         EnemiesDataManager.SaveEnemiesData();
 

@@ -1,6 +1,12 @@
 # Changelog
 
 All notable changes will be documented in the changelog.  
+
+## [1.1.4](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.4) - 2025-01-21
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.3..1.1.4)
+- Thanks to **DropDaDeuce** *(LethalGargoyles)*, the config issues should now be totally fixed, at least it works on our machines.
+- Fixed some modded mobs not registering correctly eventually.
  
 ## [1.1.3](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.3) - 2025-01-19
 

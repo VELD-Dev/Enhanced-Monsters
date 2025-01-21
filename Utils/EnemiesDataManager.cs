@@ -240,7 +240,10 @@ public static class EnemiesDataManager
             // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
             var scanNodeProperties = copy.GetComponentInChildren<ScanNodeProperties>();
             if (!scanNodeProperties)
+            {
+                GameObject.Destroy(e2prop);
                 continue;
+            }
 
             var scanNode = scanNodeProperties.gameObject.transform;
             scanNode.transform.parent = e2prop.transform;
@@ -256,6 +259,7 @@ public static class EnemiesDataManager
             enemyScrap.itemProperties = enemyItem;
 
             enemyItem.name = enemyName + " scrap";
+            enemyItem.saveItemVariable = true;
             enemyItem.itemName = scanNodeProperties.headerText;
             enemyItem.minValue = SyncedConfig.Instance.EnemiesData[enemyName].MinValue;
             enemyItem.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
@@ -271,7 +275,7 @@ public static class EnemiesDataManager
             enemyItem.restingRotation = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshRotation.ToUnityVec() * ((float)Math.PI / 180f);
             enemyItem.positionOffset = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshOffset.ToUnityVec();
 
-            LethalLib.Modules.Items.RegisterItem(enemyItem);
+            Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
             Enemies2Props.Add(enemyName, e2prop);
             Plugin.logger.LogInfo($"Registered NetworkPrefab '{e2prop.name}'/'{copy.name}' ({enemyItem.itemName})");
