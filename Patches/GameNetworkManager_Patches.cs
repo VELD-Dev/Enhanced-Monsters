@@ -31,4 +31,36 @@ internal class GameNetworkManager_Patches
     {
         SyncedConfig.RevertSync();
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch("SaveItemsInShip")]
+    public static void SaveItemsInShip(GameNetworkManager __instance)
+    {
+        var objectsInShip = UnityEngine.Object.FindObjectsByType<GrabbableObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for(int i = 0; i < objectsInShip.Length && i <= StartOfRound.Instance.maxShipItemCapacity; i++)
+        {
+            var obj = objectsInShip[i];
+            Plugin.logger.LogInfo($"SAVE CHECKER: Checking object {obj.itemProperties.itemName}...");
+            if(StartOfRound.Instance.allItemsList.itemsList.Contains(obj.itemProperties) && !obj.deactivated)
+            {
+                if(obj.itemProperties.spawnPrefab == null)
+                {
+                    Plugin.logger.LogError($"SAVE CHECKER: Object {obj.itemProperties.itemName} didn't have a spawn prefab.");
+                    continue;
+                }
+                if(!obj.itemUsedUp)
+                {
+                    Plugin.logger.LogError($"SAVE CHECKER: Object {obj.itemProperties.itemName} didn't save because it wasn't used up.");
+                    continue;
+                }
+
+
+                Plugin.logger.LogInfo($"SAVE CHECKER: Saving object {obj.itemProperties.itemName}");
+            }
+            else
+            {
+                Plugin.logger.LogInfo($"SAVE CHECKER: Not saving {obj.itemProperties.itemName}. Deactivated: {obj.deactivated} - Registered correctly: {StartOfRound.Instance.allItemsList.itemsList.Contains(obj.itemProperties)}");
+            }
+        }
+    }
 }

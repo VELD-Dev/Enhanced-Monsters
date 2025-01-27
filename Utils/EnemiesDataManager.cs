@@ -219,11 +219,11 @@ public static class EnemiesDataManager
             }
             // Clearing components that should not be
             copy.RemoveComponentsInChildren<Collider>();
+            copy.RemoveComponentsInChildren<AudioLowPassFilter>();
+            copy.RemoveComponentsInChildren<AudioReverbFilter>();
             copy.RemoveComponentsInChildren<OccludeAudio>();
             copy.RemoveComponentsInChildren<EnemyAICollisionDetect>();
             copy.RemoveComponentsInChildren<AudioSource>();
-            copy.RemoveComponentsInChildren<AudioLowPassFilter>();
-            copy.RemoveComponentsInChildren<AudioReverbFilter>();
             copy.RemoveComponentsInChildren<ParticleSystem>();
             copy.RemoveComponentsInChildren<ParticleSystemRenderer>();
 
@@ -232,10 +232,11 @@ public static class EnemiesDataManager
             copy.transform.parent = e2prop.transform;
             Plugin.logger.LogInfo($"Attached {copy.name} to {copy.transform.parent.name}");
             var enemyScrap = e2prop.GetComponent<EnemyScrap>();
+            enemyScrap.EnemyGameObject = copy;
+            Plugin.logger.LogInfo("Set EnemyGameObject on EnemyScrap.");
             enemyScrap.grabbable = true;
             enemyScrap.grabbableToEnemies = false;
             enemyScrap.enemyType = enemy.enemyType;
-            enemyScrap.EnemyGameObject = copy;
 
             // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
             var scanNodeProperties = copy.GetComponentInChildren<ScanNodeProperties>();
@@ -265,15 +266,15 @@ public static class EnemiesDataManager
             enemyItem.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
             enemyItem.allowDroppingAheadOfPlayer = true;
             enemyItem.canBeGrabbedBeforeGameStart = true;
-            enemyItem.isScrap = SyncedConfig.Instance.EnemiesData[enemyName].Pickupable;
+            enemyItem.isScrap = true;
             enemyItem.itemSpawnsOnGround = false;
             enemyItem.twoHanded = true;
             enemyItem.requiresBattery = false;
             enemyItem.twoHandedAnimation = true;
             enemyItem.weight = SyncedConfig.Instance.EnemiesData[enemyName].LCMass;
             enemyItem.spawnPrefab = e2prop;
-            enemyItem.restingRotation = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshRotation.ToUnityVec() * ((float)Math.PI / 180f);
-            enemyItem.positionOffset = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshOffset.ToUnityVec();
+            enemyItem.restingRotation = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshRotation * ((float)Math.PI / 180f);
+            enemyItem.positionOffset = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshOffset;
 
             Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);

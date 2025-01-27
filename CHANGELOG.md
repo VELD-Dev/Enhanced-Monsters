@@ -2,6 +2,17 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.1.5](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/) - 2025-01-27
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/)
+- Fixed mob bodies not having scrap values after dying.
+- Fixed some mobs having invalid animations or broken animations when they died.
+- Fixed some mobs not being grabbable after dying.
+
+Known issues:
+- Mobs still don't save after leaving the game, they should but they don't and I don't know why they don't.
+- Sometimes, dead bodies appear next to the ship after landing on a new moon, I still don't know why it happens.
+
 ## [1.1.4](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.4) - 2025-01-21
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.3..1.1.4)

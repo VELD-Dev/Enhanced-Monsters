@@ -118,3 +118,4 @@ public static class EnhancedMonstersCompatibilityLayer
 - **FROG** for helping me with the networking
 - **Xu Xiaolan** (Giant Species) for various help
 - **Moroxide** (Lethal Resonance collaborator) for helping me beta testing the mod
+- **DropDaDeuce** (LethalGargoyles) for making a fix for soft dependencies.

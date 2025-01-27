@@ -29,6 +29,11 @@ public class EnemyScrap : GrabbableObject
         {
             Plugin.logger.LogWarning($"No ScanNode found in {gameObject.name}. That's a weird enemy...");
         }
+
+        if(!itemProperties.saveItemVariable)
+        {
+            Plugin.logger.LogError($"Error: Enemy corpse saving was set to false for {enemyType.enemyName}");
+        }
     }
 
     public override void Start()
@@ -40,8 +45,15 @@ public class EnemyScrap : GrabbableObject
             Plugin.logger.LogInfo("Synchronizing the mob data and scrap values and positions with clients...");
             var enemyData = SyncedConfig.Instance.EnemiesData[enemyType.enemyName];
             int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
-            EnemyGameObject.transform.localEulerAngles = enemyData.Metadata.MeshRotation.ToUnityVec() * ((float)Math.PI/180f);
-            EnemyGameObject.transform.localPosition = enemyData.Metadata.MeshOffset.ToUnityVec();
+            if(EnemyGameObject is not null)
+            {
+                EnemyGameObject.transform.localEulerAngles = enemyData.Metadata.MeshRotation * ((float)Math.PI / 180f);
+                EnemyGameObject.transform.localPosition = enemyData.Metadata.MeshOffset;
+            }
+            else
+            {
+                Plugin.logger.LogWarning("whoops ! EnemyGameObject is not defined somehow !");
+            }
 
             SyncedScrapValue = mobValue;
         }
@@ -127,5 +139,11 @@ public class EnemyScrap : GrabbableObject
         _syncedPosition.Initialize(this);
         _syncedScrapValue.OnValueChanged += (oldVal, newVal) => UpdateScrapValue(newVal);
         _syncedPosition.OnValueChanged += (oldVal, newVal) => transform.position = newVal;
+    }
+
+    public override int GetItemDataToSave()
+    {
+        Plugin.logger.LogInfo($"GetItemData: Trying to save enemy scrap for {itemProperties.itemName}.");
+        return 0;
     }
 }

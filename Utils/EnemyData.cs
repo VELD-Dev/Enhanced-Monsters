@@ -1,6 +1,4 @@
-﻿using Vector3 = System.Numerics.Vector3;
-
-namespace EnhancedMonsters.Utils;
+﻿namespace EnhancedMonsters.Utils;
 
 [JsonObject(Description = "The value of a mob once killed, if it can be killed.")]
 [method: JsonConstructor]
@@ -12,7 +10,7 @@ public record struct EnemyData(bool Pickupable = true, int MinValue = 80, int Ma
     public record struct EnemyMetadata
     {
         [JsonConstructor]
-        public EnemyMetadata(Vector3 meshOffset = new(), Vector3 meshRotation = new(), bool animateOnDeath = true, Dictionary<string, float>? loots = null)
+        public EnemyMetadata(Vec3 meshOffset = new(), Vec3 meshRotation = new(), bool animateOnDeath = true, Dictionary<string, float>? loots = null)
         {
             MeshOffset = meshOffset;
             MeshRotation = meshRotation;
@@ -20,8 +18,8 @@ public record struct EnemyData(bool Pickupable = true, int MinValue = 80, int Ma
             LootTable = loots ?? [];
         }
 
-        public Vector3 MeshOffset;
-        public Vector3 MeshRotation;
+        public Vec3 MeshOffset;
+        public Vec3 MeshRotation;
         public bool AnimateOnDeath;
         public Dictionary<string, float> LootTable;
     }
@@ -31,4 +29,43 @@ public record struct EnemyData(bool Pickupable = true, int MinValue = 80, int Ma
     /// </summary>
     [JsonIgnore]
     public readonly float LCMass => (Mass / 105f) + 1;
+}
+
+[Serializable]
+[JsonObject(Description = "A simple and flexible Vector3 structure.")]
+public record struct Vec3
+{
+    public float X, Y, Z = 0;
+
+    [JsonConstructor]
+    public Vec3(float x, float y, float z) { X = x; Y = y; Z = z; }
+
+    public static implicit operator System.Numerics.Vector3(Vec3 v) => new(v.X, v.Y, v.Z);
+    public static implicit operator UnityEngine.Vector3(Vec3 v) => new(v.X, v.Y, v.Z);
+    public static implicit operator Vec3(System.Numerics.Vector3 v) => new(v.X, v.Y, v.Z);
+    public static implicit operator Vec3(UnityEngine.Vector3 v) => new(v.x, v.y, v.z);
+
+    public static Vec3 operator *(Vec3 l, float r) => new(l.X * r, l.Y * r, l.Z * r);
+    public static Vec3 operator *(Vec3 l, Vec3 r) => new(l.X * r.X, l.Y * r.Y, l.Z * r.Z);
+    public static Vec3 operator /(Vec3 l, float r) => new(l.X / r, l.Y / r, l.Z / r);
+    public static Vec3 operator /(Vec3 l, Vec3 r) => new(l.X / r.X, l.Y / r.Y, l.Z / r.Z);
+    public static Vec3 operator +(Vec3 l, Vec3 r) => new(l.X + r.X, l.Y + r.Y, l.Z + r.Z);
+    public static Vec3 operator -(Vec3 l, Vec3 r) => new(l.X - r.X, l.Y - r.Y, l.Z - r.Z);
+    public static Vec3 operator -(Vec3 s) => new(-s.X, -s.Y, -s.Z);
+    public static float operator ~(Vec3 l) => l.Length();
+
+    public readonly float Length() => (float)Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2) + Math.Pow(Z, 2));
+
+    public readonly void Deconstruct(out float x, out float y, out float z)
+    {
+        x = X;
+        y = Y;
+        z = Z;
+    }
+
+    public readonly void Deconstruct(out float x, out float y)
+    {
+        x = X;
+        y = Y;
+    }
 }
