@@ -2,9 +2,15 @@
 
 All notable changes will be documented in the changelog.  
 
-## [1.1.5](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/) - 2025-01-27
+## [1.2.0](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.2.0) - 2025-01-28
 
-[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/)
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.5..1.2.0)
+- **Enemy scraps are now saved** along with other standard scraps !
+- Fixed enemy bodies persisting between levels and saves.
+
+## [1.1.5](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.1.5) - 2025-01-27
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.4..1.1.5)
 - Fixed mob bodies not having scrap values after dying.
 - Fixed some mobs having invalid animations or broken animations when they died.
 - Fixed some mobs not being grabbable after dying.

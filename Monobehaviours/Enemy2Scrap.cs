@@ -12,9 +12,7 @@ public class EnemyScrap : GrabbableObject
     public EnemyData EnemyData { get => LocalConfig.Singleton.synchronizeRanks.Value ? SyncedConfig.Instance.EnemiesData[enemyType.enemyName] : SyncedConfig.Default.EnemiesData[enemyType.enemyName]; }
 
     private readonly NetworkVariable<int> _syncedScrapValue = new();
-    private readonly NetworkVariable<Vector3> _syncedPosition = new();
     public int SyncedScrapValue { get => _syncedScrapValue.Value; set { _syncedScrapValue.Value = value; } }
-    public Vector3 SyncedPosition { get => _syncedPosition.Value; set { _syncedPosition.Value = value; } }
 
     private void Awake()
     {
@@ -44,7 +42,6 @@ public class EnemyScrap : GrabbableObject
         {
             Plugin.logger.LogInfo("Synchronizing the mob data and scrap values and positions with clients...");
             var enemyData = SyncedConfig.Instance.EnemiesData[enemyType.enemyName];
-            int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
             if(EnemyGameObject is not null)
             {
                 EnemyGameObject.transform.localEulerAngles = enemyData.Metadata.MeshRotation * ((float)Math.PI / 180f);
@@ -55,7 +52,17 @@ public class EnemyScrap : GrabbableObject
                 Plugin.logger.LogWarning("whoops ! EnemyGameObject is not defined somehow !");
             }
 
-            SyncedScrapValue = mobValue;
+            if(GameNetworkManager.Instance.gameHasStarted || scrapValue == 0)
+            {
+                // Save is already defining the scrap values here.
+                int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
+                SyncedScrapValue = mobValue;
+            }
+            else
+            {
+                // So we just need to make it synchronized
+                SyncedScrapValue = scrapValue;
+            }
         }
 
         Plugin.logger.LogInfo($"Mob scrap {enemyType.enemyName} has spawned !");
@@ -97,8 +104,6 @@ public class EnemyScrap : GrabbableObject
                 EnemyAnimator.enabled = false;
             }
         }
-
-        grabbable = SyncedConfig.Instance.EnemiesData[enemyType.enemyName].Pickupable;
         
         if(ScanNode)
         {
@@ -107,10 +112,15 @@ public class EnemyScrap : GrabbableObject
             scanNode.scrapValue = SyncedScrapValue;
             scanNode.subText = $"Rank:{enemyData.Rank}\nValue: ${SyncedScrapValue}";
         }
+        else
+        {
+            Plugin.logger.LogError($"Enemy corpse {itemProperties.itemName} is missing a ScanNode !");
+        }
     }
 
-    public void UpdateScrapValue(int value)
+    public new void SetScrapValue(int value)
     {
+        Plugin.logger.LogInfo($"Setting scrap value for {itemProperties.itemName}: {value}");
         scrapValue = value;
         ScanNode.scrapValue = value;
         var enemyData = LocalConfig.Singleton.synchronizeRanks.Value ? SyncedConfig.Instance.EnemiesData[enemyType.enemyName] : SyncedConfig.Default.EnemiesData[enemyType.enemyName];
@@ -136,9 +146,7 @@ public class EnemyScrap : GrabbableObject
     {
         base.OnNetworkSpawn();
         _syncedScrapValue.Initialize(this);
-        _syncedPosition.Initialize(this);
-        _syncedScrapValue.OnValueChanged += (oldVal, newVal) => UpdateScrapValue(newVal);
-        _syncedPosition.OnValueChanged += (oldVal, newVal) => transform.position = newVal;
+        _syncedScrapValue.OnValueChanged += (oldVal, newVal) => SetScrapValue(newVal);
     }
 
     public override int GetItemDataToSave()

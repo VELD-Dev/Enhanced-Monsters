@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 namespace EnhancedMonsters;
 
 [BepInPlugin(PluginInfo.GUID, PluginInfo.DisplayName, PluginInfo.Version)]
-[BepInDependency("ainavt.lc.lethalconfig", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency(LethalConfig.PluginInfo.Guid, BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("com.willis.lc.lethalsettings", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("evaisa.lethallib", BepInDependency.DependencyFlags.HardDependency)]
 [BepInIncompatibility("Entity378.sellbodies")]
@@ -22,10 +22,7 @@ public class Plugin : BaseUnityPlugin
         new LocalConfig(Config);
         Plugin.logger.LogInfo("Local config initialized.");
         NetcodePatcher();
-    }
 
-    private void Start()
-    {
         logger.LogInfo("This is (maybe) NOT an RPG mod. And hi btw.");
         EnemiesDataManager.LoadEnemiesData();
         new SyncedConfig(Config);
@@ -62,6 +59,7 @@ public class Plugin : BaseUnityPlugin
         prefab.layer = 6;
         var ngo = prefab.GetComponent<NetworkObject>();
         ngo.AutoObjectParentSync = false;
+        ngo.DontDestroyWithOwner = true;
         var collider = prefab.AddComponent<BoxCollider>();
         collider.enabled = true;
         collider.isTrigger = true;
@@ -81,10 +79,9 @@ public class Plugin : BaseUnityPlugin
         foreach (var type in types)
         {
             // I will rewrite this to be more consistent and for a better implementation
-            if ((type.FullName.Contains("EnhancedMonsters.Config.LethalConfigSupport") && !isLethalConfigLoaded) || (type.FullName.Contains("EnhancedMonsters.Config.LethalSettingsSupport") && !isLethalSettingsLoaded))
-            {
+            if ((type == typeof(LethalConfigSupport) && !isLethalConfigLoaded) || (type == typeof(LethalSettingsSupport) && !isLethalSettingsLoaded))
                 continue;
-            }
+
             var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
             foreach (var method in methods)
             {

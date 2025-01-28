@@ -12,7 +12,7 @@ internal static class LethalConfigSupport
     {
         get
         {
-            lethalConfigLoaded ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("ainavt.lc.lethalconfig");
+            lethalConfigLoaded ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(LethalConfig.PluginInfo.Guid);
 
             return (bool)lethalConfigLoaded;
         }

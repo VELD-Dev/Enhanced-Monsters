@@ -23,6 +23,21 @@ internal class GameNetworkManager_Patches
         EnemiesDataManager.SaveEnemiesData();
 
         EnemiesDataManager.EnsureEnemy2PropPrefabs();
+
+        /*
+        foreach(var corpse in EnemiesDataManager.Enemies2Props.Values)
+        {
+            var eScrap = corpse.GetComponent<EnemyScrap>();
+            if (StartOfRound.Instance.allItemsList.itemsList.Contains(eScrap.itemProperties))
+                continue;
+
+            Plugin.logger.LogInfo("Registering ItemData to AllItemList because because LethalLib was too slow.");
+            // Not doing this may provoke a soft race error, item data would be missing and items would be skipped from the save loading.
+
+            StartOfRound.Instance.allItemsList.itemsList.Add(eScrap.itemProperties);
+            Items.LethalLibItemList.Add(eScrap.itemProperties);
+        }
+        */
     }
 
     [HarmonyPostfix]
@@ -36,7 +51,8 @@ internal class GameNetworkManager_Patches
     [HarmonyPatch("SaveItemsInShip")]
     public static void SaveItemsInShip(GameNetworkManager __instance)
     {
-        var objectsInShip = UnityEngine.Object.FindObjectsByType<GrabbableObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        var objectsInShip = UnityEngine.Object.FindObjectsByType<GrabbableObject>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        Physics.OverlapBox(StartOfRound.Instance.shipBounds.bounds.center, StartOfRound.Instance.shipBounds.bounds.size / 2f, StartOfRound.Instance.shipBounds.transform.rotation, 6, QueryTriggerInteraction.Collide);
         for(int i = 0; i < objectsInShip.Length && i <= StartOfRound.Instance.maxShipItemCapacity; i++)
         {
             var obj = objectsInShip[i];
@@ -48,12 +64,16 @@ internal class GameNetworkManager_Patches
                     Plugin.logger.LogError($"SAVE CHECKER: Object {obj.itemProperties.itemName} didn't have a spawn prefab.");
                     continue;
                 }
-                if(!obj.itemUsedUp)
+                if(obj.itemUsedUp)
                 {
-                    Plugin.logger.LogError($"SAVE CHECKER: Object {obj.itemProperties.itemName} didn't save because it wasn't used up.");
+                    Plugin.logger.LogError($"SAVE CHECKER: Object {obj.itemProperties.itemName} didn't save because it was used up.");
                     continue;
                 }
 
+                if(obj.itemProperties.isScrap)
+                {
+                    Plugin.logger.LogInfo($"SAVE CHECKER: Saving object {obj.itemProperties.itemName} scrap value: ${obj.scrapValue}");
+                }
 
                 Plugin.logger.LogInfo($"SAVE CHECKER: Saving object {obj.itemProperties.itemName}");
             }

@@ -55,6 +55,7 @@ public class EnemyAI_Patches
             }
 
             var enemyToPropInstance = NetworkManager.Instantiate(enemy2prop);
+            enemyToPropInstance.hideFlags = HideFlags.None;
             enemyToPropInstance.transform.position = __instance.transform.position;
             enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
             __instance.GetComponent<NetworkObject>().Despawn(true);
