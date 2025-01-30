@@ -72,14 +72,15 @@ public class Plugin : BaseUnityPlugin
     private static void NetcodePatcher()
     {
         var pluginInfos = BepInEx.Bootstrap.Chainloader.PluginInfos;
-        bool isLethalConfigLoaded = pluginInfos.ContainsKey("ainavt.lc.lethalconfig");
+        bool isLethalConfigLoaded = pluginInfos.ContainsKey(LethalConfig.PluginInfo.Guid);
         bool isLethalSettingsLoaded = pluginInfos.ContainsKey("com.willis.lc.lethalsettings");
 
-        var types = Assembly.GetExecutingAssembly().GetLoadableTypes();
+        var types = Assembly.GetExecutingAssembly().GetTypes();
         foreach (var type in types)
         {
-            // I will rewrite this to be more consistent and for a better implementation
-            if ((type == typeof(LethalConfigSupport) && !isLethalConfigLoaded) || (type == typeof(LethalSettingsSupport) && !isLethalSettingsLoaded))
+            bool typeIsLCS = type.FullName.Contains(typeof(LethalConfigSupport).FullName);
+            bool typeIsLSS = type.FullName.Contains(typeof(LethalSettingsSupport).FullName);
+            if ((typeIsLCS && !isLethalConfigLoaded) || (typeIsLSS && !isLethalSettingsLoaded))
                 continue;
 
             var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);

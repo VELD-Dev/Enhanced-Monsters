@@ -2,6 +2,11 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.2.1](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.2.1) - 2025-01-30
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.2.0..1.2.1)
+- Fixed mod not loading correctly when LethalConfig or LethalSettings was missing, episode 498.
+
 ## [1.2.0](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.2.0) - 2025-01-28
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.1.5..1.2.0)
