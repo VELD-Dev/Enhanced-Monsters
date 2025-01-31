@@ -2,6 +2,18 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.0](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.0) - 2025-02-
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.2.1..1.3.0)
+- Added new enemies metadata configs:
+	- `TwoHanded`: Wether the body makes "hand fulls" or not
+	- `GrabSFX`: Allows you to use a custom sound as the body grab SFX
+	- `DropSFX`: Allows you to use a custom sound as the body drop SFX
+	- `PocketSFX`: Allows you to use a custom sound as the body pocketed SFX (only for bodies that aren't TwoHanded)
+- Added mob icon in inventory (instead of the white cube). This is meant to change, I'm looking for an artist to make a custom inventory icon.
+- Added a body drop sound, made by **Moroxide** *(Lethal Resonance contributor)*
+- Added a custom sound import system for mobs drops. More details on how to use in the `README.md`.
+
 ## [1.2.1](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.2.1) - 2025-01-30
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.2.0..1.2.1)

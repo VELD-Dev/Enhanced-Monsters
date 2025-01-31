@@ -31,6 +31,15 @@ public class Plugin : BaseUnityPlugin
         logger.LogDebug("All harmony patches have been applied (energistics).");
         CreateThePrefab();
         logger.LogDebug("The Prefab have been created correctly");
+
+        if(FastResourcesManager.EnemyScrapIcon == null)
+        {
+            logger.LogError("EnemyScrapIcon didn't load yet. Caution advised.");
+        }
+        else
+        {
+            logger.LogInfo("EnemyScrapIcon loaded correctly and is ready to use !");
+        }
     }
 
     private static void ApplyAllPatches()
@@ -65,6 +74,9 @@ public class Plugin : BaseUnityPlugin
         collider.isTrigger = true;
         collider.size = new(1.5f, 1.5f, 1.5f);
         prefab.AddComponent<EnemyScrap>();
+        prefab.AddComponent<AudioSource>();
+        prefab.AddComponent<OccludeAudio>();
+        prefab.AddComponent<AudioLowPassFilter>();
 
         EnemyToPropPrefab = prefab;
     }

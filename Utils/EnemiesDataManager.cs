@@ -22,7 +22,7 @@ public static class EnemiesDataManager
         // Lootable
         ["Manticoil"]           = new EnemyData(true, 20, 30, 10, "F", new(new(0, 0, 0), new(0, 0, 0), true)),
         ["Tulip Snake"]         = new EnemyData(true, 10, 20, 11, "F", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["Hoarding bug"]        = new EnemyData(true, 30, 60, 24, "E", new(new(0, 1, 0), new(0, 0, 0), true)),
+        ["Hoarding bug"]        = new EnemyData(true, 30, 60, 24, "E", new(new(0, 1, 0), new(0, 0, 0), true, false)),
         ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E", new(new(0, 0, 0), new(0, 0, 0), true)),
         ["Centipede"]           = new EnemyData(true, 25, 40, 23, "D", new(new(0, 0, 0), new(0, 0, 0), true)),
         ["Baboon hawk"]         = new EnemyData(true, 40, 70, 31, "D", new(new(0, 0, 0), new(0, 0, 0), true)),
@@ -262,19 +262,21 @@ public static class EnemiesDataManager
             enemyItem.name = enemyName + " scrap";
             enemyItem.saveItemVariable = true;
             enemyItem.itemName = scanNodeProperties.headerText;
-            enemyItem.minValue = SyncedConfig.Instance.EnemiesData[enemyName].MinValue;
-            enemyItem.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
+            enemyItem.itemIcon = FastResourcesManager.EnemyScrapIcon;
+            enemyItem.minValue = enemyData.MinValue;
+            enemyItem.maxValue = enemyData.MaxValue;
             enemyItem.allowDroppingAheadOfPlayer = true;
             enemyItem.canBeGrabbedBeforeGameStart = true;
             enemyItem.isScrap = true;
             enemyItem.itemSpawnsOnGround = false;
-            enemyItem.twoHanded = true;
+            enemyItem.twoHanded = enemyData.Metadata.TwoHanded;
             enemyItem.requiresBattery = false;
-            enemyItem.twoHandedAnimation = true;
-            enemyItem.weight = SyncedConfig.Instance.EnemiesData[enemyName].LCMass;
+            enemyItem.twoHandedAnimation = enemyData.Metadata.TwoHanded;
+            enemyItem.weight = enemyData.LCMass;
             enemyItem.spawnPrefab = e2prop;
-            enemyItem.restingRotation = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshRotation * ((float)Math.PI / 180f);
-            enemyItem.positionOffset = SyncedConfig.Instance.EnemiesData[enemyName].Metadata.MeshOffset;
+            enemyItem.restingRotation = enemyData.Metadata.MeshRotation * ((float)Math.PI / 180f);
+            enemyItem.positionOffset = enemyData.Metadata.MeshOffset;
+            enemyItem.sfx
 
             Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
