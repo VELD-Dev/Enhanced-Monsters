@@ -26,9 +26,9 @@ public record struct EnemyData(bool Pickupable = true, int MinValue = 80, int Ma
         public Vec3 MeshRotation;
         public bool AnimateOnDeath;
         public bool TwoHanded;
-        public string DropSFX;
-        public string GrabSFX;
-        public string PocketSFX;
+        public string DropSFX = "default";
+        public string GrabSFX = "default";
+        public string PocketSFX = "default";
         public Dictionary<string, float> LootTable;
     }
 

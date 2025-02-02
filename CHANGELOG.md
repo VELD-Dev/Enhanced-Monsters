@@ -2,7 +2,13 @@
 
 All notable changes will be documented in the changelog.  
 
-## [1.3.0](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.0) - 2025-02-
+## [1.3.1](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.1) - 2025-02-02
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.0..1.3.1)
+- Added a config backup system: Deprecated config versions are renamed to `OLD_EnemyData.json` in order to not screw all your modifications on each new version. All you have to do is port your changes to the newer versions of the config.
+- Fixed the mod not loading correctly due to the custom sounds loading attempt even if there was none provided.
+
+## [1.3.0](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.0) - 2025-02-02
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.2.1..1.3.0)
 - Added new enemies metadata configs:

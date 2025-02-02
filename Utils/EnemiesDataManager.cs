@@ -91,6 +91,8 @@ public static class EnemiesDataManager
         {
             Plugin.logger.LogWarning("Enemy Data File seems to be outdated. A new config file will be created.");
             EnemiesData.ProperConcat(DefaultEnemiesData);
+            var oldFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..", "..", "config", "EnhancedMonsters", "OLD_EnemiesData.json");
+            File.Move(EnemiesDataFile, oldFilename);
             SaveEnemiesData();
             return;
         }
@@ -278,9 +280,15 @@ public static class EnemiesDataManager
             enemyItem.positionOffset = enemyData.Metadata.MeshOffset;
 
             var localEnemyData = SyncedConfig.Default.EnemiesData[enemyName];
-            enemyItem.dropSFX = FastResourcesManager.CustomAudioClips[localEnemyData.Metadata.DropSFX] ?? FastResourcesManager.EnemyDropDefaultSound;
-            enemyItem.grabSFX = FastResourcesManager.CustomAudioClips[localEnemyData.Metadata.GrabSFX] ?? FastResourcesManager.EnemyDropDefaultSound;
-            enemyItem.pocketSFX = FastResourcesManager.CustomAudioClips[localEnemyData.Metadata.PocketSFX] ?? null;
+            if (localEnemyData.Metadata.DropSFX != "default" && FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.DropSFX, out var dropsfx))
+                 enemyItem.dropSFX = dropsfx;
+            else enemyItem.dropSFX = FastResourcesManager.EnemyDropDefaultSound;
+            if (localEnemyData.Metadata.GrabSFX != "default" && FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.GrabSFX, out var grabsfx))
+                 enemyItem.grabSFX = grabsfx;
+            else enemyItem.grabSFX = FastResourcesManager.EnemyDropDefaultSound;
+            if (localEnemyData.Metadata.PocketSFX != "default" && FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.PocketSFX, out var pocketsfx))
+                 enemyItem.pocketSFX = pocketsfx;
+            else enemyItem.pocketSFX = null;
 
             Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
