@@ -117,5 +117,5 @@ public static class EnhancedMonstersCompatibilityLayer
 - **Zagster** (OpenBodyCams) for helping me with the networking and various hints
 - **FROG** for helping me with the networking
 - **Xu Xiaolan** (Giant Species) for various help
-- **Moroxide** (Lethal Resonance collaborator) for helping me beta testing the mod
+- **Moroxide** (Lethal Resonance collaborator) for creating a enemy dead body drop sound, and helping me testing the mod
 - **DropDaDeuce** (LethalGargoyles) for making a fix for soft dependencies.

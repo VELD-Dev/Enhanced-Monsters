@@ -10,12 +10,15 @@ public record struct EnemyData(bool Pickupable = true, int MinValue = 80, int Ma
     public record struct EnemyMetadata
     {
         [JsonConstructor]
-        public EnemyMetadata(Vec3 meshOffset = new(), Vec3 meshRotation = new(), bool animateOnDeath = true, bool twoHanded = true, Dictionary<string, float>? loots = null)
+        public EnemyMetadata(Vec3 meshOffset = new(), Vec3 meshRotation = new(), bool animateOnDeath = true, bool twoHanded = true, Dictionary<string, float>? loots = null, string dropsfx = "default", string grabsfx = "default", string pocketsfx = "default")
         {
             MeshOffset = meshOffset;
             MeshRotation = meshRotation;
             AnimateOnDeath = animateOnDeath;
             TwoHanded = twoHanded;
+            DropSFX = dropsfx;
+            GrabSFX = grabsfx;
+            PocketSFX = pocketsfx;
             LootTable = loots ?? [];
         }
 
@@ -23,6 +26,9 @@ public record struct EnemyData(bool Pickupable = true, int MinValue = 80, int Ma
         public Vec3 MeshRotation;
         public bool AnimateOnDeath;
         public bool TwoHanded;
+        public string DropSFX;
+        public string GrabSFX;
+        public string PocketSFX;
         public Dictionary<string, float> LootTable;
     }
 

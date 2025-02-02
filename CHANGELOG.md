@@ -13,6 +13,7 @@ All notable changes will be documented in the changelog.
 - Added mob icon in inventory (instead of the white cube). This is meant to change, I'm looking for an artist to make a custom inventory icon.
 - Added a body drop sound, made by **Moroxide** *(Lethal Resonance contributor)*
 - Added a custom sound import system for mobs drops. More details on how to use in the `README.md`.
+- Fixed some mobs not having their rank shown *when still alive*.
 
 ## [1.2.1](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.2.1) - 2025-01-30
 

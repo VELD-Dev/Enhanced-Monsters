@@ -200,7 +200,7 @@ public static class EnemiesDataManager
                 continue;
             }
 
-            if (!SyncedConfig.Instance.EnemiesData.TryGetValue(enemy.enemyType.enemyName, out var enemyData) || enemyData.Pickupable == false) continue;
+            if (!SyncedConfig.Instance.EnemiesData.TryGetValue(enemyName, out var enemyData) || enemyData.Pickupable == false) continue;
 
             var copy = new GameObject(enemy.name + " neutralized");
             foreach(Transform c in enemy.transform)
@@ -276,7 +276,11 @@ public static class EnemiesDataManager
             enemyItem.spawnPrefab = e2prop;
             enemyItem.restingRotation = enemyData.Metadata.MeshRotation * ((float)Math.PI / 180f);
             enemyItem.positionOffset = enemyData.Metadata.MeshOffset;
-            enemyItem.sfx
+
+            var localEnemyData = SyncedConfig.Default.EnemiesData[enemyName];
+            enemyItem.dropSFX = FastResourcesManager.CustomAudioClips[localEnemyData.Metadata.DropSFX] ?? FastResourcesManager.EnemyDropDefaultSound;
+            enemyItem.grabSFX = FastResourcesManager.CustomAudioClips[localEnemyData.Metadata.GrabSFX] ?? FastResourcesManager.EnemyDropDefaultSound;
+            enemyItem.pocketSFX = FastResourcesManager.CustomAudioClips[localEnemyData.Metadata.PocketSFX] ?? null;
 
             Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
