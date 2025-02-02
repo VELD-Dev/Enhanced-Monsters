@@ -21,11 +21,11 @@ Here are a few mods I have personally verified the compatibility with.
 - `Giant Species` (XuXiaolan): I'm trying to make a proper support for Giant Species mod, with ranks and eventually, for the smallest of them, prices and values.
 
 ## How to edit mobs settings ?
-No matter which way you do it, **do never modify the `Version` field, it is made to verify enemies data compatibility between versions of the mod**.
+**Wiki is work in progress, it will be more detailed and more up to date.**
 ### With R2ModMan
 - :warning: **You need to launch the game at least once, in order to generate the config list.**
 - Into r2modman, head into `Settings`, then `Locations` and click `Browse profile folder`.
-- Reach `/BepInEx/plugins/EnhancedMonsters/`
+- Reach `/BepInEx/config/EnhancedMonsters/`
 - Double-click `EnemiesData.json`
 - For more efficient search, you can press `[CTRL]`+`[F]` in order to open the word search. Type the name of the mob you want to edit.
 - Edit the values. be careful, you need to respect the types given:
@@ -37,7 +37,7 @@ No matter which way you do it, **do never modify the `Version` field, it is made
 
 ### For Warriors (manual installers yarrrgh)
 - :warning: **You need to launch the game at least once, in order to generate the config list.**
-- If you install mods, you technically know where you install them. Go to `/BepInEx/plugins/EnhancedMonsters/`
+- If you install mods, you technically know where you install them. Go to BepInEx configs `/BepInEx/config/EnhancedMonsters/`
 - Open `EnemiesData.json`
 - Search a mob by its name with `[CTRL]`+`[F]`
 - Modify its values by respecting the information given in the R2ModMan notice
