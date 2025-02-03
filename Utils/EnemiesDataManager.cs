@@ -20,20 +20,19 @@ public static class EnemiesDataManager
     public static readonly Dictionary<string, EnemyData> DefaultEnemiesData = new()
     {
         // Lootable
-        ["Manticoil"]           = new EnemyData(true, 20, 30, 10, "F", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["Tulip Snake"]         = new EnemyData(true, 10, 20, 11, "F", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["Hoarding bug"]        = new EnemyData(true, 30, 60, 24, "E", new(new(0, 1, 0), new(0, 0, 0), true, false)),
-        ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["Centipede"]           = new EnemyData(true, 25, 40, 23, "D", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["Baboon hawk"]         = new EnemyData(true, 40, 70, 31, "D", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["Bunker Spider"]       = new EnemyData(true, 90, 120, 57, "C", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["MouthDog"]            = new EnemyData(true, 110, 140, 88, "C", new(new(0, 0, 0), new(0, 0, 0),  true)),
-        ["Crawler"]             = new EnemyData(true, 150, 180, 66, "B", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["Flowerman"]           = new EnemyData(true, 162, 190, 40, "B", new(new(0, 0, 0), new(0, 90, 0), false)),
-        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B", new(new(0, 0, 0), new(0, 90, 0), false)),
-        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A", new(new(0, 0, 0), new(0, 90, 0), false)),
-        ["Maneater"]            = new EnemyData(true, 250, 290, 42, "S", new(new(0, 0, 0), new(0, 0, 0), true)),
-
+        ["Manticoil"]           = new EnemyData(true, 10, 20, 12, "F", new(new(0, 0, 0), new(0, 0, 0), true, false)),
+        ["Tulip Snake"]         = new EnemyData(true, 20, 30, 7, "F", new(new(0, 0, 0), new(0, 0, 0), true, false)),
+        ["Hoarding bug"]        = new EnemyData(true, 55, 90, 50, "E", new(new(0, 1, 0), new(0, 0, 0), true, true)),
+        ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E", new(new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Centipede"]           = new EnemyData(true, 45, 70, 35, "D", new(new(0, 0, 0), new(0, 0, 0), true, false)),
+        ["Baboon hawk"]         = new EnemyData(true, 75, 100, 105, "D", new(new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Bunker Spider"]       = new EnemyData(true, 70, 110, 75, "C", new(new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["MouthDog"]            = new EnemyData(true, 175, 250, 250, "C", new(new(0, 0, 0), new(0, 0, 0),  true, true)),
+        ["Crawler"]             = new EnemyData(true, 120, 160, 100, "B", new(new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Flowerman"]           = new EnemyData(true, 160, 190, 40, "B", new(new(0, 0, 0), new(90, 0, 0), false, true)),
+        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B", new(new(0, 0, 0), new(90, 0, 0), false, true)),
+        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A", new(new(0, 0, 0), new(90, 0, 0), false, true)),
+        ["Maneater"]            = new EnemyData(true, 250, 290, 42, "S", new(new(0, 0, 0), new(0, 0, 0), true, false)),
 
         // Invincible
         ["Docile Locust Bees"]  = new EnemyData(false, 0, 0, 0, "F", new()),
