@@ -11,6 +11,8 @@ All notable changes will be documented in the changelog.
 - Added a custom dead enemy item inventory icon, designed by **Dededenied**.
 - Added a new setting to set the grab collision box size.
 
+> Note: This update deprecates old configs. Make sure to port your changes from `OLD_EnemiesData.json`.
+
 ## [1.3.1](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.1) - 2025-02-02
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.0..1.3.1)
