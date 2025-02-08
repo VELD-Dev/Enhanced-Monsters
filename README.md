@@ -93,7 +93,7 @@ public static class EnhancedMonstersCompatibilityLayer
         get
         {
             if (_enabled == null)
-                _enabled = BepInex.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.velddev.enhancedmonsters");
+                _enabled = BepInex.Bootstrap.Chainloader.PluginInfos.ContainsKey(EnhancedMonsters.PluginInfo.GUID);
             
             return (bool)_enabled;
         }
@@ -103,7 +103,7 @@ public static class EnhancedMonstersCompatibilityLayer
     public static void RegisterCustomMonsterEnemyData()
     {
         // The EnemyName must ABSOLUTELY be the same than inside your EnemyType scriptable object!
-        EnhancedMonster.Utils.EnemiesDataManager.RegisterEnemy(EnemyType.enemyName, /*is enemy sellable ?*/ true, /*min value:*/ 150, /*max value:*/ 200, /*mass:*/ 14, /*rank:*/ "S+");
+        EnhancedMonsters.Utils.EnemiesDataManager.RegisterEnemy(EnemyType.enemyName, /*is enemy sellable ?*/ true, /*min value:*/ 150, /*max value:*/ 200, /*mass:*/ 14, /*rank:*/ "S+");
         // ...
     }
 }
@@ -118,4 +118,5 @@ public static class EnhancedMonstersCompatibilityLayer
 - **FROG** for helping me with the networking
 - **Xu Xiaolan** (Giant Species) for various help
 - **Moroxide** (Lethal Resonance collaborator) for creating a enemy dead body drop sound, and helping me testing the mod
-- **DropDaDeuce** (LethalGargoyles) for making a fix for soft dependencies.
+- **DropDaDeuce** (LethalGargoyles) for making a fix for soft dependencies
+- **Dededenied** for making the dead enemies inventory item icon

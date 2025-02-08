@@ -1,19 +1,68 @@
 ﻿namespace EnhancedMonsters.Utils;
 
 [JsonObject(Description = "The value of a mob once killed, if it can be killed.")]
-[method: JsonConstructor]
 [Serializable]
-public record struct EnemyData(bool Pickupable = true, int MinValue = 80, int MaxValue = 250, float Mass = 50f, string Rank = "E", EnemyData.EnemyMetadata Metadata = new())
+public record struct EnemyData
 {
+    [JsonConstructor]
+    public EnemyData()
+    {
+        Pickupable = true;
+        MinValue = 80;
+        MaxValue = 110;
+        Mass = 50f;
+        Rank = "C";
+        Metadata = new();
+    }
+
+    public EnemyData(bool pickupable = true, int minValue = 80, int maxValue = 250, float mass = 50f, string rank = "E", EnemyData.EnemyMetadata? metadata = null)
+    {
+        Pickupable = pickupable;
+        MinValue = minValue;
+        MaxValue = maxValue;
+        Mass = mass;
+        Rank = rank;
+        Metadata = metadata ?? new();
+    }
+
+    public bool Pickupable;
+    public int MinValue;
+    public int MaxValue;
+    public float Mass;
+    public string Rank;
+    public EnemyMetadata Metadata;
+
+    /// <summary>
+    /// LCMass will convert the Mass inputted to the weird mass shit LC has.<br/>This way, the mass in the mass counter on the top left corner should be the one inputted !
+    /// </summary>
+    [JsonIgnore]
+    public readonly float LCMass => (Mass / 105f) + 1;
+
     [JsonObject(Description = "The metadata of a mob once killed, if it can be killed.")]
     [Serializable]
     public record struct EnemyMetadata
     {
         [JsonConstructor]
-        public EnemyMetadata(Vec3 meshOffset = new(), Vec3 meshRotation = new(), bool animateOnDeath = true, bool twoHanded = true, Dictionary<string, float>? loots = null, string dropsfx = "default", string grabsfx = "default", string pocketsfx = "default")
+        public EnemyMetadata()
+        {
+            MeshOffset = new();
+            HandRotation = new();
+            FloorRotation = new();
+            CollisionExtents = new(1.5f, 1.5f, 1.5f);
+            AnimateOnDeath = false;
+            TwoHanded = true;
+            DropSFX = "default";
+            GrabSFX = "none";
+            PocketSFX = "none";
+            LootTable = [];
+        }
+
+        public EnemyMetadata(Vec3 meshOffset = new(), Vec3 handRotation = new(), Vec3 floorRotation = new(), bool animateOnDeath = true, bool twoHanded = true, Dictionary<string, float>? loots = null, string dropsfx = "default", string grabsfx = "none", string pocketsfx = "none", Vec3? collisionSize = null)
         {
             MeshOffset = meshOffset;
-            MeshRotation = meshRotation;
+            HandRotation = handRotation;
+            FloorRotation = floorRotation;
+            CollisionExtents = collisionSize ?? new(1.5f, 1.5f, 1.5f);
             AnimateOnDeath = animateOnDeath;
             TwoHanded = twoHanded;
             DropSFX = dropsfx;
@@ -23,20 +72,16 @@ public record struct EnemyData(bool Pickupable = true, int MinValue = 80, int Ma
         }
 
         public Vec3 MeshOffset;
-        public Vec3 MeshRotation;
+        public Vec3 HandRotation;
+        public Vec3 FloorRotation;
+        public Vec3 CollisionExtents;
         public bool AnimateOnDeath;
         public bool TwoHanded;
         public string DropSFX = "default";
-        public string GrabSFX = "default";
-        public string PocketSFX = "default";
+        public string GrabSFX = "none";
+        public string PocketSFX = "none";
         public Dictionary<string, float> LootTable;
     }
-
-    /// <summary>
-    /// LCMass will convert the Mass inputted to the weird mass shit LC has.<br/>This way, the mass in the mass counter on the top left corner should be the one inputted !
-    /// </summary>
-    [JsonIgnore]
-    public readonly float LCMass => (Mass / 105f) + 1;
 }
 
 [Serializable]

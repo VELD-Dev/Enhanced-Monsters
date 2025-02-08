@@ -27,7 +27,7 @@ internal static class FastResourcesManager
         EnemyScrapIcon = Resources.LoadAsset<Sprite>("EnemyScrapItemIcon");
         EnemyDropDefaultSound = Resources.LoadAsset<AudioClip>("BodyDrop");
 
-        LoadCustomSounds();
+        //LoadCustomSounds();
     }
 
     private static void LoadCustomSounds()

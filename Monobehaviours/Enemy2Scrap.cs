@@ -44,7 +44,7 @@ public class EnemyScrap : GrabbableObject
             var enemyData = SyncedConfig.Instance.EnemiesData[enemyType.enemyName];
             if(EnemyGameObject is not null)
             {
-                EnemyGameObject.transform.localEulerAngles = enemyData.Metadata.MeshRotation * ((float)Math.PI / 180f);
+                EnemyGameObject.transform.localEulerAngles = enemyData.Metadata.FloorRotation * ((float)Math.PI / 180f);
                 EnemyGameObject.transform.localPosition = enemyData.Metadata.MeshOffset;
             }
             else

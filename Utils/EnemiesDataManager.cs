@@ -20,19 +20,19 @@ public static class EnemiesDataManager
     public static readonly Dictionary<string, EnemyData> DefaultEnemiesData = new()
     {
         // Lootable
-        ["Manticoil"]           = new EnemyData(true, 10, 20, 12, "F", new(new(0, 0, 0), new(0, 0, 0), true, false)),
-        ["Tulip Snake"]         = new EnemyData(true, 20, 30, 7, "F", new(new(0, 0, 0), new(0, 0, 0), true, false)),
-        ["Hoarding bug"]        = new EnemyData(true, 55, 90, 50, "E", new(new(0, 1, 0), new(0, 0, 0), true, true)),
-        ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E", new(new(0, 0, 0), new(0, 0, 0), true, true)),
-        ["Centipede"]           = new EnemyData(true, 45, 70, 35, "D", new(new(0, 0, 0), new(0, 0, 0), true, false)),
-        ["Baboon hawk"]         = new EnemyData(true, 75, 100, 105, "D", new(new(0, 0, 0), new(0, 0, 0), true, true)),
-        ["Bunker Spider"]       = new EnemyData(true, 70, 110, 75, "C", new(new(0, 0, 0), new(0, 0, 0), true, true)),
-        ["MouthDog"]            = new EnemyData(true, 175, 250, 250, "C", new(new(0, 0, 0), new(0, 0, 0),  true, true)),
-        ["Crawler"]             = new EnemyData(true, 120, 160, 100, "B", new(new(0, 0, 0), new(0, 0, 0), true, true)),
-        ["Flowerman"]           = new EnemyData(true, 160, 190, 40, "B", new(new(0, 0, 0), new(90, 0, 0), false, true)),
-        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B", new(new(0, 0, 0), new(90, 0, 0), false, true)),
-        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A", new(new(0, 0, 0), new(90, 0, 0), false, true)),
-        ["Maneater"]            = new EnemyData(true, 250, 290, 42, "S", new(new(0, 0, 0), new(0, 0, 0), true, false)),
+        ["Manticoil"]           = new EnemyData(true, 10, 20, 12, "F", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
+        ["Tulip Snake"]         = new EnemyData(true, 20, 30, 7, "F", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
+        ["Hoarding bug"]        = new EnemyData(true, 55, 90, 50, "E", new(new(0, 1, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Centipede"]           = new EnemyData(true, 45, 70, 35, "D", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
+        ["Baboon hawk"]         = new EnemyData(true, 75, 100, 105, "D", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Bunker Spider"]       = new EnemyData(true, 70, 110, 75, "C", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["MouthDog"]            = new EnemyData(true, 175, 250, 250, "C", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Crawler"]             = new EnemyData(true, 120, 160, 100, "B", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Flowerman"]           = new EnemyData(true, 160, 190, 40, "B", new(new(0, 0, 0), new(90, 0, 0), new(0, 0, 0), false, true)),
+        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B", new(new(0, 0, 0), new(90, 0, 0), new(0, 0, 0), false, true)),
+        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A", new(new(0, 0, 0), new(90, 0, 0), new(0, 0, 0), false, true)),
+        ["Maneater"]            = new EnemyData(true, 250, 290, 42, "S", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
 
         // Invincible
         ["Docile Locust Bees"]  = new EnemyData(false, 0, 0, 0, "F", new()),
@@ -50,14 +50,14 @@ public static class EnemiesDataManager
         ["Lasso"]               = new EnemyData(false, 0, 0, 0, "dont exist haha", new()),
 
         // Unsellable
-        ["ForestGiant"]         = new EnemyData(false, 0, 0, 0, "S", new(new(0, 0, 0), new(0, 90, 0), false)), // This one is just too big lmao
+        ["ForestGiant"]         = new EnemyData(false, 0, 0, 0, "S", new(new(0, 0, 0), new(0, 90, 0), new(90, 0, 0), false)), // This one is just too big lmao
 
         // MODDED
-        ["PinkGiant"]           = new EnemyData(false, 0, 0, 0, "F", new(new(0, 0, 0), new(0, 90, 0), false)), // Too big too to be sold
+        ["PinkGiant"]           = new EnemyData(false, 0, 0, 0, "F", new(new(0, 0, 0), new(0, 90, 0), new(0, 0, 0), false)), // Too big too to be sold
         ["Football"]            = new EnemyData(false, 0, 0, 0, "B", new()),
         ["Locker"]              = new EnemyData(false, 0, 0, 0, "A", new()),
-        ["Bush Wolf"]           = new EnemyData(true, 250, 320, 51, "A", new(new(0, 0, 0), new(0, 0, 0), true)),
-        ["PjonkGoose"]          = new EnemyData(true, 279, 340, 64, "A", new(new(0, 0, 0), new(0, 0, 0), true)),
+        ["Bush Wolf"]           = new EnemyData(true, 250, 320, 51, "A", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true)),
+        ["PjonkGoose"]          = new EnemyData(true, 279, 340, 64, "A", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true)),
 
     };
 #pragma warning restore IDE0055
@@ -91,6 +91,10 @@ public static class EnemiesDataManager
             Plugin.logger.LogWarning("Enemy Data File seems to be outdated. A new config file will be created.");
             EnemiesData.ProperConcat(DefaultEnemiesData);
             var oldFilename = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..", "..", "config", "EnhancedMonsters", "OLD_EnemiesData.json");
+            if (File.Exists(oldFilename))
+            {
+                File.Delete(oldFilename);
+            }
             File.Move(EnemiesDataFile, oldFilename);
             SaveEnemiesData();
             return;
@@ -238,6 +242,8 @@ public static class EnemiesDataManager
             enemyScrap.grabbable = true;
             enemyScrap.grabbableToEnemies = false;
             enemyScrap.enemyType = enemy.enemyType;
+            var collision = e2prop.GetComponent<BoxCollider>();
+            collision.size = enemyData.Metadata.CollisionExtents;
 
             // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
             var scanNodeProperties = copy.GetComponentInChildren<ScanNodeProperties>();
@@ -261,8 +267,8 @@ public static class EnemiesDataManager
             enemyScrap.itemProperties = enemyItem;
 
             enemyItem.name = enemyName + " scrap";
-            enemyItem.saveItemVariable = true;
             enemyItem.itemName = scanNodeProperties.headerText;
+            enemyItem.saveItemVariable = true;
             enemyItem.itemIcon = FastResourcesManager.EnemyScrapIcon;
             enemyItem.minValue = enemyData.MinValue;
             enemyItem.maxValue = enemyData.MaxValue;
@@ -275,19 +281,31 @@ public static class EnemiesDataManager
             enemyItem.twoHandedAnimation = enemyData.Metadata.TwoHanded;
             enemyItem.weight = enemyData.LCMass;
             enemyItem.spawnPrefab = e2prop;
-            enemyItem.restingRotation = enemyData.Metadata.MeshRotation * ((float)Math.PI / 180f);
+            enemyItem.restingRotation = enemyData.Metadata.FloorRotation * (MathF.PI / 180f);
+            enemyItem.rotationOffset = enemyData.Metadata.HandRotation * (MathF.PI / 180f);
             enemyItem.positionOffset = enemyData.Metadata.MeshOffset;
 
             var localEnemyData = SyncedConfig.Default.EnemiesData[enemyName];
-            if (localEnemyData.Metadata.DropSFX != "default" && FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.DropSFX, out var dropsfx))
-                 enemyItem.dropSFX = dropsfx;
-            else enemyItem.dropSFX = FastResourcesManager.EnemyDropDefaultSound;
-            if (localEnemyData.Metadata.GrabSFX != "default" && FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.GrabSFX, out var grabsfx))
-                 enemyItem.grabSFX = grabsfx;
-            else enemyItem.grabSFX = FastResourcesManager.EnemyDropDefaultSound;
-            if (localEnemyData.Metadata.PocketSFX != "default" && FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.PocketSFX, out var pocketsfx))
-                 enemyItem.pocketSFX = pocketsfx;
-            else enemyItem.pocketSFX = null;
+            if (localEnemyData.Metadata.DropSFX == "default")
+                enemyItem.dropSFX = FastResourcesManager.EnemyDropDefaultSound;
+            else if (FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.DropSFX, out var dropsfx))
+                enemyItem.dropSFX = dropsfx;
+            else
+                enemyItem.dropSFX = null;
+
+            if (localEnemyData.Metadata.GrabSFX == "default")
+                enemyItem.grabSFX = FastResourcesManager.EnemyDropDefaultSound;
+            else if (FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.GrabSFX, out var grabsfx))
+                enemyItem.grabSFX = grabsfx;
+            else
+                enemyItem.grabSFX = null;
+
+            if (localEnemyData.Metadata.PocketSFX == "default")
+                enemyItem.pocketSFX = FastResourcesManager.EnemyDropDefaultSound;
+            else if (FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.PocketSFX, out var pocketsfx))
+                enemyItem.pocketSFX = pocketsfx;
+            else
+                enemyItem.pocketSFX = null;
 
             Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);

@@ -2,6 +2,15 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.2](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.2) - 2025-02-08
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.1..1.3.2)
+- Fixed custom rotations not setting correctly, and splitted *On Floor Rotation* and *In Hand Rotation* in the config.
+- Temporarily suspended the custom sounds feature, it will only use the default sounds now.
+- Added possibility to set `default` for default sound, or `none` for no sound at all in all the sound configs.
+- Added a custom dead enemy item inventory icon, designed by **Dededenied**.
+- Added a new setting to set the grab collision box size.
+
 ## [1.3.1](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.1) - 2025-02-02
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.0..1.3.1)
