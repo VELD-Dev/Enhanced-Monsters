@@ -10,6 +10,9 @@ public class EnemyAI_Patches
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.Start))]
     private static void Start(EnemyAI __instance)
     {
+        if (__instance.enemyType is null)
+            return;
+
         string creatureRank;
         if(LocalConfig.Singleton.synchronizeRanks.Value)
             creatureRank = SyncedConfig.Instance.EnemiesData[__instance.enemyType.enemyName].Rank ?? "?";
@@ -28,6 +31,8 @@ public class EnemyAI_Patches
     private static void KillEnemy(EnemyAI __instance, bool destroy)
     {
         if (__instance == null) return;  // Should never happen
+
+        if (__instance.enemyType == null) return; // This should never happen but some mods have this issue.
 
         Plugin.logger.LogDebug($"Mob {__instance.enemyType.enemyName} died.");
 

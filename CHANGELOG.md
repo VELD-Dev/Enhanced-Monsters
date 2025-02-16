@@ -2,6 +2,11 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.3](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.3) - 2025-02-16
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.2..1.3.3)
+- Fixed an error caused by some mods like ScarletDevilMansion where some mods that didn't have `EnemyType` were causing the mod to break configs and configs synchronization.
+
 ## [1.3.2](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.2) - 2025-02-08
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.1..1.3.2)

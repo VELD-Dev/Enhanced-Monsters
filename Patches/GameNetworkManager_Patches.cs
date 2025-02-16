@@ -12,8 +12,21 @@ internal class GameNetworkManager_Patches
     public static void Start(GameNetworkManager __instance)
     {
         var enemies = Resources.FindObjectsOfTypeAll<EnemyAI>();
+
         foreach (var enemy in enemies)
         {
+            if (enemy is null)
+            {
+                Plugin.logger.LogWarning("An enemy is null!");
+                continue;
+            }
+
+            if(enemy.enemyType is null)
+            {
+                Plugin.logger.LogWarning($"{enemy.name} has a null enemyType (tf?)");
+                continue;
+            }
+
             if (!SyncedConfig.Instance.EnemiesData.ContainsKey(enemy.enemyType.enemyName))
             {
                 EnemiesDataManager.RegisterEnemy(enemy.enemyType.enemyName, new());
