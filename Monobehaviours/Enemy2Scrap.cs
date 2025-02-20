@@ -14,6 +14,9 @@ public class EnemyScrap : GrabbableObject
     private readonly NetworkVariable<int> _syncedScrapValue = new();
     public int SyncedScrapValue { get => _syncedScrapValue.Value; set { _syncedScrapValue.Value = value; } }
 
+    public Dictionary<string, bool> AdditionalClientSettings { get; } = [];
+    const string SpiderSafeTag = "ShowArachnophobeMesh";
+
     private void Awake()
     {
         EnemyAnimator = gameObject.GetComponentInChildren<Animator>();
@@ -32,6 +35,11 @@ public class EnemyScrap : GrabbableObject
         {
             Plugin.logger.LogError($"Error: Enemy corpse saving was set to false for {enemyType.enemyName}");
         }
+
+        if(enemyType.enemyName == "Bunker Spider")
+        {
+            AdditionalClientSettings.TryAdd("ShowArachnophobeMesh", false);
+        }
     }
 
     public override void Start()
@@ -42,15 +50,6 @@ public class EnemyScrap : GrabbableObject
         {
             Plugin.logger.LogInfo("Synchronizing the mob data and scrap values and positions with clients...");
             var enemyData = SyncedConfig.Instance.EnemiesData[enemyType.enemyName];
-            if(EnemyGameObject is not null)
-            {
-                EnemyGameObject.transform.localEulerAngles = enemyData.Metadata.FloorRotation * ((float)Math.PI / 180f);
-                EnemyGameObject.transform.localPosition = enemyData.Metadata.MeshOffset;
-            }
-            else
-            {
-                Plugin.logger.LogWarning("whoops ! EnemyGameObject is not defined somehow !");
-            }
 
             if(GameNetworkManager.Instance.gameHasStarted || scrapValue == 0)
             {
@@ -116,6 +115,60 @@ public class EnemyScrap : GrabbableObject
         {
             Plugin.logger.LogError($"Enemy corpse {itemProperties.itemName} is missing a ScanNode !");
         }
+
+        if(enemyType.enemyName == "Bunker Spider")
+        {
+            ToggleArachnophobeMesh(IngamePlayerSettings.Instance.unsavedSettings.spiderSafeMode);
+        }
+    }
+
+    public void FixedUpdate()
+    {
+        if(enemyType.enemyName == "Bunker Spider")
+        {
+            // I made this system in order to avoid navigating through the 
+            if (!AdditionalClientSettings.TryGetValue(SpiderSafeTag, out bool arachnophobiaEnabled))
+                AdditionalClientSettings.Add(SpiderSafeTag, false);
+
+            if (arachnophobiaEnabled != IngamePlayerSettings.Instance.unsavedSettings.spiderSafeMode)
+            {
+                ToggleArachnophobeMesh(IngamePlayerSettings.Instance.unsavedSettings.spiderSafeMode);
+            }
+        }
+    }
+
+    public override void PlayDropSFX()
+    {
+        base.PlayDropSFX();
+
+        if(enemyType.enemyName == "Bunker Spider")
+            ToggleArachnophobeMesh(IngamePlayerSettings.Instance.unsavedSettings.spiderSafeMode);
+    }
+
+    public override void GrabItem()
+    {
+        base.GrabItem();
+
+        if (enemyType.enemyName == "Bunker Spider")
+            ToggleArachnophobeMesh(IngamePlayerSettings.Instance.unsavedSettings.spiderSafeMode);
+    }
+
+    public void ToggleArachnophobeMesh(bool newStatus)
+    {
+        Plugin.logger.LogInfo("Trying to update the Spider mesh to match arachnophobia settings...");
+        var spiderSafeMesh = transform.GetChild(0).Find("MeshContainer").Find("AnimContainer").Find("Armature").Find("Abdomen").Find("SpiderText").GetComponent<MeshRenderer>();
+        var spiderNormalMesh = transform.GetChild(0).Find("MeshContainer").Find("MeshRenderer").GetComponent<SkinnedMeshRenderer>();
+        if (!spiderSafeMesh || !spiderNormalMesh)
+        {
+            Plugin.logger.LogError("This Spider mesh doesn't have a normal mesh or an arachnophobe mesh.");
+            return;
+        }
+
+        AdditionalClientSettings[SpiderSafeTag] = newStatus;
+        spiderSafeMesh.enabled = newStatus;
+        spiderNormalMesh.enabled = !newStatus;
+
+        Plugin.logger.LogInfo("The spider mesh have been updated to match player Arachnophobia settings !");
     }
 
     public new void SetScrapValue(int value)

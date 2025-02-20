@@ -4,9 +4,6 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
-    <AssemblyVersion>1.3.4</AssemblyVersion>
-    <Version>1.3.4</Version>
-    <FileVersion>1.3.4</FileVersion>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <Title>Enhanced Monsters</Title>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
@@ -17,12 +14,14 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <Deterministic>True</Deterministic>
     <DebugType>embedded</DebugType>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <Deterministic>True</Deterministic>
     <DebugType>none</DebugType>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>

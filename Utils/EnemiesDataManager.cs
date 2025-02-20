@@ -20,7 +20,7 @@ public static class EnemiesDataManager
     public static readonly Dictionary<string, EnemyData> DefaultEnemiesData = new()
     {
         // Lootable
-        ["Manticoil"]           = new EnemyData(true, 10, 20, 12, "F", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
+        ["Manticoil"]           = new EnemyData(true, 10, 20, 12, "F", new(new(-0.25f, 0.25f, 0.15f), new(180, 0, -90), new(0, 0, 0), true, false)),
         ["Tulip Snake"]         = new EnemyData(true, 20, 30, 7, "F", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
         ["Hoarding bug"]        = new EnemyData(true, 55, 90, 50, "E", new(new(0, 1, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
         ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
@@ -227,6 +227,23 @@ public static class EnemiesDataManager
                 var goCopy = GameObject.Instantiate(c);
                 goCopy.name = c.name;
                 goCopy.transform.parent = copy.transform;
+
+                /*
+                if (enemy.enemyType.enemyName == "Maneater")
+                {
+                    if (!goCopy.name.StartsWith("BabyMeshContainer"))
+                    {
+                        var g = goCopy.Find("BabyEnemyCollider") ?? goCopy.Find("EnemyCollider");
+                        GameObject.Destroy(g.gameObject);
+                    }
+
+                    if (!c.name.StartsWith("MeshContainer"))
+                    {
+                        var g = goCopy.Find("BabyEnemyCollider") ?? goCopy.Find("EnemyCollider");
+                        GameObject.Destroy(g.gameObject);
+                    }
+                }
+                */
             }
             // Clearing components that should not be
             copy.RemoveComponentsInChildren<Collider>();
@@ -287,8 +304,8 @@ public static class EnemiesDataManager
             enemyItem.twoHandedAnimation = enemyData.Metadata.TwoHanded;
             enemyItem.weight = enemyData.LCMass;
             enemyItem.spawnPrefab = e2prop;
-            enemyItem.restingRotation = enemyData.Metadata.FloorRotation * (MathF.PI / 180f);
-            enemyItem.rotationOffset = enemyData.Metadata.HandRotation * (MathF.PI / 180f);
+            enemyItem.restingRotation = enemyData.Metadata.FloorRotation;
+            enemyItem.rotationOffset = enemyData.Metadata.HandRotation;
             enemyItem.positionOffset = enemyData.Metadata.MeshOffset;
 
             var localEnemyData = SyncedConfig.Default.EnemiesData[enemyName];

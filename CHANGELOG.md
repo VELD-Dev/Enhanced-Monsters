@@ -2,6 +2,12 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.5](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.5) - 2025-02-20
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.4..1.3.5)
+- Fixed Bunker Spiders having both the arachnophobe and standard meshes. Now it will update just like when it's alive, and it WILL NOT REQUIRE A RESTART to change the spider model.
+- Fixed "HandRotation" settings not working when in game. It's now possible, through the settings, to set a rotation to corpses when they are in your hands.
+
 ## [1.3.4](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.4) - 2025-02-20
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.3..1.3.4)
