@@ -186,6 +186,12 @@ public static class EnemiesDataManager
         var enemies = Resources.FindObjectsOfTypeAll<EnemyAI>();
         foreach(var enemy in enemies)
         {
+            if (enemy.enemyType == null)
+            {
+                Plugin.logger.LogWarning($"Entity {enemy.name} have been skipped: This entity lacks an EnemyType !");
+                continue;
+            }
+
             Plugin.logger.LogInfo($"Registering NetworkPrefab '{enemy.enemyType.enemyName}'");
             ref var enemyName = ref enemy.enemyType.enemyName;
             if (Enemies2Props.TryGetValue(enemy.enemyType.enemyName, out var e2p))

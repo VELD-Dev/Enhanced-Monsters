@@ -2,6 +2,11 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.4](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.4) - 2025-02-20
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.3..1.3.4)
+- Fixed a rare issue where the killable enemies scrap prefabs wouldn't be generated due to some mobs not having `EnemyType`.
+
 ## [1.3.3](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.3) - 2025-02-16
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.2..1.3.3)
