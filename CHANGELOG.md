@@ -2,6 +2,12 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.6](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.6) - 2025-02-28
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.5..1.3.6)
+- Fixed config file not being in the right folder.
+- Fixed mobs not behaving correctly after they die.
+
 ## [1.3.5](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.5) - 2025-02-20
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.4..1.3.5)
