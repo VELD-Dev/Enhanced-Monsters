@@ -55,7 +55,7 @@
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Facepunch.Steamworks.Win64.dll</HintPath>
     </Reference>
     <Reference Include="LethalConfig">
-      <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\LethalConfigs\LethalConfig.dll</HintPath>
+      <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\LethalConfig\LethalConfig.dll</HintPath>
     </Reference>
     <Reference Include="LethalLib">
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\LethalLib\LethalLib.dll</HintPath>

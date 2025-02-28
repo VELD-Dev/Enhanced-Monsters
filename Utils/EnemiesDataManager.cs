@@ -21,17 +21,17 @@ public static class EnemiesDataManager
     {
         // Lootable
         ["Manticoil"]           = new EnemyData(true, 10, 20, 12, "F", new(new(-0.25f, 0.25f, 0.15f), new(180, 0, -90), new(0, 0, 0), true, false)),
-        ["Tulip Snake"]         = new EnemyData(true, 20, 30, 7, "F", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
-        ["Hoarding bug"]        = new EnemyData(true, 55, 90, 50, "E", new(new(0, 1, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Tulip Snake"]         = new EnemyData(true, 20, 30, 7, "F", new(new(-0.15f, 0.1f, 0.11f), new(0, 90, 90), new(0, 0, 0), true, false)),
+        ["Hoarding bug"]        = new EnemyData(true, 55, 90, 50, "E", new(new(0.1f, 0.2f, -0.3f), new(0, 0, 90), new(0, 0, 0), true, true)),
         ["Puffer"]              = new EnemyData(true, 30, 60, 69, "E", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
-        ["Centipede"]           = new EnemyData(true, 45, 70, 35, "D", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
-        ["Baboon hawk"]         = new EnemyData(true, 75, 100, 105, "D", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
+        ["Centipede"]           = new EnemyData(true, 45, 70, 35, "D", new(new(-0.25f, 0.1f, 0), new(0, 0, -90), new(0, 0, 0), true, false)),
+        ["Baboon hawk"]         = new EnemyData(true, 75, 100, 105, "D", new(new(-0.3f, 0.5f, 1.5f), new(0, 0, 90), new(0, 0, 0), true, true)),
         ["Bunker Spider"]       = new EnemyData(true, 70, 110, 75, "C", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
-        ["MouthDog"]            = new EnemyData(true, 175, 250, 250, "C", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
-        ["Crawler"]             = new EnemyData(true, 120, 160, 100, "B", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, true)),
-        ["Flowerman"]           = new EnemyData(true, 160, 190, 40, "B", new(new(0, 0, 0), new(90, 0, 0), new(0, 0, 0), false, true)),
-        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B", new(new(0, 0, 0), new(90, 0, 0), new(0, 0, 0), false, true)),
-        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A", new(new(0, 0, 0), new(90, 0, 0), new(0, 0, 0), false, true)),
+        ["MouthDog"]            = new EnemyData(true, 175, 250, 250, "C", new(new(-1.25f, -1, -0.5f), new(180, 0, -90), new(180, 0, 180), true, true)),
+        ["Crawler"]             = new EnemyData(true, 120, 160, 100, "B", new(new(-0.5f, 0, -1), new(0, 0, -60), new(0, 0, 0), true, true)),
+        ["Flowerman"]           = new EnemyData(true, 160, 190, 40, "B", new(new(0, 0, 1.5f), new(0, 90, -90), new(-90, 0, 0), false, true)),
+        ["Butler"]              = new EnemyData(true, 170, 199, 77, "B", new(new(-0.5f, 0, 1), new(0, 90, -90), new(-90, 0, 0), false, true)),
+        ["Nutcracker"]          = new EnemyData(true, 190, 220, 43, "A", new(new(0, 0, 1.5f), new(0, 90, -90), new(-90, 0, 0), false, true)),
         ["Maneater"]            = new EnemyData(true, 250, 290, 42, "S", new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true, false)),
 
         // Invincible
@@ -62,7 +62,7 @@ public static class EnemiesDataManager
     };
 #pragma warning restore IDE0055
 
-    public static string EnemiesDataFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..", "..", "config", "EnhancedMonsters", "EnemiesData.json");
+    public static string EnemiesDataFile = Path.Combine(BepInEx.Paths.ConfigPath, "EnhancedMonsters", "EnemiesData.json");
     public static readonly Dictionary<string, GameObject> Enemies2Props = [];
 
     public static void LoadEnemiesData()
