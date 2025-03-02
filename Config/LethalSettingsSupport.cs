@@ -30,6 +30,7 @@ internal static class LethalSettingsSupport
             OnInitialize = (comp) => { comp.Value = config.synchronizeRanks.Value; comp.Enabled = !GameNetworkManager.Instance.gameHasStarted || !NetworkManager.Singleton.IsListening; }
         };
         Plugin.logger.LogInfo("Registering lsDungeonPrevQltComp");
+        /*
         var lsDungeonPrevQltComp = new LethalSettings.UI.Components.SliderComponent
         {
             Enabled = !config.SeamlessDungeonExists,
@@ -42,8 +43,9 @@ internal static class LethalSettingsSupport
             OnValueChanged = (comp, value) => { config.dungeonPreviewResolution.Value = (int)value; },
             OnInitialize = (comp) => { comp.Value = config.dungeonPreviewResolution.Value; }
         };
+        */
         Plugin.logger.LogInfo("Registering lsDungeonPrevComponent");
-        var lsDungeonPrevComponent = new LethalSettings.UI.Components.ToggleComponent
+        /*var lsDungeonPrevComponent = new LethalSettings.UI.Components.ToggleComponent
         {
             Enabled = config.SeamlessDungeonExists,
             Text = "Dungeon Preview",
@@ -51,11 +53,12 @@ internal static class LethalSettingsSupport
             OnValueChanged = (comp, value) => { config.dungeonPreview.Value = value; lsDungeonPrevQltComp.Enabled = value; },
             OnInitialize = (comp) => { comp.Value = config.dungeonPreview.Value; lsDungeonPrevQltComp.Enabled = config.dungeonPreview.Value; }
         };
+        */
         Plugin.logger.LogInfo("Registering lsDungeonSndVolComponent");
         var lsDungeonSndVolComponent = new LethalSettings.UI.Components.SliderComponent
         {
-            Enabled = true,
-            Text = "Dungeon Sound Exchange Volume",
+            Enabled = false,
+            Text = "[UNAVAILABLE] Dungeon Sound Exchange Volume",
             Value = 100,
             MinValue = 0,
             MaxValue = 100,
@@ -67,8 +70,8 @@ internal static class LethalSettingsSupport
         Plugin.logger.LogInfo("Registering lsDungeonSndComponent");
         var lsDungeonSndComponent = new LethalSettings.UI.Components.ToggleComponent
         {
-            Enabled = true,
-            Text = "Dungeon Sound Exchange",
+            Enabled = false,
+            Text = "[UNAVAILABLE] Dungeon Sound Exchange",
             Value = true,
             OnValueChanged = (comp, value) => { config.dungeonSoundExchange.Value = value; lsDungeonSndVolComponent.Enabled = value; },
             OnInitialize = (comp) => { comp.Value = config.dungeonSoundExchange.Value; lsDungeonSndVolComponent.Enabled = config.dungeonSoundExchange.Value; }
@@ -92,10 +95,8 @@ internal static class LethalSettingsSupport
             MenuComponents = [
                 lsSyncRanks,
                 lsAccessEnemiesDataFile,
-                lsDungeonPrevComponent,
-                lsDungeonPrevQltComp,
-                lsDungeonSndComponent,
-                lsDungeonSndVolComponent
+                //lsDungeonSndComponent,
+                //lsDungeonSndVolComponent
             ],
         });
         Plugin.logger.LogInfo("Registered Mod Info");

@@ -9,8 +9,6 @@ public class LocalConfig
     internal readonly bool SeamlessDungeonExists;
 
     public readonly ConfigEntry<bool> synchronizeRanks;
-    public readonly ConfigEntry<bool> dungeonPreview;
-    public readonly ConfigEntry<int> dungeonPreviewResolution;
     public readonly ConfigEntry<bool> dungeonSoundExchange;
     public readonly ConfigEntry<int> dungeonSoundExchangeVolume;
 
@@ -26,29 +24,17 @@ public class LocalConfig
             true,
             "Wether or not to synchronize ranks of enemies from host's configs. It is recommended to keep it enabled. [NOTE: This setting can only be edited from the main menu.]"
         );
-        dungeonPreview = cfg.Bind(
-            "Entrance Improvements",
-            "Dungeon Preview",
-            SeamlessDungeonExists ? false : true,
-            "Wether or not to enable interior/exterior preview through Dungeon's doors windows. [NOTE: This may not work on some modded moons and interiors.]"
-        );
-        dungeonPreviewResolution = cfg.Bind(
-            "Entrance Improvements",
-            "Dungeon Preview Resolution",
-            512,
-            "The dungeon preview uses cameras to render the exterior/interior. Reducing this will reduce preview quality but increase performance. [NOTE: Must be a multiple of 2.]"
-        );
         dungeonSoundExchange = cfg.Bind(
             "Entrance Improvements",
-            "Dungeon Sound Exchange",
+            "[NOT AVAILABLE YET] Dungeon Sound Exchange",
             true,
-            "Wether to enable or not sound exchange between interior and exterior of the dungeon, next to entrance and fire exits. Disabling it can enhance performance on weakest configurations."
+            "[NOT AVAILABLE YET] Wether to enable or not sound exchange between interior and exterior of the dungeon, next to entrance and fire exits. Disabling it can enhance performance on weakest configurations."
         );
         dungeonSoundExchangeVolume = cfg.Bind(
             "Entrance Improvements",
-            "Dungeon Sound Exchange Volume",
+            "[NOT AVAILABLE YET] Dungeon Sound Exchange Volume",
             70,
-            "Volume level of sounds emitted from the interior/exterior when player is on the other side of the door."
+            "[NOT AVAILABLE YET] Volume level of sounds emitted from the interior/exterior when player is on the other side of the door."
         );
 
         if (LethalConfigSupport.LethalConfigLoaded)

@@ -2,6 +2,13 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.7](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.7) - 2025-03-03
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.6..1.3.7)
+- Fixed mobs body duplication occurring in multiplayer when the body is picked was picked too quickly.
+- Removed two settings entries as they are not relevant anymore (feature unplanned).
+- Also grayed-out two settings that are not relevant as the feature is not implemented yet.
+
 ## [1.3.6](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.6) - 2025-02-28
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.5..1.3.6)
