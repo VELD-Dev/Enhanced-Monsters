@@ -2,6 +2,11 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.8](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.8) - 2025-03-03
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.7..1.3.8)
+- Fixed mod not loading because the config file has bad keys.
+
 ## [1.3.7](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.7) - 2025-03-03
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.6..1.3.7)

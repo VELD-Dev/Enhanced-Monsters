@@ -26,15 +26,15 @@ public class LocalConfig
         );
         dungeonSoundExchange = cfg.Bind(
             "Entrance Improvements",
-            "[NOT AVAILABLE YET] Dungeon Sound Exchange",
+            "Unimplemented - Dungeon Sound Exchange",
             true,
-            "[NOT AVAILABLE YET] Wether to enable or not sound exchange between interior and exterior of the dungeon, next to entrance and fire exits. Disabling it can enhance performance on weakest configurations."
+            "Unimplemented - Wether to enable or not sound exchange between interior and exterior of the dungeon, next to entrance and fire exits. Disabling it can enhance performance on weakest configurations."
         );
         dungeonSoundExchangeVolume = cfg.Bind(
             "Entrance Improvements",
-            "[NOT AVAILABLE YET] Dungeon Sound Exchange Volume",
+            "Unimplemented - Dungeon Sound Exchange Volume",
             70,
-            "[NOT AVAILABLE YET] Volume level of sounds emitted from the interior/exterior when player is on the other side of the door."
+            "Unimplemented - Volume level of sounds emitted from the interior/exterior when player is on the other side of the door."
         );
 
         if (LethalConfigSupport.LethalConfigLoaded)
