@@ -62,11 +62,11 @@ public class EnemyAI_Patches
             enemyToPropInstance.hideFlags = HideFlags.None;
             enemyToPropInstance.transform.position = __instance.transform.position;
             enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
-            // Instead of deleting, it's better to just move it far far away
-            __instance.transform.position = new(-10000, -10000, -10000);
-            __instance.SyncPositionToClients();
         }
-
+        
+        //move the original body away for all players
+        __instance.transform.position = new(-10000, -10000, -10000);
+        __instance.SyncPositionToClients();
         Plugin.logger.LogDebug("Mob should now be grabbable for all users.");
     }
 }
