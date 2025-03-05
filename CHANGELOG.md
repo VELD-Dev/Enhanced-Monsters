@@ -2,6 +2,11 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.9](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.9) - 2025-03-05
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.8..1.3.9)
+- Fixed original mob bodies not disappearing correctly on clients but correctly on host, by @Entity378 in pull request https://github.com/VELD-Dev/Enhanced-Monsters/pull/5
+
 ## [1.3.8](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.8) - 2025-03-03
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.7..1.3.8)
