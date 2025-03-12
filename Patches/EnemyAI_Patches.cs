@@ -62,6 +62,16 @@ public class EnemyAI_Patches
             enemyToPropInstance.hideFlags = HideFlags.None;
             enemyToPropInstance.transform.position = __instance.transform.position;
             enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
+
+            if (__instance.GetComponent<NutcrackerEnemyAI>() != null && __instance.GetComponent<NutcrackerEnemyAI>().gun != null) 
+            {
+                int shotgunPrice = __instance.GetComponent<NutcrackerEnemyAI>().gun.scrapValue;
+                __instance.GetComponent<NutcrackerEnemyAI>().gun.GetComponent<NetworkObject>().Despawn();
+                Item shotgunItem = StartOfRound.Instance.allItemsList.itemsList.First(i => i.name == "Shotgun");
+                GameObject newShotgun = Object.Instantiate(shotgunItem.spawnPrefab, __instance.transform.position, __instance.transform.rotation);
+                newShotgun.GetComponent<ShotgunItem>().scrapValue = shotgunPrice;
+                newShotgun.GetComponent<NetworkObject>().Spawn();
+            }
         }
         
         //move the original body away for all players
