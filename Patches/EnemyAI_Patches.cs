@@ -71,6 +71,7 @@ public class EnemyAI_Patches
                 GameObject newShotgun = Object.Instantiate(shotgunItem.spawnPrefab, __instance.transform.position, __instance.transform.rotation);
                 newShotgun.GetComponent<ShotgunItem>().scrapValue = shotgunPrice;
                 newShotgun.GetComponent<NetworkObject>().Spawn();
+                SyncDetailsClientRpc(price, new NetworkObjectReference(newShotgun.GetComponent<NetworkObject>()));
             }
         }
         
@@ -78,5 +79,21 @@ public class EnemyAI_Patches
         __instance.transform.position = new(-10000, -10000, -10000);
         __instance.SyncPositionToClients();
         Plugin.logger.LogDebug("Mob should now be grabbable for all users.");
+    }
+    
+    [ClientRpc]
+    void SyncDetailsClientRpc(int price, NetworkObjectReference netRef)
+    {
+        NetworkObject networkObject;
+        netRef.TryGet(out networkObject, null);
+        ShotgunItem shotgun = networkObject.GetComponent<ShotgunItem>();
+        if (shotgun != null)
+        {
+            shotgun.scrapValue = price;
+            shotgun.itemProperties.creditsWorth = price;
+            shotgun.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${price}";
+            Debug.Log("Successfully synced shotgun values");
+        }
+        else Debug.LogError("Failed to resolve network reference!");
     }
 }
