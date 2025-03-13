@@ -73,7 +73,7 @@ public class EnemyAI_Patches
                 GameObject newShotgun = Object.Instantiate(shotgunItem.spawnPrefab, __instance.transform.position, __instance.transform.rotation);
                 newShotgun.GetComponent<ShotgunItem>().scrapValue = shotgunPrice;
                 newShotgun.GetComponent<NetworkObject>().Spawn();
-                StartCoroutine(SendDetailsWithDelay(price, new NetworkObjectReference(newShotgun.GetComponent<NetworkObject>())));
+                StartCoroutine(SendDetailsWithDelay(shotgunPrice, new NetworkObjectReference(newShotgun.GetComponent<NetworkObject>())));
             }
         }
         
