@@ -1,5 +1,7 @@
 ﻿using EnhancedMonsters.Utils;
-
+using System.Collections;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace EnhancedMonsters.Patches;
 
@@ -62,11 +64,44 @@ public class EnemyAI_Patches
             enemyToPropInstance.hideFlags = HideFlags.None;
             enemyToPropInstance.transform.position = __instance.transform.position;
             enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
+
+            if (__instance.GetComponent<NutcrackerEnemyAI>() != null && __instance.GetComponent<NutcrackerEnemyAI>().gun != null) 
+            {
+                int shotgunPrice = __instance.GetComponent<NutcrackerEnemyAI>().gun.scrapValue;
+                __instance.GetComponent<NutcrackerEnemyAI>().gun.GetComponent<NetworkObject>().Despawn();
+                Item shotgunItem = StartOfRound.Instance.allItemsList.itemsList.First(i => i.name == "Shotgun");
+                GameObject newShotgun = Object.Instantiate(shotgunItem.spawnPrefab, __instance.transform.position, __instance.transform.rotation);
+                newShotgun.GetComponent<ShotgunItem>().scrapValue = shotgunPrice;
+                newShotgun.GetComponent<NetworkObject>().Spawn();
+                StartCoroutine(SendDetailsWithDelay(shotgunPrice, new NetworkObjectReference(newShotgun.GetComponent<NetworkObject>())));
+            }
         }
         
         //move the original body away for all players
         __instance.transform.position = new(-10000, -10000, -10000);
         __instance.SyncPositionToClients();
         Plugin.logger.LogDebug("Mob should now be grabbable for all users.");
+    }
+
+    private IEnumerator SendDetailsWithDelay(int price, NetworkObjectReference netRef)
+    {
+        yield return new WaitForSeconds(0.25f);
+        SyncDetailsClientRpc(price, netRef);
+    }
+    
+    [ClientRpc]
+    void SyncDetailsClientRpc(int price, NetworkObjectReference netRef)
+    {
+        NetworkObject networkObject;
+        netRef.TryGet(out networkObject, null);
+        ShotgunItem shotgun = networkObject.GetComponent<ShotgunItem>();
+        if (shotgun != null)
+        {
+            shotgun.scrapValue = price;
+            shotgun.itemProperties.creditsWorth = price;
+            shotgun.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${price}";
+            Debug.Log("Successfully synced shotgun values");
+        }
+        else Debug.LogError("Failed to resolve network reference!");
     }
 }
