@@ -4,7 +4,7 @@ All notable changes will be documented in the changelog.
 
 ## [1.3.10](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.10) - 2025-06-09
 
-[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.9..1.3.10))
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.9..1.3.10)
 - Ported to Lethal Company **v70**
 - Fixed some mobs not being grabbable or being invisible for clients, and only visible on host side.
 - Arachnophobia issues are know and still under inspection.
