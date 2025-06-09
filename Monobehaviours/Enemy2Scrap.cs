@@ -38,7 +38,8 @@ public class EnemyScrap : GrabbableObject
 
         if(enemyType.enemyName == "Bunker Spider")
         {
-            AdditionalClientSettings.TryAdd("ShowArachnophobeMesh", false);
+            AdditionalClientSettings.TryAdd(SpiderSafeTag, false);
+            Plugin.logger.LogDebug("Spider Safe tag added as false to Bunker Spider.");
         }
     }
 
