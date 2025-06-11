@@ -2,6 +2,12 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.11](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.11) - 2025-06-11
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.10..1.3.11)
+- Added compatibility with [MelanieMelicious' Farming and Cooking mod](https://thunderstore.io/c/lethal-company/p/MelanieMelicious/Farming_and_Cooking_Mod_MelanieMelicious/).
+- Fixed some mobs being killable when they SHOULD NOT be killable, like the Bees Clusters where kill function was force called by the Sapsuckers.
+
 ## [1.3.10](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.10) - 2025-06-09
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.9..1.3.10)

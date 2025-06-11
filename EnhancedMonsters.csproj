@@ -63,6 +63,9 @@
     <Reference Include="LethalSettings">
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\LethalSettings\LethalSettings.dll</HintPath>
     </Reference>
+    <Reference Include="MelanieMeliciousCooked">
+      <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\BepInEx\plugins\MelanieMeliciousCooked\MelanieMeliciousCooked-publicized.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>D:\soft\Steam\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Newtonsoft.Json.dll</HintPath>
     </Reference>

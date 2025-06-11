@@ -9,7 +9,6 @@ Nutcrackers to drop their shotgun, and also adds a ranking mechanic to mobs.
 - Configurable mobs minimum and maximum values, mass, wether it can be sold or not, and mob's rank.
 - `[WIP]` - Nutcrackers have a chance to drop their shotgun when they die.
 - `[WIP]` - Masked mimics drop their mask when they die.
-- `[WIP]` - See and hear what's happening inside the facility from the door's windows.
 
 I must still think about more features in fact.
 
@@ -19,6 +18,7 @@ Here are a few mods I have personally verified the compatibility with.
 - `LethalSettings`: I made sure that LethalSettings works fine too, it's just so that you can use whatever mods you've installed instead of downloading yet another config mod.
 - `Football` (Kittenji): Football has a rank, I haven't verified if she has a ScanNode though, so maybe you won't even be able to scan her but yeah, should work anyway.
 - `Giant Species` (XuXiaolan): I'm trying to make a proper support for Giant Species mod, with ranks and eventually, for the smallest of them, prices and values.
+- `Farming & Cooking Mod` (MelanieMelicious): As requested by many, I have added support for Farming & Cooking mod so you can enjoy meat made with the corpses of the enemies from this mod.
 
 ## How to edit mobs settings ?
 **Wiki is work in progress, it will be more detailed and more up to date.**

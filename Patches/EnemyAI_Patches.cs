@@ -38,11 +38,6 @@ public class EnemyAI_Patches
 
         if (destroy) return;
 
-        if (!__instance.isEnemyDead)
-        {
-            __instance.isEnemyDead = true;
-        }
-
         if (!SyncedConfig.Instance.EnemiesData.ContainsKey(__instance.enemyType.enemyName))
         {
             EnemiesDataManager.RegisterEnemy(__instance.enemyType.enemyName, new(true));

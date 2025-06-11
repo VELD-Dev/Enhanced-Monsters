@@ -64,6 +64,7 @@ public static class EnemiesDataManager
 
     public static string EnemiesDataFile = Path.Combine(BepInEx.Paths.ConfigPath, "EnhancedMonsters", "EnemiesData.json");
     public static readonly Dictionary<string, GameObject> Enemies2Props = [];
+    public static readonly List<Item> AllEnemiesScraps = [];
 
     public static void LoadEnemiesData()
     {
@@ -256,7 +257,7 @@ public static class EnemiesDataManager
             copy.RemoveComponentsInChildren<ParticleSystemRenderer>();
 
             copy.transform.localScale = enemy.transform.localScale;
-            var e2prop = LethalLib.Modules.NetworkPrefabs.CloneNetworkPrefab(Plugin.EnemyToPropPrefab, enemy.name + " propized");
+            var e2prop = LethalLib.Modules.NetworkPrefabs.CloneNetworkPrefab(Plugin.EnemyToPropPrefab, "Dead " + enemy.name);
             copy.transform.parent = e2prop.transform;
             Plugin.logger.LogInfo($"Attached {copy.name} to {copy.transform.parent.name}");
             var enemyScrap = e2prop.GetComponent<EnemyScrap>();
@@ -332,8 +333,14 @@ public static class EnemiesDataManager
 
             Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
+            AllEnemiesScraps.Add(enemyItem);
             Enemies2Props.Add(enemyName, e2prop);
             Plugin.logger.LogInfo($"Registered NetworkPrefab '{e2prop.name}'/'{copy.name}' ({enemyItem.itemName})");
+        }
+
+        if(FarmingAndCookingSupport.FarmingAndCookingLoaded)
+        {
+            FarmingAndCookingSupport.RegisterFarmingAndCookingBodies(AllEnemiesScraps);
         }
     }
 }
