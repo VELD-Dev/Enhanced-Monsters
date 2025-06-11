@@ -14,10 +14,19 @@ public class EnemyAI_Patches
             return;
 
         string creatureRank;
-        if(LocalConfig.Singleton.synchronizeRanks.Value)
-            creatureRank = SyncedConfig.Instance.EnemiesData[__instance.enemyType.enemyName].Rank ?? "?";
-        else
-            creatureRank = SyncedConfig.Default.EnemiesData[__instance.enemyType.enemyName].Rank ?? "?";
+        SyncedConfig TargetConfig = LocalConfig.Singleton.synchronizeRanks.Value ? SyncedConfig.Instance : SyncedConfig.Default;
+
+        if(!TargetConfig.EnemiesData.TryGetValue(__instance.enemyType.enemyName, out var enemyData))
+        {
+            Plugin.logger.LogWarning($"Enemy {__instance.enemyType.enemyName} is not registered in the enemies data. Registering it now.");
+            enemyData = new(true);
+            EnemiesDataManager.RegisterEnemy(__instance.enemyType.enemyName, enemyData);
+        }
+
+        if (enemyData.Rank == string.Empty)
+            return;
+
+        creatureRank = enemyData.Rank;
 
         var scanNode = __instance.gameObject.GetComponentInChildren<ScanNodeProperties>();
         if(scanNode)

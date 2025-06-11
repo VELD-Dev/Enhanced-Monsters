@@ -2,6 +2,11 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.3.12](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.12) - 2025-MM-DD
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.11..1.3.12)
+- Reworked rank code so if an enemy has no rank defined in the config, then no subtitle is shown at all under the enemy tooltip.
+
 ## [1.3.11](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.11) - 2025-06-11
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.10..1.3.11)

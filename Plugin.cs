@@ -1,4 +1,5 @@
 ﻿using EnhancedMonsters.Utils;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace EnhancedMonsters;
@@ -10,9 +11,9 @@ namespace EnhancedMonsters;
 [BepInIncompatibility("Entity378.sellbodies")]
 public class Plugin : BaseUnityPlugin 
 {
-    internal static Plugin Singleton { get; private set; }
+    [NotNull] internal static Plugin Singleton { get; private set; }
     private static readonly Harmony harmony = new(PluginInfo.GUID);
-    public static ManualLogSource? logger;
+    [NotNull] public static ManualLogSource? logger;
     public static GameObject EnemyToPropPrefab { get; private set; }
 
     private void Awake()
