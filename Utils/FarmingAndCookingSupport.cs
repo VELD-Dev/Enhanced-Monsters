@@ -22,18 +22,13 @@ internal static class FarmingAndCookingSupport
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static void RegisterFarmingAndCookingBodies(List<Item> bodies)
     {
-        var meatGrindConfig = MelanieCookedConfig.meatGrind.Value;
-        string[] prefabNames = new string[bodies.Count];
-        for(int i = 0; i < bodies.Count; i++)
+        foreach(var body in bodies)
         {
-            var body = bodies[i];
-            if (meatGrindConfig.Contains(body.name))
-                continue;
-            prefabNames[i] = body.spawnPrefab.name;
+            // Hashsets don't need to be checked for duplicates. They do it on their own.
+            MelanieMeliciousCooked.Plugin.bodyHash.Add(body);
+            Plugin.logger.LogDebug($"Registered {body.itemName} for MelanieMeliciousCooked plugin.");
         }
 
-        var concatenatedNames = string.Join(",", prefabNames.Where(s => s != string.Empty && s != null));
-        MelanieCookedConfig.meatGrind.Value += meatGrindConfig == string.Empty ? concatenatedNames : $",{concatenatedNames}";
-        ;
+        Plugin.logger.LogInfo($"Successfully registered all the corpses as grindable for the Farming & Cooking mod.");
     }
 }

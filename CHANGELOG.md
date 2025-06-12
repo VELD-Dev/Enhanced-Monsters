@@ -6,6 +6,7 @@ All notable changes will be documented in the changelog.
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.11..1.3.12)
 - Reworked rank code so if an enemy has no rank defined in the config, then no subtitle is shown at all under the enemy tooltip.
+- Updated the compatibility layer for [MelanieMelicious' Farming and Cooking mod](https://thunderstore.io/c/lethal-company/p/MelanieMelicious/Farming_and_Cooking_Mod_MelanieMelicious/)'s new update.
 
 ## [1.3.11](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.11) - 2025-06-11
 

@@ -43,6 +43,13 @@ Here are a few mods I have personally verified the compatibility with.
 - Modify its values by respecting the information given in the R2ModMan notice
 - **You need to relaunch the game in order to apply the settings**.
 
+## How to set custom sounds for dead corpses ?
+
+1. Go to `/BepInEx/config/EnhancedMonsters/CustomSFX` and put any sound you want in `.ogg` format.
+2. Open `/BepInEx/config/EnhancedMonsters/EnemiesData.json` and go to the mob you want to set a custom sound for.
+3. Inside the mob's `Metadata` object, set the fields `DropSFX`, `GrabSFX` and `PocketSFX` based on the sound you want.
+4. :warning: **The names of the sounds must be the same as the file names you put in the `CustomSFX` folder, without the `.ogg` extension !**
+
 ## Q&A
 #### Q: Is it possible to make the mod client-side only so I can use only the ranking with my vanilla friends ?
 > A: *I will probably do it, but it's far from being a priority.*
