@@ -60,6 +60,8 @@ public class Plugin : BaseUnityPlugin
         logger.LogDebug("PlayerController patches applied.");
         harmony.PatchAll(typeof(GameNetworkManager_Patches));
         logger.LogDebug("GameNetworkManager patches applied.");
+        harmony.PatchAll(typeof(StartOfRound_Patches));
+        logger.LogDebug("StartOfRound patches applied.");
     }
 
     private static void CreateThePrefab()
