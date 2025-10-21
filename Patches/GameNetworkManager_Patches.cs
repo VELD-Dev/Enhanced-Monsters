@@ -8,52 +8,6 @@ namespace EnhancedMonsters.Patches;
 internal class GameNetworkManager_Patches
 {
     [HarmonyPostfix]
-    [HarmonyPatch("Start")]
-    public static void Start(GameNetworkManager __instance)
-    {
-        var enemies = Resources.FindObjectsOfTypeAll<EnemyAI>();
-
-        foreach (var enemy in enemies)
-        {
-            if (enemy is null)
-            {
-                Plugin.logger.LogWarning("An enemy is null!");
-                continue;
-            }
-
-            if(enemy.enemyType is null)
-            {
-                Plugin.logger.LogWarning($"{enemy.name} has a null enemyType (tf?)");
-                continue;
-            }
-
-            if (!SyncedConfig.Instance.EnemiesData.ContainsKey(enemy.enemyType.enemyName))
-            {
-                EnemiesDataManager.RegisterEnemy(enemy.enemyType.enemyName, new());
-                Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{enemy.enemyType.enemyName}'");
-            }
-        }
-        EnemiesDataManager.SaveEnemiesData();
-
-        EnemiesDataManager.EnsureEnemy2PropPrefabs();
-
-        /*
-        foreach(var corpse in EnemiesDataManager.Enemies2Props.Values)
-        {
-            var eScrap = corpse.GetComponent<EnemyScrap>();
-            if (StartOfRound.Instance.allItemsList.itemsList.Contains(eScrap.itemProperties))
-                continue;
-
-            Plugin.logger.LogInfo("Registering ItemData to AllItemList because because LethalLib was too slow.");
-            // Not doing this may provoke a soft race error, item data would be missing and items would be skipped from the save loading.
-
-            StartOfRound.Instance.allItemsList.itemsList.Add(eScrap.itemProperties);
-            Items.LethalLibItemList.Add(eScrap.itemProperties);
-        }
-        */
-    }
-
-    [HarmonyPostfix]
     [HarmonyPatch("StartDisconnect")]
     public static void StartDisconnect()
     {
