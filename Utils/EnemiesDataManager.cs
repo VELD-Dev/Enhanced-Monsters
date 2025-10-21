@@ -1,5 +1,3 @@
-﻿using System.Security.Cryptography;
-using System.Xml.Linq;
 using UnityEngine;
 
 namespace EnhancedMonsters.Utils;
@@ -87,7 +85,7 @@ public static class EnemiesDataManager
             return;
         }
 
-        if((PluginInfo.ConfigVersion - parsed.Version) > 1)
+        if ((PluginInfo.ConfigVersion - parsed.Version) > 1)
         {
             Plugin.logger.LogWarning("Enemy Data File seems to be outdated. A new config file will be created.");
             EnemiesData.ProperConcat(DefaultEnemiesData);
@@ -128,7 +126,7 @@ public static class EnemiesDataManager
         }
         else
         {
-            if(overrideRegister)
+            if (overrideRegister)
             {
                 EnemiesData[enemyName] = new(sellable, minPrice, maxPrice, mass, rank, metadata);
             }
@@ -151,7 +149,7 @@ public static class EnemiesDataManager
     {
         if (!SyncedConfig.IsHost && NetworkManager.Singleton.IsListening) return;
 
-        if(!ReferenceEquals(EnemiesData, SyncedConfig.Instance.EnemiesData))
+        if (!ReferenceEquals(EnemiesData, SyncedConfig.Instance.EnemiesData))
         {
             Plugin.logger.LogError("Cannot update the mob configs. Somehow, the EnemiesData from the EnemiesDataManager and the one from the SyncedConfigs are not the same, even though they both are yours.");
             return;
@@ -185,7 +183,7 @@ public static class EnemiesDataManager
     public static void EnsureEnemy2PropPrefabs()
     {
         var enemies = Resources.FindObjectsOfTypeAll<EnemyAI>();
-        foreach(var enemy in enemies)
+        foreach (var enemy in enemies)
         {
             if (enemy.enemyType == null)
             {
@@ -215,7 +213,8 @@ public static class EnemiesDataManager
             if (!SyncedConfig.Instance.EnemiesData.TryGetValue(enemyName, out var enemyData) || enemyData.Pickupable == false) continue;
 
             var copy = new GameObject(enemy.name + " neutralized");
-            foreach(Transform c in enemy.transform)
+            //copy = GetCleanCopy(copy);
+            foreach (Transform c in enemy.transform)
             {
                 if (c.name.StartsWith("MapDot")) continue;
                 if (c.name.StartsWith("Collider")) continue;
@@ -261,7 +260,9 @@ public static class EnemiesDataManager
             copy.transform.parent = e2prop.transform;
             Plugin.logger.LogInfo($"Attached {copy.name} to {copy.transform.parent.name}");
             var enemyScrap = e2prop.GetComponent<EnemyScrap>();
+            //enemyScrap.EnemyGameObject = copy;
             enemyScrap.EnemyGameObject = copy;
+            CleanEnemyObj(enemyScrap.EnemyGameObject);
             Plugin.logger.LogInfo("Set EnemyGameObject on EnemyScrap.");
             enemyScrap.grabbable = true;
             enemyScrap.grabbableToEnemies = false;
@@ -338,9 +339,54 @@ public static class EnemiesDataManager
             Plugin.logger.LogInfo($"Registered NetworkPrefab '{e2prop.name}'/'{copy.name}' ({enemyItem.itemName})");
         }
 
-        if(FarmingAndCookingSupport.FarmingAndCookingLoaded)
+        if (FarmingAndCookingSupport.FarmingAndCookingLoaded)
         {
             FarmingAndCookingSupport.RegisterFarmingAndCookingBodies(AllEnemiesScraps);
+        }
+    }
+
+    public static void CleanEnemyObj(GameObject enemyObj)
+    {
+        try
+        {
+            if(enemyObj.name.Contains("SandSpider")) return;
+
+            int mask = Camera.main ? Camera.main.cullingMask : 591075327;
+            Renderer[] renderers = enemyObj.GetComponentsInChildren<Renderer>(true);
+
+            Animator anim = enemyObj.GetComponent<Animator>();
+            if (anim != null) 
+            {
+                anim.Update(0f);
+            }
+
+            Plugin.logger.LogInfo($"Starting cleanup on '{enemyObj.name}'");
+
+            foreach (var r in renderers)
+            {
+                if (r == null) continue;
+
+                bool isEnabled = r.enabled;
+                bool isInCameraMask = ((1 << r.gameObject.layer) & mask) != 0;
+
+                if (!isEnabled || !isInCameraMask)
+                {
+                    Plugin.logger.LogInfo($"Removing renderer '{r.name}' from '{enemyObj.name}'");
+                    GameObject.DestroyImmediate(r);
+                }
+
+                if (r is SkinnedMeshRenderer smr)
+                {
+                    Mesh bakedMesh = new Mesh();
+                    smr.BakeMesh(bakedMesh);
+                }
+            }
+
+            Plugin.logger.LogInfo($"Cleanup completed on '{enemyObj.name}'");
+        }
+        catch (Exception ex)
+        {
+            Plugin.logger.LogError($"ERROR cleaning '{enemyObj.name}': {ex}");
         }
     }
 }
