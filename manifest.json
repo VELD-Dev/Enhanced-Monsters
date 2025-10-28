@@ -4,7 +4,7 @@
   "version_number": "1.3.13",
   "website_url": "https://github.com/VELD-Dev/Enhanced-Monsters/",
   "dependencies": [
-    "BepInEx-BepInExPack-5.4.2121",
+    "bbepis-BepInExPack-5.4.2121",
     "Evaisa-LethalLib-0.16.2"
   ]
 }
