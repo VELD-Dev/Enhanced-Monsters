@@ -196,6 +196,7 @@
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
     <Copy SourceFiles="$(ProjectDir)/README.md" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
     <Copy SourceFiles="$(ProjectDir)/manifest.json" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(ProjectDir)/icon.png" DestinationFolder="bin/$(Configuration)/$(AssemblyName)" SkipUnchangedFiles="true"/>
     <Copy SourceFiles="$(ProjectDir)/LICENSE" DestinationFolder="bin/$(Configuration)/$(AssemblyName)/" SkipUnchangedFiles="true" />
     <ZipDirectory SourceDirectory="bin/$(Configuration)/$(AssemblyName)/" DestinationFile="$(LCPluginFolder)/$(AssemblyName).zip" Overwrite="true" />
 
