@@ -2,7 +2,13 @@
 
 All notable changes will be documented in the changelog.  
 
-## [1.3.12](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.12) - 2025-MM-DD
+## [1.3.13](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.13) - 2025-10-28
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.12...1.3.13)
+- Fixed white meshes appearing on dead bodies prefabs by @Entity378 in https://github.com/VELD-Dev/Enhanced-Monsters/pull/7
+- Compatible with **v73** !
+
+## [1.3.12](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.12) - 2025-06-12
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.11..1.3.12)
 - Reworked rank code so if an enemy has no rank defined in the config, then no subtitle is shown at all under the enemy tooltip.
