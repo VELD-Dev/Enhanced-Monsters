@@ -1,6 +1,7 @@
 ﻿using EnhancedMonsters.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using NetworkPrefabs = LethalLib.Modules.NetworkPrefabs;
 
 namespace EnhancedMonsters;
 
@@ -66,7 +67,7 @@ public class Plugin : BaseUnityPlugin
 
     private static void CreateThePrefab()
     {
-        var prefab = LethalLib.Modules.NetworkPrefabs.CreateNetworkPrefab("EnemyAsProp");
+        var prefab = NetworkPrefabs.CreateNetworkPrefab("EnemyAsProp");
         prefab.tag = "PhysicsProp";
         prefab.layer = 6;
         var ngo = prefab.GetComponent<NetworkObject>();
@@ -81,6 +82,7 @@ public class Plugin : BaseUnityPlugin
         prefab.AddComponent<OccludeAudio>();
         prefab.AddComponent<AudioLowPassFilter>();
 
+        NetworkPrefabs.RegisterNetworkPrefab(prefab);
         EnemyToPropPrefab = prefab;
     }
 

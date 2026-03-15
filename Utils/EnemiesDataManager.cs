@@ -1,4 +1,5 @@
 using UnityEngine;
+using NetworkPrefabs = LethalLib.Modules.NetworkPrefabs;
 
 namespace EnhancedMonsters.Utils;
 
@@ -256,7 +257,7 @@ public static class EnemiesDataManager
             copy.RemoveComponentsInChildren<ParticleSystemRenderer>();
 
             copy.transform.localScale = enemy.transform.localScale;
-            var e2prop = LethalLib.Modules.NetworkPrefabs.CloneNetworkPrefab(Plugin.EnemyToPropPrefab, "Dead " + enemy.name);
+            var e2prop = NetworkPrefabs.CloneNetworkPrefab(Plugin.EnemyToPropPrefab, "Dead " + enemy.name);
             copy.transform.parent = e2prop.transform;
             Plugin.logger.LogInfo($"Attached {copy.name} to {copy.transform.parent.name}");
             var enemyScrap = e2prop.GetComponent<EnemyScrap>();
@@ -332,6 +333,7 @@ public static class EnemiesDataManager
             else
                 enemyItem.pocketSFX = null;
 
+            NetworkPrefabs.RegisterNetworkPrefab(e2prop);
             Items.RegisterItem(enemyItem);
             Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
             AllEnemiesScraps.Add(enemyItem);

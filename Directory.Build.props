@@ -3,8 +3,8 @@
   <PropertyGroup>
     
     <!-- LC BepInEx plugin folder here -->
-    <LCFolder>B:\SteamLibrary\steamapps\common\Lethal Company</LCFolder>
-    <LCPluginFolder>$(LCFolder)\BepInEx\plugins</LCPluginFolder>
+    <LCFolder>/var/home/veld/.local/share/Steam/steamapps/common/Lethal Company/</LCFolder>
+    <LCPluginFolder>/home/veld/.local/share/com.kesomannen.gale/lethal-company/profiles/Test Enhanced Monsters/BepInEx/plugins/</LCPluginFolder>
     
   </PropertyGroup>
 </Project>

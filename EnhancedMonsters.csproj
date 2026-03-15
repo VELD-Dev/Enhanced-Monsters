@@ -55,16 +55,16 @@
       <HintPath>$(LCFolder)\Lethal Company_Data\Managed\Facepunch.Steamworks.Win64.dll</HintPath>
     </Reference>
     <Reference Include="LethalConfig">
-      <HintPath>$(LCFolder)\BepInEx\plugins\LethalConfig\LethalConfig.dll</HintPath>
+      <HintPath>$(LCPluginFolder)\AinaVT-LethalConfig\LethalConfig\LethalConfig.dll</HintPath>
     </Reference>
     <Reference Include="LethalLib">
-      <HintPath>$(LCFolder)\BepInEx\plugins\LethalLib\LethalLib.dll</HintPath>
+      <HintPath>$(LCPluginFolder)\Evaisa-LethalLib\LethalLib\LethalLib.dll</HintPath>
     </Reference>
     <Reference Include="LethalSettings">
-      <HintPath>$(LCFolder)\BepInEx\plugins\LethalSettings\LethalSettings.dll</HintPath>
+      <HintPath>$(LCPluginFolder)\willis81808-LethalSettings\LethalSettings.dll</HintPath>
     </Reference>
     <Reference Include="MelanieMeliciousCooked">
-      <HintPath>$(LCFolder)\BepInEx\plugins\MelanieMeliciousCooked\MelanieMeliciousCooked-publicized.dll</HintPath>
+      <HintPath>$(LCPluginFolder)\MelanieMelicious-Farming_and_Cooking_Mod_MelanieMelicious\MelanieMeliciousCooked-publicized.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(LCFolder)\Lethal Company_Data\Managed\Newtonsoft.Json.dll</HintPath>
@@ -186,6 +186,14 @@
     <None Update="README.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.AssemblyPublicizer" Version="0.5.0-beta.2" />
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.5.0-beta.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://github.com/VELD-Dev/schemastore/master/src/schemas/json/ThunderstoreManifestSchema.json" /></VisualStudio></ProjectExtensions>
