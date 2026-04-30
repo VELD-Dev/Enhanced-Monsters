@@ -1,4 +1,4 @@
-﻿namespace EnhancedMonsters.Config;
+namespace EnhancedMonsters.Config;
 
 public class LocalConfig
 {
@@ -6,35 +6,17 @@ public class LocalConfig
 
     internal const string ModDesc = "Enhanced Monsters aims at enhancing experience towards monsters, but also has various QOL improvements.";
 
-    internal readonly bool SeamlessDungeonExists;
-
     public readonly ConfigEntry<bool> synchronizeRanks;
-    public readonly ConfigEntry<bool> dungeonSoundExchange;
-    public readonly ConfigEntry<int> dungeonSoundExchangeVolume;
 
     public LocalConfig(ConfigFile cfg)
     {
         Singleton = this;
-
-        SeamlessDungeonExists = BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("tsundrella.seamlessdungeon");
 
         synchronizeRanks = cfg.Bind(
             "General",
             "Synchronize Ranks",
             true,
             "Wether or not to synchronize ranks of enemies from host's configs. It is recommended to keep it enabled. [NOTE: This setting can only be edited from the main menu.]"
-        );
-        dungeonSoundExchange = cfg.Bind(
-            "Entrance Improvements",
-            "Unimplemented - Dungeon Sound Exchange",
-            true,
-            "Unimplemented - Wether to enable or not sound exchange between interior and exterior of the dungeon, next to entrance and fire exits. Disabling it can enhance performance on weakest configurations."
-        );
-        dungeonSoundExchangeVolume = cfg.Bind(
-            "Entrance Improvements",
-            "Unimplemented - Dungeon Sound Exchange Volume",
-            70,
-            "Unimplemented - Volume level of sounds emitted from the interior/exterior when player is on the other side of the door."
         );
 
         if (LethalConfigSupport.LethalConfigLoaded)

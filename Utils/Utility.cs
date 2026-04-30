@@ -1,9 +1,7 @@
-﻿namespace EnhancedMonsters.Utils;
+namespace EnhancedMonsters.Utils;
 
 public static class Utility
 {
-    public const float KgToLb = 1f/0.45359237f;
-
     public static string ToStringObj(this object obj, string prefix = "")
     {
         var sb = new StringBuilder();
@@ -39,21 +37,13 @@ public static class Utility
     /// <summary>
     /// Allows adding a range of values inside a Dictionary. If a value is in conflict, it skips it.
     /// </summary>
-    /// <typeparam name="K">Key type</typeparam>
-    /// <typeparam name="T">Value type</typeparam>
-    /// <typeparam name="TI">Enumerable</typeparam>
-    /// <param name="target">Where the objects will be merged</param>
-    /// <param name="source">Objects to be merged</param>
-    /// <param name="key">Key accessor</param>
-    /// <param name="selector">Value accessor</param>
-    /// <param name="set">Wether it is a SetRange or an AddRange operation</param>
     public static void AddRange<K, T, TI>(this IDictionary<K, T> target, IEnumerable<TI> source, Func<TI, K> key, Func<TI, T> selector, bool set = true)
     {
         foreach (var item in source)
         {
             var dkey = key(item);
             var dval = selector(item);
-            if(set)
+            if (set)
             {
                 target[dkey] = dval;
             }
@@ -65,16 +55,12 @@ public static class Utility
     }
 
     /// <summary>
-    /// Instead of returning a new dict resulting of the merge, it directly merges into the existing dictionary.<br/>
-    /// Above this, duplicated keys are ignored. Basically a "BetterUnion" as well
+    /// Instead of returning a new dict resulting of the merge, it directly merges into the existing dictionary.
+    /// Duplicated keys are ignored.
     /// </summary>
-    /// <typeparam name="K">Key</typeparam>
-    /// <typeparam name="T">Value</typeparam>
-    /// <param name="target">Where the objects will be merged</param>
-    /// <param name="source">Objects to be merged/unioned/concatenated</param>
     public static void ProperConcat<K, T>(this IDictionary<K, T> target, IDictionary<K, T> source)
     {
-        foreach(var kvp in source)
+        foreach (var kvp in source)
         {
             if (target.ContainsKey(kvp.Key))
                 continue;
@@ -85,12 +71,10 @@ public static class Utility
     /// <summary>
     /// Removes and destroy all the components in the children of the gameobject.
     /// </summary>
-    /// <typeparam name="T">Type of the components to remove</typeparam>
-    /// <param name="go">GameObject whose children to remove the components from</param>
     public static void RemoveComponentsInChildren<T>(this GameObject go) where T : Component
     {
         var components = go.GetComponentsInChildren<T>();
-        foreach(T comp in components)
+        foreach (T comp in components)
         {
             Plugin.logger.LogDebug($"Destroying component {comp.GetType().Name} on {comp.name} (child of {go.name})");
             Component.Destroy(comp);
@@ -113,7 +97,4 @@ public static class Utility
             return ex.Types.Where(t => t != null);
         }
     }
-
-    public static UnityEngine.Vector3 ToUnityVec(this System.Numerics.Vector3 v) => new(v.X, v.Y, v.Z);
-    public static System.Numerics.Vector3 ToSystemVec(this UnityEngine.Vector3 v) => new(v.x, v.y, v.z);
 }
