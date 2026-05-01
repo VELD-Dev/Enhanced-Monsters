@@ -385,10 +385,6 @@ public static class EnemiesDataManager
     {
         NetworkPrefabs.RegisterNetworkPrefab(scrapPrefab);
 
-        // LethalLib only flushes its static list into NGO via a one-shot GameNetworkManager.Start
-        // hook — runtime clones created here (after that hook fired) never reach
-        // NetworkManager.NetworkConfig.Prefabs, so clients can't resolve their GlobalObjectIdHash
-        // when the host spawns a corpse. Add it directly to keep host and clients in sync.
         var nm = NetworkManager.Singleton;
         if (nm != null && !nm.NetworkConfig.Prefabs.Contains(scrapPrefab))
         {

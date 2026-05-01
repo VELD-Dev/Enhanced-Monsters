@@ -16,6 +16,7 @@ internal static class LethalSettingsSupport
         }
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     internal static void RegisterLethalSettings(LocalConfig config)
     {
         Plugin.logger.LogInfo("Registering lsSyncRank");

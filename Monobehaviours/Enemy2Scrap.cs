@@ -44,11 +44,13 @@ public class EnemyScrap : GrabbableObject
 
             if (GameNetworkManager.Instance.gameHasStarted || scrapValue == 0)
             {
+                // Save is already defining the scrap values here.
                 int mobValue = new System.Random().Next(enemyData.MinValue, enemyData.MaxValue);
                 SyncedScrapValue = mobValue;
             }
             else
             {
+                // So we just need to make it synchronized
                 SyncedScrapValue = scrapValue;
             }
         }
@@ -84,6 +86,7 @@ public class EnemyScrap : GrabbableObject
                 EnemyAnimator.enabled = false;
             }
 
+            // I hate doing that but I have no choice here
             if (enemyType.enemyName == KnownEnemies.Flowerman)
             {
                 EnemyAnimator.gameObject.SetActive(false);
@@ -121,7 +124,7 @@ public class EnemyScrap : GrabbableObject
             yield break;
 
         var deathAnimDuration = currentClip[0].clip.length;
-        var deathAnimProgress = EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+        var deathAnimProgress = EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime; // Happily this is a property
 
         while (deathAnimProgress < deathAnimDuration)
             yield return new WaitForEndOfFrame();

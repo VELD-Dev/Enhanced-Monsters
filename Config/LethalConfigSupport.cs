@@ -17,6 +17,7 @@ internal static class LethalConfigSupport
         }
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     internal static void RegisterLethalConfig(LocalConfig config)
     {
         LethalConfigManager.SetModDescription(LocalConfig.ModDesc);

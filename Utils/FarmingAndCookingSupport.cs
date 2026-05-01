@@ -16,10 +16,12 @@ internal static class FarmingAndCookingSupport
         }
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static void RegisterFarmingAndCookingBodies(List<Item> bodies)
     {
         foreach (var body in bodies)
         {
+            // Hashsets don't need to be checked for duplicates. They do it on their own.
             MelanieMeliciousCooked.Plugin.bodyHash.Add(body);
             Plugin.logger.LogDebug($"Registered {body.itemName} for MelanieMeliciousCooked plugin.");
         }
