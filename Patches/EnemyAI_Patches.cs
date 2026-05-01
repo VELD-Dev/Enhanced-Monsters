@@ -68,9 +68,12 @@ public class EnemyAI_Patches
         enemyToPropInstance.GetComponent<NetworkObject>().Spawn();
 
         // Move the original LC body off-map so the new pickupable corpse is the only thing
-        // visible. Fire our custom ClientRpc so every client teleports their local copy too.
+        // visible. Update both transform.position and serverPosition: clients lerp toward
+        // serverPosition in EnemyAI.Update, so leaving it at the old value would cause them
+        // to snap back. Fire the custom ClientRpc to apply the same change on every client.
         Vector3 hidePosition = new(-10000, -10000, -10000);
         __instance.transform.position = hidePosition;
+        __instance.serverPosition = hidePosition;
 
         var enemyNetworkObject = __instance.GetComponent<NetworkObject>();
         var handler = EnhancedMonstersNetworkHandler.Instance;

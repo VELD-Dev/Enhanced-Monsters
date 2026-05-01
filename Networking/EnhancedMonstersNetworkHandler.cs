@@ -87,7 +87,14 @@ public class EnhancedMonstersNetworkHandler : NetworkBehaviour
             Plugin.logger.LogWarning("HideOriginalEnemyBodyClientRpc: could not resolve enemy NetworkObject; skipping client-side teleport");
             return;
         }
+        
+        // Update serverPosition as well so the lerp target matches the new location.
         enemyNo.transform.position = hidePosition;
+        var enemyAi = enemyNo.GetComponent<EnemyAI>();
+        if (enemyAi != null)
+        {
+            enemyAi.serverPosition = hidePosition;
+        }
         Plugin.logger.LogDebug($"Hid original enemy body '{enemyNo.gameObject.name}' at {hidePosition}");
     }
 }
