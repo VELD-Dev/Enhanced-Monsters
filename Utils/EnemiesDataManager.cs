@@ -376,9 +376,14 @@ public static class EnemiesDataManager
 
     private static AudioClip ResolveSfx(string sfxKey)
     {
+        if (string.IsNullOrEmpty(sfxKey) || sfxKey == "none")
+            return null!;
         if (sfxKey == "default")
             return FastResourcesManager.EnemyDropDefaultSound;
-        return null;
+        if (FastResourcesManager.CustomAudioClips.TryGetValue(sfxKey, out var clip))
+            return clip;
+        Plugin.logger.LogWarning($"Custom SFX '{sfxKey}' not found in CustomAudioClips. Using default. (File missing or coroutine still running?)");
+        return FastResourcesManager.EnemyDropDefaultSound;
     }
 
     private static void RegisterPrefabAndItem(string enemyName, GameObject scrapPrefab, Item enemyItem)
