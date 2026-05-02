@@ -181,6 +181,33 @@ public static class EnemiesDataManager
         Plugin.logger.LogInfo("Saved enemies data.");
     }
 
+    public static void ScanAndRegisterUnknownEnemies()
+    {
+        var enemies = Resources.FindObjectsOfTypeAll<EnemyAI>();
+        Plugin.logger.LogInfo($"Scanning {enemies.Length} enemies for unknown entries");
+        foreach (var enemy in enemies)
+        {
+            if (enemy is null)
+            {
+                Plugin.logger.LogWarning("An enemy is null!");
+                continue;
+            }
+
+            if (enemy.enemyType is null)
+            {
+                Plugin.logger.LogWarning($"{enemy.name} has a null enemyType (tf?)");
+                continue;
+            }
+
+            if (SyncedConfig.Instance.EnemiesData.ContainsKey(enemy.enemyType.enemyName))
+                continue;
+
+            RegisterEnemy(enemy.enemyType.enemyName, new(true, metadata: new(new(0, 0, 0), new(0, 0, 0), new(0, 0, 0), true)));
+            Plugin.logger.LogInfo($"Mob was not registered. Registered it with name '{enemy.enemyType.enemyName}'");
+        }
+        SaveEnemiesData();
+    }
+
     public static void EnsureEnemy2PropPrefabs()
     {
         var enemies = Resources.FindObjectsOfTypeAll<EnemyAI>();
@@ -192,153 +219,23 @@ public static class EnemiesDataManager
                 continue;
             }
 
-            Plugin.logger.LogInfo($"Registering NetworkPrefab '{enemy.enemyType.enemyName}'");
-            ref var enemyName = ref enemy.enemyType.enemyName;
-            if (Enemies2Props.TryGetValue(enemy.enemyType.enemyName, out var e2p))
-            {
-                if (!SyncedConfig.Instance.EnemiesData[enemyName].Pickupable)
-                {
-                    Enemies2Props.Remove(enemyName);
-                    continue;
-                }
+            string enemyName = enemy.enemyType.enemyName;
+            Plugin.logger.LogInfo($"Ensuring NetworkPrefab '{enemyName}'");
 
-                var pp = e2p.GetComponent<EnemyScrap>();
-                pp.enemyType = enemy.enemyType;
-                pp.itemProperties.minValue = SyncedConfig.Instance.EnemiesData[enemyName].MinValue;
-                pp.itemProperties.maxValue = SyncedConfig.Instance.EnemiesData[enemyName].MaxValue;
-                pp.itemProperties.weight = SyncedConfig.Instance.EnemiesData[enemyName].LCMass;
-
+            if (TryUpdateExistingPrefab(enemy, enemyName))
                 continue;
-            }
 
-            if (!SyncedConfig.Instance.EnemiesData.TryGetValue(enemyName, out var enemyData) || enemyData.Pickupable == false) continue;
-
-            var copy = new GameObject(enemy.name + " neutralized");
-            //copy = GetCleanCopy(copy);
-            foreach (Transform c in enemy.transform)
-            {
-                if (c.name.StartsWith("MapDot")) continue;
-                if (c.name.StartsWith("Collider")) continue;
-                if (c.name.StartsWith("VoiceSFX")) continue;
-                if (c.name.StartsWith("CreatureSFX")) continue;
-                if (c.name.StartsWith("SeepingSFX")) continue;
-                if (c.name.StartsWith("CreatureVoice")) continue;
-                if (c.name.StartsWith("Ambience")) continue;
-
-                var goCopy = GameObject.Instantiate(c);
-                goCopy.name = c.name;
-                goCopy.transform.parent = copy.transform;
-
-                /*
-                if (enemy.enemyType.enemyName == "Maneater")
-                {
-                    if (!goCopy.name.StartsWith("BabyMeshContainer"))
-                    {
-                        var g = goCopy.Find("BabyEnemyCollider") ?? goCopy.Find("EnemyCollider");
-                        GameObject.Destroy(g.gameObject);
-                    }
-
-                    if (!c.name.StartsWith("MeshContainer"))
-                    {
-                        var g = goCopy.Find("BabyEnemyCollider") ?? goCopy.Find("EnemyCollider");
-                        GameObject.Destroy(g.gameObject);
-                    }
-                }
-                */
-            }
-            // Clearing components that should not be
-            copy.RemoveComponentsInChildren<Collider>();
-            copy.RemoveComponentsInChildren<AudioLowPassFilter>();
-            copy.RemoveComponentsInChildren<AudioReverbFilter>();
-            copy.RemoveComponentsInChildren<OccludeAudio>();
-            copy.RemoveComponentsInChildren<EnemyAICollisionDetect>();
-            copy.RemoveComponentsInChildren<AudioSource>();
-            copy.RemoveComponentsInChildren<ParticleSystem>();
-            copy.RemoveComponentsInChildren<ParticleSystemRenderer>();
-
-            copy.transform.localScale = enemy.transform.localScale;
-            var e2prop = NetworkPrefabs.CloneNetworkPrefab(Plugin.EnemyToPropPrefab, "Dead " + enemy.name);
-            copy.transform.parent = e2prop.transform;
-            Plugin.logger.LogInfo($"Attached {copy.name} to {copy.transform.parent.name}");
-            var enemyScrap = e2prop.GetComponent<EnemyScrap>();
-            //enemyScrap.EnemyGameObject = copy;
-            enemyScrap.EnemyGameObject = copy;
-            CleanEnemyObj(enemyScrap.EnemyGameObject);
-            Plugin.logger.LogInfo("Set EnemyGameObject on EnemyScrap.");
-            enemyScrap.grabbable = true;
-            enemyScrap.grabbableToEnemies = false;
-            enemyScrap.enemyType = enemy.enemyType;
-            var collision = e2prop.GetComponent<BoxCollider>();
-            collision.size = enemyData.Metadata.CollisionExtents;
-
-            // It should always exist on a pickupable mob, otherwise it means that the enemy is client-side and is not networked, so it cant be sold.
-            var scanNodeProperties = copy.GetComponentInChildren<ScanNodeProperties>();
-            if (!scanNodeProperties)
-            {
-                GameObject.Destroy(e2prop);
+            if (!SyncedConfig.Instance.EnemiesData.TryGetValue(enemyName, out var enemyData) || enemyData.Pickupable == false)
                 continue;
-            }
 
-            var scanNode = scanNodeProperties.gameObject.transform;
-            scanNode.transform.parent = e2prop.transform;
-            scanNode.gameObject.AddComponent<BoxCollider>();
-            scanNode.localPosition = new(0, 0, 0);
-            scanNodeProperties.maxRange = 13;
-            scanNodeProperties.minRange = 1;
-            scanNodeProperties.nodeType = 2;
-            scanNodeProperties.requiresLineOfSight = true;
-            scanNodeProperties.headerText = "Dead " + scanNodeProperties.headerText;
+            var visual = BuildVisualCopy(enemy);
+            var scrapPrefab = BuildScrapPrefab(enemy, enemyName, visual, enemyData);
+            if (scrapPrefab == null)
+                continue;
 
-            var enemyItem = ScriptableObject.CreateInstance<Item>();
-            enemyScrap.itemProperties = enemyItem;
-
-            enemyItem.name = enemyName + " scrap";
-            enemyItem.itemName = scanNodeProperties.headerText;
-            enemyItem.saveItemVariable = true;
-            enemyItem.itemIcon = FastResourcesManager.EnemyScrapIcon;
-            enemyItem.minValue = enemyData.MinValue;
-            enemyItem.maxValue = enemyData.MaxValue;
-            enemyItem.allowDroppingAheadOfPlayer = true;
-            enemyItem.canBeGrabbedBeforeGameStart = true;
-            enemyItem.isScrap = true;
-            enemyItem.itemSpawnsOnGround = false;
-            enemyItem.twoHanded = enemyData.Metadata.TwoHanded;
-            enemyItem.requiresBattery = false;
-            enemyItem.twoHandedAnimation = enemyData.Metadata.TwoHanded;
-            enemyItem.weight = enemyData.LCMass;
-            enemyItem.spawnPrefab = e2prop;
-            enemyItem.restingRotation = enemyData.Metadata.FloorRotation;
-            enemyItem.rotationOffset = enemyData.Metadata.HandRotation;
-            enemyItem.positionOffset = enemyData.Metadata.MeshOffset;
-
-            var localEnemyData = SyncedConfig.Default.EnemiesData[enemyName];
-            if (localEnemyData.Metadata.DropSFX == "default")
-                enemyItem.dropSFX = FastResourcesManager.EnemyDropDefaultSound;
-            else if (FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.DropSFX, out var dropsfx))
-                enemyItem.dropSFX = dropsfx;
-            else
-                enemyItem.dropSFX = null;
-
-            if (localEnemyData.Metadata.GrabSFX == "default")
-                enemyItem.grabSFX = FastResourcesManager.EnemyDropDefaultSound;
-            else if (FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.GrabSFX, out var grabsfx))
-                enemyItem.grabSFX = grabsfx;
-            else
-                enemyItem.grabSFX = null;
-
-            if (localEnemyData.Metadata.PocketSFX == "default")
-                enemyItem.pocketSFX = FastResourcesManager.EnemyDropDefaultSound;
-            else if (FastResourcesManager.CustomAudioClips.TryGetValue(localEnemyData.Metadata.PocketSFX, out var pocketsfx))
-                enemyItem.pocketSFX = pocketsfx;
-            else
-                enemyItem.pocketSFX = null;
-
-            NetworkPrefabs.RegisterNetworkPrefab(e2prop);
-            Items.RegisterItem(enemyItem);
-            Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
-            AllEnemiesScraps.Add(enemyItem);
-            Enemies2Props.Add(enemyName, e2prop);
-            Plugin.logger.LogInfo($"Registered NetworkPrefab '{e2prop.name}'/'{copy.name}' ({enemyItem.itemName})");
+            var scanNodeProperties = scrapPrefab.GetComponentInChildren<ScanNodeProperties>();
+            var enemyItem = BuildItemScriptable(enemyName, enemyData, scrapPrefab, scanNodeProperties);
+            RegisterPrefabAndItem(enemyName, scrapPrefab, enemyItem);
         }
 
         if (FarmingAndCookingSupport.FarmingAndCookingLoaded)
@@ -347,11 +244,170 @@ public static class EnemiesDataManager
         }
     }
 
+    private static bool TryUpdateExistingPrefab(EnemyAI enemy, string enemyName)
+    {
+        if (!Enemies2Props.TryGetValue(enemyName, out var e2p))
+            return false;
+
+        var data = SyncedConfig.Instance.EnemiesData[enemyName];
+        if (!data.Pickupable)
+        {
+            Enemies2Props.Remove(enemyName);
+            return true;
+        }
+
+        var pp = e2p.GetComponent<EnemyScrap>();
+        pp.enemyType = enemy.enemyType;
+        pp.itemProperties.minValue = data.MinValue;
+        pp.itemProperties.maxValue = data.MaxValue;
+        pp.itemProperties.weight = data.LCMass;
+        return true;
+    }
+
+    private static GameObject BuildVisualCopy(EnemyAI enemy)
+    {
+        var copy = new GameObject(enemy.name + " neutralized");
+        foreach (Transform c in enemy.transform)
+        {
+            if (c.name.StartsWith("MapDot")) continue;
+            if (c.name.StartsWith("Collider")) continue;
+            if (c.name.StartsWith("VoiceSFX")) continue;
+            if (c.name.StartsWith("CreatureSFX")) continue;
+            if (c.name.StartsWith("SeepingSFX")) continue;
+            if (c.name.StartsWith("CreatureVoice")) continue;
+            if (c.name.StartsWith("Ambience")) continue;
+
+            var goCopy = GameObject.Instantiate(c);
+            goCopy.name = c.name;
+            goCopy.transform.parent = copy.transform;
+        }
+
+        copy.RemoveComponentsInChildren<Collider>();
+        copy.RemoveComponentsInChildren<AudioLowPassFilter>();
+        copy.RemoveComponentsInChildren<AudioReverbFilter>();
+        copy.RemoveComponentsInChildren<OccludeAudio>();
+        copy.RemoveComponentsInChildren<EnemyAICollisionDetect>();
+        copy.RemoveComponentsInChildren<AudioSource>();
+        copy.RemoveComponentsInChildren<ParticleSystem>();
+        copy.RemoveComponentsInChildren<ParticleSystemRenderer>();
+
+        copy.transform.localScale = enemy.transform.localScale;
+        return copy;
+    }
+
+    private static GameObject BuildScrapPrefab(EnemyAI enemy, string enemyName, GameObject visual, EnemyData enemyData)
+    {
+        // IMPORTANT: use enemyType.enemyName (canonical) instead of enemy.name (GameObject name).
+        // LethalLib.NetworkPrefabs.CloneNetworkPrefab derives the NetworkObject.GlobalObjectIdHash
+        // from this string. Using enemy.name (e.g. "HoarderBug(Clone)" vs "HoarderBugVariant")
+        // produces different hashes on host and clients, breaking NGO's spawn replication —
+        // result: corpses appear only on the host. The canonical enemyName is identical on
+        // every machine, so the hash matches and NGO can resolve the prefab on every client.
+        var e2prop = NetworkPrefabs.CloneNetworkPrefab(Plugin.EnemyToPropPrefab, "Dead " + enemyName);
+        visual.transform.parent = e2prop.transform;
+        Plugin.logger.LogInfo($"Attached {visual.name} to {visual.transform.parent.name}");
+
+        var enemyScrap = e2prop.GetComponent<EnemyScrap>();
+        enemyScrap.EnemyGameObject = visual;
+        CleanEnemyObj(enemyScrap.EnemyGameObject);
+        enemyScrap.grabbable = true;
+        enemyScrap.grabbableToEnemies = false;
+        enemyScrap.enemyType = enemy.enemyType;
+
+        var collision = e2prop.GetComponent<BoxCollider>();
+        collision.size = enemyData.Metadata.CollisionExtents;
+
+        if (enemyName == KnownEnemies.BunkerSpider)
+            e2prop.AddComponent<SpiderArachnophobiaToggle>();
+
+        var scanNodeProperties = visual.GetComponentInChildren<ScanNodeProperties>();
+        if (!scanNodeProperties)
+        {
+            Plugin.logger.LogWarning($"Enemy '{enemyName}' has no ScanNodeProperties; corpse cannot be networked-scanned. Discarding scrap prefab.");
+            GameObject.Destroy(e2prop);
+            return null;
+        }
+
+        var scanNode = scanNodeProperties.gameObject.transform;
+        scanNode.transform.parent = e2prop.transform;
+        scanNode.gameObject.AddComponent<BoxCollider>();
+        scanNode.localPosition = new(0, 0, 0);
+        scanNodeProperties.maxRange = 13;
+        scanNodeProperties.minRange = 1;
+        scanNodeProperties.nodeType = 2;
+        scanNodeProperties.requiresLineOfSight = true;
+        scanNodeProperties.headerText = "Dead " + scanNodeProperties.headerText;
+
+        return e2prop;
+    }
+
+    private static Item BuildItemScriptable(string enemyName, EnemyData enemyData, GameObject scrapPrefab, ScanNodeProperties scanNodeProperties)
+    {
+        var enemyItem = ScriptableObject.CreateInstance<Item>();
+        var enemyScrap = scrapPrefab.GetComponent<EnemyScrap>();
+        enemyScrap.itemProperties = enemyItem;
+
+        enemyItem.name = enemyName + " scrap";
+        enemyItem.itemName = scanNodeProperties.headerText;
+        enemyItem.saveItemVariable = true;
+        enemyItem.itemIcon = FastResourcesManager.EnemyScrapIcon;
+        enemyItem.minValue = enemyData.MinValue;
+        enemyItem.maxValue = enemyData.MaxValue;
+        enemyItem.allowDroppingAheadOfPlayer = true;
+        enemyItem.canBeGrabbedBeforeGameStart = true;
+        enemyItem.isScrap = true;
+        enemyItem.itemSpawnsOnGround = false;
+        enemyItem.twoHanded = enemyData.Metadata.TwoHanded;
+        enemyItem.requiresBattery = false;
+        enemyItem.twoHandedAnimation = enemyData.Metadata.TwoHanded;
+        enemyItem.weight = enemyData.LCMass;
+        enemyItem.spawnPrefab = scrapPrefab;
+        enemyItem.restingRotation = enemyData.Metadata.FloorRotation;
+        enemyItem.rotationOffset = enemyData.Metadata.HandRotation;
+        enemyItem.positionOffset = enemyData.Metadata.MeshOffset;
+
+        var localEnemyData = SyncedConfig.Default.EnemiesData[enemyName];
+        enemyItem.dropSFX = ResolveSfx(localEnemyData.Metadata.DropSFX);
+        enemyItem.grabSFX = ResolveSfx(localEnemyData.Metadata.GrabSFX);
+        enemyItem.pocketSFX = ResolveSfx(localEnemyData.Metadata.PocketSFX);
+
+        return enemyItem;
+    }
+
+    private static AudioClip ResolveSfx(string sfxKey)
+    {
+        if (string.IsNullOrEmpty(sfxKey) || sfxKey == "none")
+            return null!;
+        if (sfxKey == "default")
+            return FastResourcesManager.EnemyDropDefaultSound;
+        if (FastResourcesManager.CustomAudioClips.TryGetValue(sfxKey, out var clip))
+            return clip;
+        Plugin.logger.LogWarning($"Custom SFX '{sfxKey}' not found in CustomAudioClips. Using default. (File missing or coroutine still running?)");
+        return FastResourcesManager.EnemyDropDefaultSound;
+    }
+
+    private static void RegisterPrefabAndItem(string enemyName, GameObject scrapPrefab, Item enemyItem)
+    {
+        NetworkPrefabs.RegisterNetworkPrefab(scrapPrefab);
+
+        var nm = NetworkManager.Singleton;
+        if (nm != null && !nm.NetworkConfig.Prefabs.Contains(scrapPrefab))
+        {
+            nm.AddNetworkPrefab(scrapPrefab);
+        }
+
+        Items.RegisterItem(enemyItem);
+        Items.RegisterScrap(enemyItem, 0, Levels.LevelTypes.None);
+        AllEnemiesScraps.Add(enemyItem);
+        Enemies2Props.Add(enemyName, scrapPrefab);
+        Plugin.logger.LogInfo($"Registered NetworkPrefab '{scrapPrefab.name}' ({enemyItem.itemName})");
+    }
+
     public static void CleanEnemyObj(GameObject enemyObj)
     {
         try
         {
-            if(enemyObj.name.Contains("SandSpider")) return;
+            if(enemyObj.name.Contains(KnownEnemies.SandSpider)) return;
 
             int mask = Camera.main ? Camera.main.cullingMask : 591075327;
             Renderer[] renderers = enemyObj.GetComponentsInChildren<Renderer>(true);

@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-
 namespace EnhancedMonsters.Utils;
 
 internal static class FarmingAndCookingSupport
 {
+    private const string FarmingAndCookingGuid = "MelanieMelicious.FarmAndCook";
+
     private static bool? farmingAndCookingLoaded;
 
     public static bool FarmingAndCookingLoaded
     {
         get
         {
-            farmingAndCookingLoaded ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(MelanieMeliciousCooked.Plugin.GUID);
+            farmingAndCookingLoaded ??= BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(FarmingAndCookingGuid);
 
             return (bool)farmingAndCookingLoaded;
         }
@@ -22,7 +19,7 @@ internal static class FarmingAndCookingSupport
     [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
     public static void RegisterFarmingAndCookingBodies(List<Item> bodies)
     {
-        foreach(var body in bodies)
+        foreach (var body in bodies)
         {
             // Hashsets don't need to be checked for duplicates. They do it on their own.
             MelanieMeliciousCooked.Plugin.bodyHash.Add(body);

@@ -1,6 +1,6 @@
-﻿using EnhancedMonsters.Utils;
+using EnhancedMonsters.Networking;
+using EnhancedMonsters.Utils;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using NetworkPrefabs = LethalLib.Modules.NetworkPrefabs;
 
 namespace EnhancedMonsters;
@@ -10,20 +10,20 @@ namespace EnhancedMonsters;
 [BepInDependency("com.willis.lc.lethalsettings", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInDependency("evaisa.lethallib", BepInDependency.DependencyFlags.HardDependency)]
 [BepInIncompatibility("Entity378.sellbodies")]
-public class Plugin : BaseUnityPlugin 
+public class Plugin : BaseUnityPlugin
 {
     [NotNull] internal static Plugin Singleton { get; private set; }
     private static readonly Harmony harmony = new(PluginInfo.GUID);
     [NotNull] public static ManualLogSource? logger;
     public static GameObject EnemyToPropPrefab { get; private set; }
+    public static GameObject NetworkHandlerPrefab { get; private set; }
 
     private void Awake()
     {
         Singleton = this;
         logger = Logger;
         new LocalConfig(Config);
-        Plugin.logger.LogInfo("Local config initialized.");
-        NetcodePatcher();
+        logger.LogInfo("Local config initialized.");
 
         logger.LogInfo("This is (maybe) NOT an RPG mod. And hi btw.");
         EnemiesDataManager.LoadEnemiesData();
@@ -33,8 +33,10 @@ public class Plugin : BaseUnityPlugin
         logger.LogDebug("All harmony patches have been applied (energistics).");
         CreateThePrefab();
         logger.LogDebug("The Prefab have been created correctly");
+        CreateNetworkHandlerPrefab();
+        logger.LogDebug("EnhancedMonstersNetworkHandler network prefab registered");
 
-        if(FastResourcesManager.EnemyScrapIcon == null)
+        if (FastResourcesManager.EnemyScrapIcon == null)
         {
             logger.LogError("EnemyScrapIcon didn't load yet. Caution advised.");
         }
@@ -52,17 +54,11 @@ public class Plugin : BaseUnityPlugin
         }
         logger.LogDebug("Applying patches...");
         harmony.PatchAll(typeof(EnemyAI_Patches));
-        logger.LogDebug("Enemy patches applied.");
-        //harmony.PatchAll(typeof(MaskedPlayerEnemy_Patches));
-        logger.LogDebug("MaskedEnemy patches applied.");
         harmony.PatchAll(typeof(MenuManager_Patches));
-        logger.LogDebug("MenuManager patches applied.");
         harmony.PatchAll(typeof(PlayerControllerB_Patches));
-        logger.LogDebug("PlayerController patches applied.");
         harmony.PatchAll(typeof(GameNetworkManager_Patches));
-        logger.LogDebug("GameNetworkManager patches applied.");
         harmony.PatchAll(typeof(StartOfRound_Patches));
-        logger.LogDebug("StartOfRound patches applied.");
+        logger.LogDebug("All Harmony patches applied.");
     }
 
     private static void CreateThePrefab()
@@ -86,29 +82,15 @@ public class Plugin : BaseUnityPlugin
         EnemyToPropPrefab = prefab;
     }
 
-    private static void NetcodePatcher()
+    private static void CreateNetworkHandlerPrefab()
     {
-        var pluginInfos = BepInEx.Bootstrap.Chainloader.PluginInfos;
-        bool isLethalConfigLoaded = pluginInfos.ContainsKey(LethalConfig.PluginInfo.Guid);
-        bool isLethalSettingsLoaded = pluginInfos.ContainsKey("com.willis.lc.lethalsettings");
+        var prefab = NetworkPrefabs.CreateNetworkPrefab("EnhancedMonstersNetworkHandler");
+        var ngo = prefab.GetComponent<NetworkObject>();
+        ngo.AutoObjectParentSync = false;
+        ngo.DontDestroyWithOwner = true;
+        prefab.AddComponent<EnhancedMonstersNetworkHandler>();
 
-        var types = Assembly.GetExecutingAssembly().GetTypes();
-        foreach (var type in types)
-        {
-            bool typeIsLCS = type.FullName.Contains(typeof(LethalConfigSupport).FullName);
-            bool typeIsLSS = type.FullName.Contains(typeof(LethalSettingsSupport).FullName);
-            if ((typeIsLCS && !isLethalConfigLoaded) || (typeIsLSS && !isLethalSettingsLoaded))
-                continue;
-
-            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-            foreach (var method in methods)
-            {
-                var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
-                if (attributes.Length > 0)
-                {
-                    method.Invoke(null, null);
-                }
-            }
-        }
+        NetworkPrefabs.RegisterNetworkPrefab(prefab);
+        NetworkHandlerPrefab = prefab;
     }
 }
