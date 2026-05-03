@@ -6,7 +6,7 @@ All notable changes will be documented in the changelog.
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.13...1.4.0)
 - Compatibility with **v80** and **v81** !
-- **Fixed desyncs** thanks to @Entity378's pull request #9 (https://github.com/VELD-Dev/Enhanced-Monsters/pull/9)
+- **Fixed desyncs** thanks to @Entity378's pull request https://github.com/VELD-Dev/Enhanced-Monsters/pull/9
 - Fixed arachnophobia mode not working properly.
 - Finally implemented **sounds customization**, more info in the `README.md`.
 
