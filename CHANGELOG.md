@@ -2,6 +2,14 @@
 
 All notable changes will be documented in the changelog.  
 
+## [1.4.0](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.4.0) - 2026-05-03
+
+[View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.13...1.4.0)
+- Compatibility with **v80** and **v81** !
+- **Fixed desyncs** thanks to @Entity378's pull request #9 (https://github.com/VELD-Dev/Enhanced-Monsters/pull/9)
+- Fixed arachnophobia mode not working properly.
+- Finally implemented **sounds customization**, more info in the `README.md`.
+
 ## [1.3.13](https://github.com/VELD-Dev/Enhanced-Monsters/releases/tag/1.3.13) - 2025-10-28
 
 [View diff](https://github.com/VELD-Dev/Enhanced-Monsters/compare/1.3.12...1.3.13)

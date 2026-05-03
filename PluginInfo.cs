@@ -6,7 +6,7 @@ namespace EnhancedMonsters;
 public static class PluginInfo
 {
     public const int ConfigVersion = 11;
-    public const string Version = "1.3.13";
+    public const string Version = "1.14.0";
     public const string GUID = "com.velddev.enhancedmonsters";
     public const string DisplayName = "Enhanced Monsters";
 }
