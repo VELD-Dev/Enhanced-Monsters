@@ -127,4 +127,4 @@ public static class EnhancedMonstersCompatibilityLayer
 - **Moroxide** (Lethal Resonance collaborator) for creating a enemy dead body drop sound, and helping me testing the mod
 - **DropDaDeuce** (LethalGargoyles) for making a fix for soft dependencies
 - **Dededenied** for making the dead enemies inventory item icon
-- **Entity378** (SellBodies Fixed, BuyableShotgunPlus, Crimson Moons Semblance) for making contributing to the mod !
+- **Entity378** (SellBodies Fixed, BuyableShotgunPlus, Crimson Moons Semblance) for making contributions to the mod !
